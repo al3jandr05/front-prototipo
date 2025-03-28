@@ -66,14 +66,8 @@ const InfoVoluntarios = () => {
                 </div>
 
                 <div className="historial-boton">
-                    <button >
-                        Volver
-                    </button>
-                    <button
-                        className="btn btn-outline-primary"
-                        onClick={() => navigate(`/historial/${voluntarios[0].id}`)}
-                    >
-                        <FaHistory/> Historial
+                    <button className="btn btn-outline-primary" onClick={() => navigate(`/historial/1`)}>
+                        <FaHistory /> Historial
                     </button>
                 </div>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/listaVoluntarios.css';
 
-const TarjetaVoluntario = ({ voluntario }) => {
+const CardVoluntario = ({ voluntario }) => {
     const navigate = useNavigate();
 
     return (
@@ -24,4 +24,4 @@ const TarjetaVoluntario = ({ voluntario }) => {
     );
 };
 
-export default TarjetaVoluntario;
+export default CardVoluntario;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
-import TarjetaVoluntario from '../components/TarjetaVoluntario';
+import CardVoluntario from '../components/CardVoluntario';
 import '../styles/listaVoluntarios.css';
 
 const ListaVoluntarios = () => {
@@ -14,6 +14,38 @@ const ListaVoluntarios = () => {
             ci: '97841123',
             tipoSangre: 'RH A+',
             ultimaEvaluacion: '19/02/2025',
+        },
+        {
+            id: 2,
+            nombre: 'Carla Fernández',
+            estado: 'Disponible',
+            ci: '65498127',
+            tipoSangre: 'RH O-',
+            ultimaEvaluacion: '15/03/2025',
+        },
+        {
+            id: 3,
+            nombre: 'Luis Mamani',
+            estado: 'Disponible',
+            ci: '81329764',
+            tipoSangre: 'RH B+',
+            ultimaEvaluacion: '10/01/2025',
+        },
+        {
+            id: 2,
+            nombre: 'Carla Fernández',
+            estado: 'Disponible',
+            ci: '65498127',
+            tipoSangre: 'RH O-',
+            ultimaEvaluacion: '15/03/2025',
+        },
+        {
+            id: 3,
+            nombre: 'Luis Mamani',
+            estado: 'Disponible',
+            ci: '81329764',
+            tipoSangre: 'RH B+',
+            ultimaEvaluacion: '10/01/2025',
         },
         {
             id: 2,
@@ -56,7 +88,7 @@ const ListaVoluntarios = () => {
 
                 <div className="lista-voluntarios-scroll">
                     {filtrados.map((v) => (
-                        <TarjetaVoluntario key={v.id} voluntario={v} />
+                        <CardVoluntario key={v.id} voluntario={v} />
                     ))}
                 </div>
             </div>

@@ -1,0 +1,103 @@
+
+.wrapper {
+    width: 1000px;
+    height: 500px;
+    background: white;
+    color: var(--color-dark-blue);
+    display: flex;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.login-left {
+    flex: 1;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.login-right {
+    flex: 1;
+    background-color: var(--color-lighter-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-right img {
+    width: 80%;
+    max-width: 400px;
+}
+
+form h3 {
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+form h1 {
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: var(--color-dark-blue);
+}
+
+.input-box {
+    margin-bottom: 20px;
+}
+
+.input-box p {
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: var(--color-lighter-cyan);
+}
+
+.password-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.password-wrapper input {
+    flex: 1;
+}
+
+
+
+button[type="submit"] {
+    background-color: var(--color-dark-blue);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--color-blue);
+}
+.eye-icon {
+    position: absolute;
+    align-items: center;
+    right: 10px;
+    cursor: pointer;
+    transform: translateY(-50%);
+    color: var(--color-dark-blue);
+}

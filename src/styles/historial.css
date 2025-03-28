@@ -72,7 +72,6 @@
     flex-direction: column;
     gap: 20px;
 }
-
 .historial-item {
     background-color: var(--color-light-cyan);
     padding: 30px;

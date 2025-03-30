@@ -1,7 +1,8 @@
 import '../styles/login.css';
+import { useNavigate} from 'react-router-dom';
 
 const Login = () => {
-
+    const navigate = useNavigate();
     return (
         <div className="wrapper d-flex">
             <div className="login-left">
@@ -21,7 +22,7 @@ const Login = () => {
                             />
                         </div>
                     </div>
-                    <button type="submit">Iniciar Sesión</button>
+                    <button type="submit" onClick={() => navigate(`/ListaVoluntarios`)}>Iniciar Sesión</button>
                 </form>
             </div>
 

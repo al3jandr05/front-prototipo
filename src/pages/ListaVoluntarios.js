@@ -32,7 +32,7 @@ const ListaVoluntarios = () => {
             ultimaEvaluacion: '10/01/2025',
         },
         {
-            id: 2,
+            id: 4,
             nombre: 'Carla Fernández',
             estado: 'Disponible',
             ci: '65498127',
@@ -40,7 +40,7 @@ const ListaVoluntarios = () => {
             ultimaEvaluacion: '15/03/2025',
         },
         {
-            id: 3,
+            id: 5,
             nombre: 'Luis Mamani',
             estado: 'Disponible',
             ci: '81329764',
@@ -48,7 +48,7 @@ const ListaVoluntarios = () => {
             ultimaEvaluacion: '10/01/2025',
         },
         {
-            id: 2,
+            id: 6,
             nombre: 'Carla Fernández',
             estado: 'Disponible',
             ci: '65498127',
@@ -56,7 +56,7 @@ const ListaVoluntarios = () => {
             ultimaEvaluacion: '15/03/2025',
         },
         {
-            id: 3,
+            id: 7,
             nombre: 'Luis Mamani',
             estado: 'Disponible',
             ci: '81329764',

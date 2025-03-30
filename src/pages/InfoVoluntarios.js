@@ -13,7 +13,7 @@ import {
     FaHistory
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { MdPsychology, MdSportsHandball } from 'react-icons/md';
+import { MdPsychology } from 'react-icons/md';
 import '../styles/infoVoluntarios.css';
 
 const InfoVoluntarios = () => {
@@ -66,7 +66,7 @@ const InfoVoluntarios = () => {
                 </div>
 
                 <div className="historial-boton">
-                    <button className="btn btn-outline-primary" onClick={() => navigate(`/historial/1`)}>
+                    <button className="btn btn-outline-primary" onClick={() => navigate(`/Historial/1`)}>
                         <FaHistory /> Historial
                     </button>
                 </div>

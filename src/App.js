@@ -5,6 +5,8 @@ import ListaVoluntarios from './pages/ListaVoluntarios';
 import InfoVoluntarios from './pages/InfoVoluntarios';
 import History from './pages/Historial';
 import Formulario from './pages/Formulario';
+import ListaResultados from "./pages/ListaResultados";
+import ResultadoVoluntario from "./pages/ResultadoVoluntario";
 
 function App() {
     return (
@@ -12,9 +14,11 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/ListaVoluntarios" element={<ListaVoluntarios />} />
-                <Route path="/voluntario/:id" element={<InfoVoluntarios />} />
-                <Route path="/historial/:id" element={<History />} />
-                <Route path="/formulario" element={<Formulario />} />
+                <Route path="/Voluntario/:id" element={<InfoVoluntarios />} />
+                <Route path="/Historial/:id" element={<History />} />
+                <Route path="/Formulario" element={<Formulario />} />
+                <Route path="/ListaResultados" element={<ListaResultados />} />
+                <Route path="/ResultadoVoluntario/:id" element={<ResultadoVoluntario />} />
             </Routes>
         </Router>
     );

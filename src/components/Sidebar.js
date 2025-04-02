@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/sidebar.css';
 import { FaHome, FaWpforms, FaInfoCircle, FaSignOutAlt } from 'react-icons/fa';
+import { SiAnswer } from "react-icons/si";
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -10,7 +11,8 @@ const Sidebar = () => {
         <div className="sidebar">
             <div className="sidebar-icons">
                 <FaHome title="Inicio" onClick={() => navigate('/ListaVoluntarios')} />
-                <FaWpforms title="Formulario" onClick={() => navigate('/formulario')} />
+                <FaWpforms title="Formulario" onClick={() => navigate('/Formulario')} />
+                <SiAnswer  title="Resultados" onClick={() => navigate('/ListaResultados')} />
             </div>
 
             <div className="sidebar-bottom">

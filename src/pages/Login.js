@@ -15,12 +15,7 @@ const Login = () => {
                     </div>
                     <div className="input-box">
                         <p>Contraseña</p>
-                        <div className="password-wrapper">
-                            <input
-                                placeholder="Ingrese su Contraseña"
-                                required
-                            />
-                        </div>
+                        <input type="text" placeholder="Ingrese su Contraseña" required />
                     </div>
                     <button type="submit" onClick={() => navigate(`/ListaVoluntarios`)}>Iniciar Sesión</button>
                 </form>

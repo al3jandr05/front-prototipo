@@ -75,7 +75,7 @@ const ListaVoluntarios = () => {
 
             <div className="contenido-voluntarios">
                 <div className="encabezado-voluntarios">
-                    <h1 className="titulo-voluntarios">Búsqueda de Voluntarios</h1>
+                    <h1 className="titulo-voluntarios">Voluntarios</h1>
                     <div className="buscador">
                         <input
                             type="text"

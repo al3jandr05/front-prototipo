@@ -29,8 +29,8 @@ const InfoVoluntarios = () => {
                         <span>A</span>
                     </div>
                     <div>
-                        <h1>Alejandro Ormachea</h1>
-                        <p>correodelusuario@gmail.com</p>
+                        <h1>Voluntario Apellido</h1>
+                        <p>correodelvoluntario@gmail.com</p>
                     </div>
                     <div className="estado-usuario">
                         <span className="estado-activo"></span> Activo

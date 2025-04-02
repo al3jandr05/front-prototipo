@@ -25,12 +25,12 @@ const ListaResultados = () => {
     return (
         <div>
             <Sidebar />
-            <div className="contenido-voluntarios">
-                <div className="encabezado-voluntarios">
-                    <h1 className="titulo-voluntarios">Resultados de la Encuesta</h1>
+            <div className="contenido-resultados">
+                <div className="encabezado-resultados">
+                    <h1 className="titulo-resultados">Resultados de la Encuesta</h1>
                 </div>
 
-                <div className="lista-voluntarios-scroll">
+                <div className="lista-resultados-scroll">
                     {voluntarios.map((v) => (
                         <CardResultado key={v.id} voluntario={v} />
                     ))}

@@ -1,84 +1,94 @@
 .formulario-container {
     display: flex;
     align-items: flex-start;
-    height: 100vh;
+    min-height: 100vh;
     padding-left: 60px;
-}
 
+}
 
 .formulario-content {
-    width: 80%;
-    max-width: 1200px;
-    padding: 30px;
+    width: 100%;
+    max-width: 1400px;
+    padding: 30px 50px;
     box-sizing: border-box;
-    border-radius: 15px;
     position: absolute;
-    align-items: center;
 }
 
-h1 {
-    font-size: 2.5rem;
+h1.titulo-formulario {
+    font-size: 2.3rem;
     color: var(--color-dark-blue);
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+}
+
+h2 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    color: var(--color-blue);
+    font-size: 1.8rem;
 }
 
 .formulario-columns {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
     gap: 30px;
 }
 
 .formulario-item {
-    width: 100%;
-    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formulario-item.full-width {
+    grid-column: span 2;
 }
 
 label {
-    font-size: 1.2rem;
-    color: #03045e;
-    display: block;
-    margin-bottom: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-dark-blue);
 }
 
 input[type="text"],
 input[type="email"],
+select,
 textarea {
-    width: 100%;
     padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1rem;
-    color: #444;
+    width: 100%;
     box-sizing: border-box;
 }
 
 textarea {
-    height: 120px;
+    height: 100px;
     resize: none;
 }
 
 .checkbox-group {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.checkbox-group input {
-    margin: 5px 0;
+.checkbox-group label {
+    font-weight: normal;
 }
 
-button.btn-enviar {
-    background-color: #00b4d8;
+.btn-enviar {
+    background-color: var(--color-cyan);
     color: white;
-    padding: 12px 25px;
+    padding: 14px 28px;
+    margin-top: 40px;
     border: none;
+    font-size: 1.1rem;
     border-radius: 8px;
-    font-size: 1.2rem;
     cursor: pointer;
-    transition: background-color 0.3s;
     width: 100%;
+    transition: background 0.3s;
 }
 
-button.btn-enviar:hover {
-    background-color: #0077b6;
+.btn-enviar:hover {
+    background-color: var(--color-blue);
 }

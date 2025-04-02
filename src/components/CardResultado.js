@@ -7,13 +7,13 @@ const CardResultado = ({ voluntario }) => {
 
     return (
         <div
-            className="card-voluntario"
+            className="card-resultado"
             onClick={() => navigate(`/ResultadoVoluntario/${voluntario.id}`)}
         >
             <div className="avatar">
                 <span>{voluntario.nombre[0]}</span>
             </div>
-            <div className="info-voluntario">
+            <div className="info-resultado">
                 <h4>{voluntario.nombre}</h4>
                 <p>Fecha de encuesta: {voluntario.ultimaEvaluacion}</p>
             </div>

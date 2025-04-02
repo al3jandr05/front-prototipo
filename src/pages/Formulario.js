@@ -6,203 +6,181 @@ const Formulario = () => {
     const [formData, setFormData] = useState({
         nombre: '',
         apellido: '',
-        email: '',
-        telefono: '',
-        empresa: '',
-        tipoNegocio: [],
-        tipoPagina: [],
-        barraNavegacion: [],
-        otrosItems: '',
-        serviciosAdicionales: [],
-        comentarios: ''
+        fisico: {
+            condicionGeneral: '',
+            sintomas: [],
+            movilidad: '',
+            hidratacion: '',
+            comentario: ''
+        },
+        psicologico: {
+            estadoAnimo: '',
+            emociones: [],
+            nivelEstres: '',
+            descanso: '',
+            comentario: ''
+        }
     });
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+    const handleChange = (e, section, field) => {
+        const { type, name, value, checked } = e.target;
         if (type === 'checkbox') {
-            if (checked) {
-                setFormData({
-                    ...formData,
-                    [name]: [...formData[name], value]
-                });
-            } else {
-                setFormData({
-                    ...formData,
-                    [name]: formData[name].filter((item) => item !== value)
-                });
-            }
-        } else {
-            setFormData({
-                ...formData,
-                [name]: value
+            setFormData((prev) => {
+                const updated = checked
+                    ? [...prev[section][field], value]
+                    : prev[section][field].filter((v) => v !== value);
+                return {
+                    ...prev,
+                    [section]: {
+                        ...prev[section],
+                        [field]: updated
+                    }
+                };
             });
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                [section]: {
+                    ...prev[section],
+                    [field]: value
+                }
+            }));
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Formulario enviado:', formData);
+        console.log(formData);
     };
 
     return (
         <div className="formulario-container">
             <Sidebar />
             <div className="formulario-content">
-                <h1 className="titulo-formulario">Formulario de Bienestar</h1>
+                <h1 className="titulo-formulario">Formulario de Evaluación Post-Incendio</h1>
                 <form className="formulario-bienestar" onSubmit={handleSubmit}>
+                    <h2>Evaluación Física</h2>
                     <div className="formulario-columns">
                         <div className="formulario-item">
-                            <label>Nombre</label>
-                            <input
-                                type="text"
-                                name="nombre"
-                                value={formData.nombre}
-                                onChange={handleChange}
-                                placeholder="Ingrese su nombre"
-                            />
+                            <label>¿Cómo calificaría su condición física general?</label>
+                            <select
+                                name="condicionGeneral"
+                                value={formData.fisico.condicionGeneral}
+                                onChange={(e) => handleChange(e, 'fisico', 'condicionGeneral')}
+                            >
+                                <option value="">Seleccione</option>
+                                <option value="excelente">Excelente</option>
+                                <option value="buena">Buena</option>
+                                <option value="regular">Regular</option>
+                                <option value="mala">Mala</option>
+                            </select>
                         </div>
 
                         <div className="formulario-item">
-                            <label>Apellido</label>
-                            <input
-                                type="text"
-                                name="apellido"
-                                value={formData.apellido}
-                                onChange={handleChange}
-                                placeholder="Ingrese su apellido"
-                            />
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Ingrese su email"
-                            />
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>Teléfono</label>
-                            <input
-                                type="text"
-                                name="telefono"
-                                value={formData.telefono}
-                                onChange={handleChange}
-                                placeholder="Ingrese su teléfono"
-                            />
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>Empresa</label>
-                            <input
-                                type="text"
-                                name="empresa"
-                                value={formData.empresa}
-                                onChange={handleChange}
-                                placeholder="Ingrese su empresa"
-                            />
-                        </div>
-
-                        <div className="formulario-item checkbox-group">
-                            <label>Tipo de Negocio</label>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="tipoNegocio"
-                                    value="Tecnología"
-                                    onChange={handleChange}
-                                /> Tecnología
-                                <input
-                                    type="checkbox"
-                                    name="tipoNegocio"
-                                    value="Comida"
-                                    onChange={handleChange}
-                                /> Comida
-                                <input
-                                    type="checkbox"
-                                    name="tipoNegocio"
-                                    value="Salud"
-                                    onChange={handleChange}
-                                /> Salud
-                            </div>
-                        </div>
-
-                        <div className="formulario-item checkbox-group">
-                            <label>Tipo de Página Web</label>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="tipoPagina"
-                                    value="Personal"
-                                    onChange={handleChange}
-                                /> Personal
-                                <input
-                                    type="checkbox"
-                                    name="tipoPagina"
-                                    value="Educacional"
-                                    onChange={handleChange}
-                                /> Educacional
-                            </div>
-                        </div>
-
-                        <div className="formulario-item checkbox-group">
-                            <label>Elemento de Barra de Navegación</label>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="barraNavegacion"
-                                    value="Sobre Nosotros"
-                                    onChange={handleChange}
-                                /> Sobre Nosotros
-                                <input
-                                    type="checkbox"
-                                    name="barraNavegacion"
-                                    value="Blog"
-                                    onChange={handleChange}
-                                /> Blog
+                            <label>¿Ha tenido alguno de estos síntomas?</label>
+                            <div className="checkbox-group">
+                                {["Dolor muscular", "Cansancio extremo", "Fiebre", "Dolor de cabeza"].map((sintoma) => (
+                                    <label key={sintoma}>
+                                        <input
+                                            type="checkbox"
+                                            value={sintoma}
+                                            checked={formData.fisico.sintomas.includes(sintoma)}
+                                            onChange={(e) => handleChange(e, 'fisico', 'sintomas')}
+                                        />
+                                        {sintoma}
+                                    </label>
+                                ))}
                             </div>
                         </div>
 
                         <div className="formulario-item">
-                            <label>Otros Elementos</label>
-                            <input
-                                type="text"
-                                name="otrosItems"
-                                value={formData.otrosItems}
-                                onChange={handleChange}
-                                placeholder="Especifique"
-                            />
-                        </div>
-
-                        <div className="formulario-item checkbox-group">
-                            <label>Servicios Adicionales</label>
+                            <label>¿Tiene dificultades para moverse?</label>
                             <div>
-                                <input
-                                    type="checkbox"
-                                    name="serviciosAdicionales"
-                                    value="Diseño de Banner"
-                                    onChange={handleChange}
-                                /> Diseño de Banner
-                                <input
-                                    type="checkbox"
-                                    name="serviciosAdicionales"
-                                    value="SEO"
-                                    onChange={handleChange}
-                                /> SEO
+                                <label><input type="radio" value="sí" name="movilidad" onChange={(e) => handleChange(e, 'fisico', 'movilidad')} /> Sí</label>
+                                <label><input type="radio" value="no" name="movilidad" onChange={(e) => handleChange(e, 'fisico', 'movilidad')} /> No</label>
                             </div>
                         </div>
 
                         <div className="formulario-item">
-                            <label>Comentarios Adicionales</label>
+                            <label>¿Ha mantenido una buena hidratación?</label>
+                            <select
+                                value={formData.fisico.hidratacion}
+                                onChange={(e) => handleChange(e, 'fisico', 'hidratacion')}
+                            >
+                                <option value="">Seleccione</option>
+                                <option value="sí">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div className="formulario-item full-width">
+                            <label>Comentario adicional sobre su estado físico:</label>
                             <textarea
-                                name="comentarios"
-                                value={formData.comentarios}
-                                onChange={handleChange}
-                                placeholder="Ingrese sus comentarios"
-                            ></textarea>
+                                value={formData.fisico.comentario}
+                                onChange={(e) => handleChange(e, 'fisico', 'comentario')}
+                                placeholder="Ingrese detalles relevantes"
+                            />
+                        </div>
+                    </div>
+
+                    <h2>Evaluación Psicológica</h2>
+                    <div className="formulario-columns">
+                        <div className="formulario-item">
+                            <label>¿Cómo describiría su estado de ánimo hoy?</label>
+                            <select
+                                value={formData.psicologico.estadoAnimo}
+                                onChange={(e) => handleChange(e, 'psicologico', 'estadoAnimo')}
+                            >
+                                <option value="">Seleccione</option>
+                                <option value="positivo">Positivo</option>
+                                <option value="neutral">Neutral</option>
+                                <option value="negativo">Negativo</option>
+                            </select>
+                        </div>
+
+                        <div className="formulario-item">
+                            <label>¿Qué emociones ha experimentado?</label>
+                            <div className="checkbox-group">
+                                {["Ansiedad", "Tristeza", "Irritabilidad", "Tranquilidad"].map((emo) => (
+                                    <label key={emo}>
+                                        <input
+                                            type="checkbox"
+                                            value={emo}
+                                            checked={formData.psicologico.emociones.includes(emo)}
+                                            onChange={(e) => handleChange(e, 'psicologico', 'emociones')}
+                                        />
+                                        {emo}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="formulario-item">
+                            <label>¿Nivel de estrés (1 a 5)?</label>
+                            <select
+                                value={formData.psicologico.nivelEstres}
+                                onChange={(e) => handleChange(e, 'psicologico', 'nivelEstres')}
+                            >
+                                <option value="">Seleccione</option>
+                                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
+                            </select>
+                        </div>
+
+                        <div className="formulario-item">
+                            <label>¿Ha descansado bien recientemente?</label>
+                            <div>
+                                <label><input type="radio" value="sí" name="descanso" onChange={(e) => handleChange(e, 'psicologico', 'descanso')} /> Sí</label>
+                                <label><input type="radio" value="no" name="descanso" onChange={(e) => handleChange(e, 'psicologico', 'descanso')} /> No</label>
+                            </div>
+                        </div>
+
+                        <div className="formulario-item full-width">
+                            <label>Comentario adicional sobre su estado psicológico:</label>
+                            <textarea
+                                value={formData.psicologico.comentario}
+                                onChange={(e) => handleChange(e, 'psicologico', 'comentario')}
+                                placeholder="Ingrese detalles relevantes"
+                            />
                         </div>
                     </div>
 

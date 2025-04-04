@@ -1,17 +1,9 @@
 
 import React from 'react';
 import Sidebar from '../components/Sidebar';
-import {
-    FaCalendarAlt,
-    FaVenusMars,
-    FaPhone,
-    FaTint,
-    FaMapMarkerAlt,
-    FaIdCard,
-    FaFileAlt,
-    FaChartLine,
-    FaHistory
-} from 'react-icons/fa';
+import { FaCalendarAlt, FaVenusMars, FaPhone, FaTint, FaMapMarkerAlt, FaIdCard, FaFileAlt, FaChartLine, FaHistory,FaBan, FaClock, FaExclamationTriangle, FaRunning} from 'react-icons/fa';
+import { BsFillSendFill } from "react-icons/bs";
+import { GiBrain } from 'react-icons/gi';
 import { useNavigate } from 'react-router-dom';
 import { MdPsychology } from 'react-icons/md';
 import '../styles/infoVoluntarios.css';
@@ -65,27 +57,61 @@ const InfoVoluntarios = () => {
                     </div>
                 </div>
 
-                <div className="historial-boton">
+                <div className="botones-voluntario">
                     <button className="btn btn-outline-primary" onClick={() => navigate(`/Historial/1`)}>
                         <FaHistory /> Historial
                     </button>
+                    <button className="btn btn-outline-primary" >
+                        <BsFillSendFill /> Enviar Formulario
+                    </button>
                 </div>
+
+
 
                 <div className="info-reportes">
                     <h2>Reportes y análisis</h2>
                     <div className="reporte-box">
-                    <h4>Alejandro Ormachea</h4>
-                        <p>Voluntario</p>
                         <ul>
-                            <li><span className="reporte-icon">🚫</span> <div><strong>Inactividad</strong><br/>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.</div></li>
-                            <li><span className="reporte-icon">⏰</span> <div><strong>Antes de la emergencia</strong><br/>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.</div></li>
-                            <lia><span className="reporte-icon">⚠️</span> <div><strong>Altos niveles de estrés</strong><br/>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.</div></lia>
-                            <li><span className="reporte-icon">🏃</span> <div><strong>Necesidad urgente de actividad física</strong><br/>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.</div></li>
-                            <li><span className="reporte-icon">📈</span> <div><strong>Después de la emergencia</strong><br/>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.</div></li>
-                            <li><span className="reporte-icon">🧠</span> <div><strong>Necesidad de atención psicológica</strong><br/>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very short story.</div></li>
+                            <li>
+                                <span className="reporte-icon"><FaBan /></span>
+                                <div>
+                                    <strong>Inactividad</strong>
+                                </div>
+                            </li>
+                            <li>
+                                <span className="reporte-icon"><FaClock /></span>
+                                <div>
+                                    <strong>Antes de la emergencia</strong>
+                                </div>
+                            </li>
+                            <li>
+                                <span className="reporte-icon"><FaExclamationTriangle /></span>
+                                <div>
+                                    <strong>Altos niveles de estrés</strong>
+                                </div>
+                            </li>
+                            <li>
+                                <span className="reporte-icon"><FaRunning /></span>
+                                <div>
+                                    <strong>Necesidad urgente de actividad física</strong>
+                                </div>
+                            </li>
+                            <li>
+                                <span className="reporte-icon"><FaChartLine /></span>
+                                <div>
+                                    <strong>Después de la emergencia</strong>
+                                </div>
+                            </li>
+                            <li>
+                                <span className="reporte-icon"><GiBrain /></span>
+                                <div>
+                                    <strong>Necesidad de atención psicológica</strong>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
     );

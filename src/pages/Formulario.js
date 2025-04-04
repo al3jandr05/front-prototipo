@@ -1,190 +1,167 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../components/Sidebar';
 import '../styles/formulario.css';
 
-const Formulario = () => {
-    const [formData, setFormData] = useState({
-        nombre: '',
-        apellido: '',
-        fisico: {
-            condicionGeneral: '',
-            sintomas: [],
-            movilidad: '',
-            hidratacion: '',
-            comentario: ''
-        },
-        psicologico: {
-            estadoAnimo: '',
-            emociones: [],
-            nivelEstres: '',
-            descanso: '',
-            comentario: ''
-        }
-    });
+const opciones = ["Nunca", "Raramente", "A veces", "Frecuentemente", "Siempre"];
 
-    const handleChange = (e, section, field) => {
-        const { type, name, value, checked } = e.target;
-        if (type === 'checkbox') {
-            setFormData((prev) => {
-                const updated = checked
-                    ? [...prev[section][field], value]
-                    : prev[section][field].filter((v) => v !== value);
-                return {
-                    ...prev,
-                    [section]: {
-                        ...prev[section],
-                        [field]: updated
-                    }
-                };
-            });
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                [section]: {
-                    ...prev[section],
-                    [field]: value
-                }
-            }));
-        }
+const preguntas = {
+    fisico: [
+        "¿Te sientes más cansado o agotado de lo habitual después de las intervenciones?",
+        "¿Has notado quemaduras, irritación o enrojecimiento en la piel después de las intervenciones?",
+        "¿Has tenido dificultades para respirar o tos después de las intervenciones?",
+        "¿Tienes dolor o molestias en el pecho desde el incendio?",
+        "¿Has experimentado palpitaciones o un ritmo cardíaco irregular después de la intervención?",
+        "¿Tus ojos han estado irritados, con ardor o picazón desde la intervención?",
+        "¿Tienes dificultad para respirar profundamente desde la intervención?",
+        "¿Haz notado que tu nariz está congestionada o bloqueada más de lo normal?"
+    ],
+    psicologico: [
+        "¿Con qué frecuencia has tenido pensamientos no deseados relacionados al incendio?",
+        "¿Sientes que últimamente piensas en qué pudiste hacer diferente durante la intervención?",
+        "¿Has notado disminución de apetito desde la intervención?",
+        "¿Te resulta difícil relajarte o desconectar mentalmente después de las intervenciones?",
+        "¿Has tenido dificultades para concentrarte en tus tareas diarias debido al estrés?",
+        "¿Has sufrido de insomnio recientemente?",
+        "¿Te has sentido emocionalmente más inestable o irritable desde el incendio?",
+        "¿Te sientes preocupado o ansioso constantemente desde el incendio?"
+    ]
+};
+
+const Formulario = () => {
+    const [pagina, setPagina] = useState('fisico');
+    const [respuestas, setRespuestas] = useState({
+        fisico: Array(preguntas.fisico.length).fill(""),
+        psicologico: Array(preguntas.psicologico.length).fill("")
+    });
+    const topRef = useRef(null);
+
+    const scrollToTop = () => {
+        topRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToTop();
+    }, [pagina]);
+
+    const handleChange = (seccion, index, valor) => {
+        const copia = [...respuestas[seccion]];
+        copia[index] = valor;
+        setRespuestas({ ...respuestas, [seccion]: copia });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
+
+        if (respuestas.psicologico.includes("") || respuestas.fisico.includes("")) {
+            alert("Por favor responde todas las preguntas antes de enviar.");
+            return;
+        }
+
+        const datosParaEnviar = {
+            fecha: new Date().toISOString(),
+            respuestas: {
+                fisico: preguntas.fisico.map((pregunta, index) => ({
+                    pregunta,
+                    respuesta: respuestas.fisico[index]
+                })),
+                psicologico: preguntas.psicologico.map((pregunta, index) => ({
+                    pregunta,
+                    respuesta: respuestas.psicologico[index]
+                }))
+            },
+
+        };
+        console.log("Respuetas: ", datosParaEnviar);
+
     };
+
+
+
+    const cambiarPagina = (nuevaPagina) => {
+        setPagina(nuevaPagina);
+    };
+
+    const renderPreguntas = (seccion) => (
+        <div className="seccion-preguntas">
+            <h2>{seccion === 'fisico' ? 'Evaluación Física' : 'Evaluación Psicológica'}</h2>
+            <div className="formulario-grid">
+                <div className="columna">
+                    {preguntas[seccion].slice(0, 4).map((pregunta, idx) => (
+                        <div className="formulario-item" key={idx}>
+                            <label>{pregunta}</label>
+                            <div className="radio-group">
+                                {opciones.map((opcion) => (
+                                    <label key={opcion}>
+                                        <input
+                                            type="radio"
+                                            name={`${seccion}-${idx}`}
+                                            value={opcion}
+                                            checked={respuestas[seccion][idx] === opcion}
+                                            onChange={() => handleChange(seccion, idx, opcion)}
+                                        />
+                                        {opcion}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="columna">
+                    {preguntas[seccion].slice(4).map((pregunta, idx) => (
+                        <div className="formulario-item" key={idx + 4}>
+                            <label>{pregunta}</label>
+                            <div className="radio-group">
+                                {opciones.map((opcion) => (
+                                    <label key={opcion}>
+                                        <input
+                                            type="radio"
+                                            name={`${seccion}-${idx + 4}`}
+                                            value={opcion}
+                                            checked={respuestas[seccion][idx + 4] === opcion}
+                                            onChange={() => handleChange(seccion, idx + 4, opcion)}
+                                        />
+                                        {opcion}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
 
     return (
         <div className="formulario-container">
             <Sidebar />
-            <div className="formulario-content">
+            <div className="formulario-content" ref={topRef}>
                 <h1 className="titulo-formulario">Formulario de Evaluación Post-Incendio</h1>
                 <form className="formulario-bienestar" onSubmit={handleSubmit}>
-                    <h2>Evaluación Física</h2>
-                    <div className="formulario-columns">
-                        <div className="formulario-item">
-                            <label>¿Cómo calificaría su condición física general?</label>
-                            <select
-                                name="condicionGeneral"
-                                value={formData.fisico.condicionGeneral}
-                                onChange={(e) => handleChange(e, 'fisico', 'condicionGeneral')}
+                    {pagina === 'fisico' ? renderPreguntas('fisico') : renderPreguntas('psicologico')}
+
+                    {pagina === 'fisico' ? (
+                        <button
+                            type="button"
+                            className="btn-formulario-nav"
+                            onClick={() => cambiarPagina('psicologico')}
+                        >
+                            Siguiente
+                        </button>
+                    ) : (
+                        <div className="botones-navegacion">
+                            <button
+                                type="button"
+                                className="btn-formulario-nav"
+                                onClick={() => cambiarPagina('fisico')}
                             >
-                                <option value="">Seleccione</option>
-                                <option value="excelente">Excelente</option>
-                                <option value="buena">Buena</option>
-                                <option value="regular">Regular</option>
-                                <option value="mala">Mala</option>
-                            </select>
+                                Anterior
+                            </button>
+                            <button type="submit" className="btn-enviar">
+                                Enviar
+                            </button>
                         </div>
-
-                        <div className="formulario-item">
-                            <label>¿Ha tenido alguno de estos síntomas?</label>
-                            <div className="checkbox-group">
-                                {["Dolor muscular", "Cansancio extremo", "Fiebre", "Dolor de cabeza"].map((sintoma) => (
-                                    <label key={sintoma}>
-                                        <input
-                                            type="checkbox"
-                                            value={sintoma}
-                                            checked={formData.fisico.sintomas.includes(sintoma)}
-                                            onChange={(e) => handleChange(e, 'fisico', 'sintomas')}
-                                        />
-                                        {sintoma}
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>¿Tiene dificultades para moverse?</label>
-                            <div>
-                                <label><input type="radio" value="sí" name="movilidad" onChange={(e) => handleChange(e, 'fisico', 'movilidad')} /> Sí</label>
-                                <label><input type="radio" value="no" name="movilidad" onChange={(e) => handleChange(e, 'fisico', 'movilidad')} /> No</label>
-                            </div>
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>¿Ha mantenido una buena hidratación?</label>
-                            <select
-                                value={formData.fisico.hidratacion}
-                                onChange={(e) => handleChange(e, 'fisico', 'hidratacion')}
-                            >
-                                <option value="">Seleccione</option>
-                                <option value="sí">Sí</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-
-                        <div className="formulario-item full-width">
-                            <label>Comentario adicional sobre su estado físico:</label>
-                            <textarea
-                                value={formData.fisico.comentario}
-                                onChange={(e) => handleChange(e, 'fisico', 'comentario')}
-                                placeholder="Ingrese detalles relevantes"
-                            />
-                        </div>
-                    </div>
-
-                    <h2>Evaluación Psicológica</h2>
-                    <div className="formulario-columns">
-                        <div className="formulario-item">
-                            <label>¿Cómo describiría su estado de ánimo hoy?</label>
-                            <select
-                                value={formData.psicologico.estadoAnimo}
-                                onChange={(e) => handleChange(e, 'psicologico', 'estadoAnimo')}
-                            >
-                                <option value="">Seleccione</option>
-                                <option value="positivo">Positivo</option>
-                                <option value="neutral">Neutral</option>
-                                <option value="negativo">Negativo</option>
-                            </select>
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>¿Qué emociones ha experimentado?</label>
-                            <div className="checkbox-group">
-                                {["Ansiedad", "Tristeza", "Irritabilidad", "Tranquilidad"].map((emo) => (
-                                    <label key={emo}>
-                                        <input
-                                            type="checkbox"
-                                            value={emo}
-                                            checked={formData.psicologico.emociones.includes(emo)}
-                                            onChange={(e) => handleChange(e, 'psicologico', 'emociones')}
-                                        />
-                                        {emo}
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>¿Nivel de estrés (1 a 5)?</label>
-                            <select
-                                value={formData.psicologico.nivelEstres}
-                                onChange={(e) => handleChange(e, 'psicologico', 'nivelEstres')}
-                            >
-                                <option value="">Seleccione</option>
-                                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
-                            </select>
-                        </div>
-
-                        <div className="formulario-item">
-                            <label>¿Ha descansado bien recientemente?</label>
-                            <div>
-                                <label><input type="radio" value="sí" name="descanso" onChange={(e) => handleChange(e, 'psicologico', 'descanso')} /> Sí</label>
-                                <label><input type="radio" value="no" name="descanso" onChange={(e) => handleChange(e, 'psicologico', 'descanso')} /> No</label>
-                            </div>
-                        </div>
-
-                        <div className="formulario-item full-width">
-                            <label>Comentario adicional sobre su estado psicológico:</label>
-                            <textarea
-                                value={formData.psicologico.comentario}
-                                onChange={(e) => handleChange(e, 'psicologico', 'comentario')}
-                                placeholder="Ingrese detalles relevantes"
-                            />
-                        </div>
-                    </div>
-
-                    <button type="submit" className="btn-enviar">Enviar</button>
+                    )}
                 </form>
             </div>
         </div>

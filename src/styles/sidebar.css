@@ -1,8 +1,7 @@
 
 
-/* Sidebar base */
 .sidebar {
-    width: 10%;
+    width: 12%;
     background-color: var(--color-blue);
     height: 100vh;
     position: fixed;
@@ -16,7 +15,6 @@
     z-index: 1000;
 }
 
-/* Logo */
 .sidebar-header {
     display: flex;
     align-items: center;

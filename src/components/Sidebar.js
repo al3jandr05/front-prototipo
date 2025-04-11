@@ -1,10 +1,12 @@
 import React from 'react';
 import '../styles/sidebar.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaHome, FaWpforms, FaInfoCircle, FaSignOutAlt } from 'react-icons/fa';
+import {  FaWpforms, FaInfoCircle, FaSignOutAlt } from 'react-icons/fa';
 import { SiAnswer } from "react-icons/si";
 import { MdSpaceDashboard } from "react-icons/md";
 import { PiFireSimpleFill } from "react-icons/pi";
+import { IoList } from "react-icons/io5";
+
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -12,7 +14,7 @@ const Sidebar = () => {
 
     const menuItems = [
         { icon: <MdSpaceDashboard />, label: 'Dashboard', path: '/Dashboard' },
-        { icon: <FaHome />, label: 'Inicio', path: '/ListaVoluntarios' },
+        { icon: <IoList  />, label: 'Lista Voluntarios', path: '/ListaVoluntarios' },
         { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
         { icon: <SiAnswer />, label: 'Resultados', path: '/ListaResultados' },
     ];

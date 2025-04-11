@@ -1,9 +1,11 @@
 .historial-container {
-    margin-left: 10%;
-    width: 90%;
-    height: 100%;
+    margin-left: 12%;
+    width: calc(100% - 12%);
+    box-sizing: border-box;
     overflow: hidden;
+    min-height: 100vh;
     position: absolute;
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
 .encabezado-historial {
     background-color: transparent;

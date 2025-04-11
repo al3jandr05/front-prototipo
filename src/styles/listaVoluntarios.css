@@ -1,14 +1,15 @@
 
 .contenido-voluntarios {
-    width: 90%;
-    height: 100lvh;
-    overflow: hidden;
-    position: absolute;
     margin-left: 10%;
-
-
-
+    width: calc(100% - 10%);
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 100vh;
+    position: absolute;
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
+
 
 .encabezado-voluntarios {
     background-color: transparent;
@@ -43,7 +44,7 @@
 
 .lista-voluntarios-scroll {
     height: 85%;
-    width: 98%;
+    width: 100%;
     overflow-y: auto;
     padding: 20px 40px 40px 40px;
     display: flex;

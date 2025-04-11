@@ -7,12 +7,14 @@ import History from './pages/Historial';
 import Formulario from './pages/Formulario';
 import ListaResultados from "./pages/ListaResultados";
 import ResultadoVoluntario from "./pages/ResultadoVoluntario";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/ListaVoluntarios" element={<ListaVoluntarios />} />
                 <Route path="/Voluntario/:id" element={<InfoVoluntarios />} />
                 <Route path="/Historial/:id" element={<History />} />

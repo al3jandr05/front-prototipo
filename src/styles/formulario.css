@@ -1,12 +1,15 @@
 .formulario-container {
-    display: flex;
-    min-height: 100lvh;
+    margin-left: 10%;
+    width: 100%;
+    height: 100lvh;
+
+
 }
 
 .formulario-content {
     flex: 1;
     padding: 2rem 3rem;
-    margin-left: 60px;
+    margin-left: 10%;
     position: absolute;
 
 
@@ -134,4 +137,3 @@ input[type="radio"] {
     gap: 1rem;
     margin-top: 1rem;
 }
-

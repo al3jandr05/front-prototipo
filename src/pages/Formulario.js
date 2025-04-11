@@ -82,7 +82,7 @@ const Formulario = () => {
     };
 
     const renderPreguntas = (seccion) => (
-        <div className="seccion-preguntas">
+        <div className="seccion-preguntas" >
             <h2>{seccion === 'fisico' ? 'Evaluación Física' : 'Evaluación Psicológica'}</h2>
             <div className="formulario-grid">
                 <div className="columna">
@@ -133,7 +133,7 @@ const Formulario = () => {
     );
 
     return (
-        <div className="formulario-container">
+        <div className="formulario-container" >
             <Sidebar />
             <div className="formulario-content" ref={topRef}>
                 <h1 className="titulo-formulario">Formulario de Evaluación Post-Incendio</h1>

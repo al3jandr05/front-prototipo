@@ -75,7 +75,7 @@ const Historial = () => {
     };
 
     return (
-        <div className="historial-container">
+        <div className="historial-container" >
             <Sidebar />
             <div className="historial-content">
                 <div className="encabezado-historial">

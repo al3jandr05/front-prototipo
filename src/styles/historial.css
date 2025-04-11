@@ -1,14 +1,12 @@
 .historial-container {
-    margin-left: 2%;
-    width: 100%;
+    margin-left: 10%;
+    width: 90%;
     height: 100%;
     overflow: hidden;
     position: absolute;
-    padding: 40px;
 }
 .encabezado-historial {
     background-color: transparent;
-    padding: 30px 40px 10px 40px;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -16,7 +14,7 @@
 
 .titulo-historial {
     color: var(--color-dark-blue);
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 20px;
 }
 
@@ -25,12 +23,12 @@
     justify-content: center;
     gap: 30px;
     position: sticky;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
 }
 
 .tab-button {
-    padding: 10px 60px;
+    padding: 10px ;
     border: 1px solid #ddd;
     border-radius: 12px;
     width: 40%;
@@ -60,11 +58,10 @@
     margin-left: 7.5%;
     border-radius: 12px;
     width: 85%;
-    max-height:74vh;
+    max-height:85lvh;
     overflow-y: auto;
     text-align: left;
     box-sizing: border-box;
-    height: 90%;
     flex-direction: column;
     gap: 20px;
 }
@@ -80,4 +77,3 @@
 .historial-item p {
     margin: 15px 0;
 }
-

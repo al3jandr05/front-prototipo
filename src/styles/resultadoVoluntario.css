@@ -1,22 +1,13 @@
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #f5f5f5;
-}
-
 .resultado-container {
-    margin-left: 60px;
-    width: 100%;
-    padding: 40px;
+    width: 90%;
+    padding: 30px;
     box-sizing: border-box;
     min-height: 100vh;
     position: absolute;
-}
+    margin-left: 10%;
 
-.resultado-content {
-    padding: 20px;
+
 }
 
 .titulo-resultado {

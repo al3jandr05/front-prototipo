@@ -1,0 +1,211 @@
+
+
+.dashboard-container {
+    position: absolute;
+    width: 90%;
+    display: flex;
+    min-height: 100lvh;
+    margin-left: 10%;
+
+
+
+}
+
+.dashboard-content {
+    padding: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease;
+}
+.titulo-dashboard {
+    color: var(--color-dark-blue);
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.notificacion-wrapper {
+    position: relative;
+}
+
+.notificacion-icon {
+    font-size: 24px;
+    color: var(--color-dark-blue);
+    cursor: pointer;
+}
+
+.notificacion-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.notificacion-popup {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: white;
+    width: 260px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    z-index: 10;
+    border-radius: 10px;
+}
+
+.notificacion-popup h4 {
+    margin: 0 0 10px;
+    color: var(--color-blue);
+}
+
+.notificacion-item {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: var(--color-lighter-cyan);
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+
+.notificacion-item.leido {
+    background-color: var(--color-light-cyan);
+    color: #666;
+}
+
+.tarjetas-resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    margin: 40px 0;
+}
+
+.tarjeta {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.tarjeta h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-dark-blue);
+}
+
+.tarjeta p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.tarjeta svg {
+    font-size: 30px;
+    color: var(--color-blue);
+}
+
+.dashboard-paneles {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.panel {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    min-width: 300px;
+}
+
+.panel h3 {
+    color: var(--color-blue);
+    margin-bottom: 15px;
+}
+
+.panel ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.panel li {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #333;
+}
+.voluntarios-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.voluntario-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: var(--color-light-cyan);
+    padding: 12px 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+.reportes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.reporte-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: var(--color-light-cyan);
+    padding: 12px 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.reporte-tipo {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: var(--color-dark-blue);
+    font-style: italic;
+}
+
+.avatar-voluntario {
+    background-color: var(--color-dark-blue);
+    color: white;
+    font-weight: bold;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.estado {
+    margin: 4px 0 0;
+    font-size: 14px;
+}
+
+.estado.verde {
+    color: green;
+}
+
+.estado.rojo {
+    color: red;
+}

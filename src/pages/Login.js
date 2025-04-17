@@ -1,7 +1,11 @@
 import '../styles/login.css';
 import { useNavigate} from 'react-router-dom';
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import React, { useState } from 'react';
+
 
 const Login = () => {
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     return (
         <div className="wrapper d-flex">
@@ -15,9 +19,18 @@ const Login = () => {
                     </div>
                     <div className="input-box">
                         <p>Contraseña</p>
-                        <input type="text" placeholder="Ingrese su Contraseña" required />
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Ingrese su Contraseña"
+                                required
+                            />
+                            <span onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FaEyeSlash className="eye-icon" /> : <FaEye className="eye-icon" />}
+              </span>
+                        </div>
                     </div>
-                    <button type="submit" onClick={() => navigate(`/ListaVoluntarios`)}>Iniciar Sesión</button>
+                    <button type="submit" onClick={() => navigate(`/Dashboard`)}>Iniciar Sesión</button>
                 </form>
             </div>
 
@@ -25,6 +38,7 @@ const Login = () => {
             </div>
         </div>
     );
+
 };
 
 export default Login;

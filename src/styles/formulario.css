@@ -1,7 +1,9 @@
 .formulario-container {
     margin-left: 2%;
-    width: calc(100% - 10%);
+    width: calc(100% - 2%);
+    padding: 15px;
     box-sizing: border-box;
+    overflow: hidden;
     min-height: 100vh;
     position: absolute;
     transition: margin-left 0.3s ease, width 0.3s ease;

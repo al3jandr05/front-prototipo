@@ -2,29 +2,22 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/resultadoVoluntario.css';
+import resultadosEncuesta from '../data/resultados_encuesta';
 
 const ResultadoVoluntario = () => {
     const { id } = useParams();
+    const voluntario = resultadosEncuesta.find(v => v.id === parseInt(id));
 
-    const voluntario = {
-        nombre: 'Voluntario',
-        fecha: '19/02/2025',
-        resultados: {
-            fisico: [
-                { subcategoria: 'Estado Físico General', resultado: 'Bueno', observacion: 'Buena condición física.' },
-                { subcategoria: 'Resistencia', resultado: 'Alta', observacion: 'Resiste bien largas jornadas.' },
-                { subcategoria: 'Frecuencia Cardíaca', resultado: 'Normal', observacion: 'Ritmo cardíaco saludable.' },
-                { subcategoria: 'Presión Arterial', resultado: 'Levemente alta', observacion: 'Revisar periódicamente.' },
-            ],
-            psicologico: [
-                { subcategoria: 'Estrés', resultado: 'Moderado', observacion: 'Requiere actividades relajantes.' },
-                { subcategoria: 'Ánimo', resultado: 'Positivo', observacion: 'Buen estado de ánimo general.' },
-                { subcategoria: 'Concentración', resultado: 'Adecuada', observacion: 'Buena atención en tareas.' },
-                { subcategoria: 'Relaciones Sociales', resultado: 'Satisfactorias', observacion: 'Buena interacción grupal.' },
-            ]
-        }
-
-    };
+    if (!voluntario) {
+        return (
+            <div className="resultado-container">
+                <Sidebar />
+                <div className="resultado-content">
+                    <h2>No se encontraron resultados para este voluntario.</h2>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="resultado-container">

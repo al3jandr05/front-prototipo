@@ -1,7 +1,7 @@
 import { Modal, Button } from 'react-bootstrap';
 import { IoBookOutline } from "react-icons/io5";
 import { GrDocumentText } from "react-icons/gr";
-
+import '../styles/modalStyle.css';
 
 const ModalCapacitaciones = ({ show, handleClose, certificaciones }) => {
     return (

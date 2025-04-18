@@ -270,31 +270,7 @@ input[type="range"] {
     background-color: var(--color-blue);
     color: white;
 }
-.modal-content {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-}
 
-.modal-header {
-    background-color: var(--color-blue);
-    color: white;
-    padding: 16px 24px;
-}
-
-.modal-title {
-    font-weight: bold;
-}
-
-.modal-body {
-    padding: 24px;
-    background-color: #f9f9f9;
-}
-
-.modal-footer {
-    padding: 16px 24px;
-    background-color: #f1f1f1;
-}
 
 .capacitacion-card {
     border: 1px solid #ddd;

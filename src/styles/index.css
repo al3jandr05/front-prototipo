@@ -17,7 +17,7 @@
 }
 
 body{
-  font-family: 'Roboto', serif;
+  font-family: 'Roboto', serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;

@@ -2,25 +2,13 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 import '../styles/listaResultados.css';
 import CardResultado from "../components/CardResultado";
+import voluntarios from "../data/voluntarios";
+import resultadosEncuesta from '../data/resultados_encuesta';
 
 const ListaResultados = () => {
-    const voluntarios = [
-        {
-            id: 1,
-            nombre: 'Alejandro Ormachea',
-            ultimaEvaluacion: '19/02/2025',
-        },
-        {
-            id: 2,
-            nombre: 'Carla Fernández',
-            ultimaEvaluacion: '25/03/2025',
-        },
-        {
-            id: 3,
-            nombre: 'Luis Mamani',
-            ultimaEvaluacion: '01/03/2025',
-        },
-    ];
+    const voluntariosConResultados = voluntarios.filter(v =>
+        resultadosEncuesta.some(r => r.id === v.id)
+    );
 
     return (
         <div>
@@ -31,7 +19,7 @@ const ListaResultados = () => {
                 </div>
 
                 <div className="lista-resultados-scroll">
-                    {voluntarios.map((v) => (
+                    {voluntariosConResultados.map((v) => (
                         <CardResultado key={v.id} voluntario={v} />
                     ))}
                 </div>

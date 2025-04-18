@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import '../styles/dashboard.css';
-import { FaBell, FaUserFriends, FaUserAltSlash ,FaUsers, FaChartBar, FaHeartbeat } from 'react-icons/fa';
+import { FaBell, FaUserAltSlash ,FaUsers, FaChartBar, FaHeartbeat } from 'react-icons/fa';
 
 const Dashboard = () => {
     const [showNotifications, setShowNotifications] = useState(false);
@@ -96,6 +96,7 @@ const Dashboard = () => {
 
             </div>
         </div>
+
     );
 };
 

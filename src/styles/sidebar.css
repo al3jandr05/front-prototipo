@@ -7,9 +7,10 @@
     left: 0;
     color: white;
     display: flex;
-    min-width: 200px;
+    min-width: 12%;
     flex-direction: column;
     padding: 20px 15px;
+    max-width: 12%;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     transition: transform 0.3s ease;

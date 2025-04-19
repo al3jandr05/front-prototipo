@@ -4,10 +4,12 @@ import {
     FaCalendarAlt, FaVenusMars, FaPhone, FaTint,
     FaMapMarkerAlt, FaIdCard, FaFileAlt, FaChartLine, FaHistory
 } from 'react-icons/fa';
+import { GoReport } from "react-icons/go";
 import { TbListDetails } from 'react-icons/tb';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdPsychology } from 'react-icons/md';
 import { useParams, useNavigate } from 'react-router-dom';
+import { PiCertificate } from "react-icons/pi";
 
 import historialVoluntarios from '../data/historialVoluntarios';
 import certificacionesVoluntarios from '../data/cap_cert';
@@ -29,6 +31,7 @@ const InfoVoluntarios = () => {
     const [certificacionesVoluntario, setCertificacionesVoluntario] = useState([]);
 
     const tieneHistorial = historialVoluntarios.some(v => v.id === parseInt(id));
+    const tieneReporte = reportesData.some(v => v.id === parseInt(id));
     const reportesVoluntario = reportesData.find(v => v.id === parseInt(id));
     const reportes = reportesVoluntario?.reportes || [];
 
@@ -58,7 +61,15 @@ const InfoVoluntarios = () => {
         if (tieneHistorial) {
             navigate(`/Historial/${id}`);
         } else {
-            setShowModalHistorial(true);
+            setShowModalNuloCap(true);
+        }
+    };
+
+    const handleIrReportes = () => {
+        if (tieneReporte) {
+            navigate(`/Reportes/${id}`);
+        } else {
+            setShowModalNuloCap(true);
         }
     };
 
@@ -76,7 +87,6 @@ const InfoVoluntarios = () => {
         <div className="container-fluid">
             <Sidebar />
             <div className="info-container">
-                {/* Encabezado */}
                 <div className="info-header">
                     <div className="info-avatar"><span>A</span></div>
                     <div>
@@ -98,7 +108,7 @@ const InfoVoluntarios = () => {
                     </div>
 
                     <div className="info-box">
-                        <h4>Evaluaciones Psicológicas</h4>
+                        <h4>Evaluaciones Físicas</h4>
                         {evaluacionesPsico.map((d, i) => (
                             <p key={i}>{d.icono} {d.texto}</p>
                         ))}
@@ -110,23 +120,20 @@ const InfoVoluntarios = () => {
                         </p>
                     </div>
 
-                    <div className="info-box">
-                        <h4>Capacitaciones y Certificaciones</h4>
-                        <button
-                            className="btn-ver-capacitaciones"
-                            onClick={handleVerCertificaciones}
-                        >
-                            Ver Capacitaciones y Certificaciones
-                        </button>
-                    </div>
                 </div>
 
-                {/* Botón Historial */}
-                <div className="historial-boton">
+                <div className="opciones-boton">
                     <button className="btn btn-outline-primary" onClick={handleIrHistorial}>
                         <FaHistory /> Historial
                     </button>
+                    <button className="btn btn-outline-primary" onClick={handleIrReportes}>
+                        <GoReport /> Reportes
+                    </button>
+                    <button className="btn btn-outline-primary" onClick={handleVerCertificaciones}>
+                        <PiCertificate /> Certificaciones
+                    </button>
                 </div>
+
 
                 {/* Detalles y análisis */}
                 <div className="info-reportes">

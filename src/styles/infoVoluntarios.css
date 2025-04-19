@@ -1,12 +1,14 @@
 .container{
     width: 100%;
     position: fixed;
+
 }
 
 .info-container {
     margin-left: 12%;
-    width: calc(100% - 14%);
+    width: calc(100% - 13%);
     padding: 15px;
+    margin-top: 2.5%;
     box-sizing: border-box;
     overflow: hidden;
     min-height: 100vh;
@@ -20,13 +22,13 @@
     gap: 20px;
     margin-bottom: 30px;
 }
-.historial-boton {
+.opciones-boton {
     margin-top: 25px;
     display: flex;
     gap: 12px;
 }
 
-.historial-boton button {
+.opciones-boton button {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -40,7 +42,7 @@
     transition: background-color 0.2s ease;
 }
 
-.historial-boton button:hover {
+.opciones-boton button:hover {
     background-color: var(--color-blue);
 }
 
@@ -127,11 +129,11 @@
     justify-content: flex-start;
 }
 
-.historial-boton {
+.opciones-boton {
     margin-top: 25px;
 }
 
-.historial-boton button {
+.opciones-boton button {
     display: flex;
     align-items: center;
     gap: 8px;

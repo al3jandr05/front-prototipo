@@ -8,6 +8,7 @@ import Formulario from './pages/Formulario';
 import ListaResultados from "./pages/ListaResultados";
 import ResultadoVoluntario from "./pages/ResultadoVoluntario";
 import Dashboard from "./pages/Dashboard";
+import ReportesVoluntario from "./pages/ReportesVoluntario";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/ListaVoluntarios" element={<ListaVoluntarios />} />
                 <Route path="/Voluntario/:id" element={<InfoVoluntarios />} />
+                <Route path="/Reportes/:id" element={<ReportesVoluntario />} />
                 <Route path="/Historial/:id" element={<History />} />
                 <Route path="/Formulario" element={<Formulario />} />
                 <Route path="/ListaResultados" element={<ListaResultados />} />

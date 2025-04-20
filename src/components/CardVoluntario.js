@@ -4,13 +4,16 @@ import '../styles/listaVoluntarios.css';
 
 const CardVoluntario = ({ voluntario }) => {
     const navigate = useNavigate();
+    const handleClick = () => {
+        localStorage.setItem('voluntarioId', voluntario.id);
+        navigate(`/Voluntario/${voluntario.id}`);
+    };
+
 
     return (
-        <div
-            className="card-voluntario"
-            onClick={() => navigate(`/Voluntario/${voluntario.id}`)}
-        >
-            <div className="avatar">
+        <div className="card-voluntario" onClick={handleClick}>
+
+        <div className="avatar">
                 <span>{voluntario.nombre[0]}</span>
             </div>
             <div className="info-voluntario">

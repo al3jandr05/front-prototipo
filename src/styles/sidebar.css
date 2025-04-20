@@ -10,7 +10,6 @@
     min-width: 12%;
     flex-direction: column;
     padding: 20px 15px;
-    max-width: 12%;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     transition: transform 0.3s ease;
@@ -133,3 +132,64 @@
         cursor: pointer;
     }
 }
+
+.sidebar-submenu {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    gap: 10px;
+}
+
+.sidebar-submenu .sidebar-item {
+    background-color: var(--color-light-cyan);
+    color: var(--color-dark-blue);
+    font-size: 14px;
+    font-weight: 500;
+    padding-left: 25px;
+}
+
+.sidebar-submenu .sidebar-item.active {
+    background-color: var(--color-cyan);
+    color: white;
+}
+
+.sidebar-chevron {
+    margin-left: auto;
+    font-size: 14px;
+}
+.sidebar-chevron {
+    margin-left: auto;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-left: 20px;
+    margin-top: 6px;
+}
+
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+/* Animación de aparición/desaparición del submenu */
+.sidebar-submenu-animated {
+    animation: slideDown 0.3s ease forwards;
+}
+
+.sidebar-submenu-hide {
+    animation: slideUp 0.3s ease forwards;
+    pointer-events: none;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+

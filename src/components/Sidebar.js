@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/sidebar.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaWpforms, FaInfoCircle, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
+import {
+    FaWpforms, FaInfoCircle, FaSignOutAlt, FaBars, FaTimes,
+    FaHistory
+} from 'react-icons/fa';
 import { SiAnswer } from "react-icons/si";
 import { MdSpaceDashboard } from "react-icons/md";
 import { PiFireSimpleFill } from "react-icons/pi";
-import { IoList } from "react-icons/io5";
+import { IoList, IoPerson } from "react-icons/io5";
+import { MdReport } from "react-icons/md";
 
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
+    const [voluntarioId, setVoluntarioId] = useState(null);
+    const [submenuVisible, setSubmenuVisible] = useState(false);
 
     const menuItems = [
         { icon: <MdSpaceDashboard />, label: 'Dashboard', path: '/Dashboard' },
@@ -24,29 +30,29 @@ const Sidebar = () => {
         setIsOpen(false);
     };
 
-    // 👇 cerrar el sidebar automáticamente al agrandar la pantalla
     useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth > 768) {
-                setIsOpen(false);
-            }
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+        const id = localStorage.getItem('voluntarioId');
+        const path = location.pathname;
+
+        const isInfoRuta = /^\/(Voluntario|Historial|Reportes)\/\d+/.test(path);
+
+        if (id && isInfoRuta) {
+            setVoluntarioId(id);
+            setSubmenuVisible(true);
+        } else {
+            setSubmenuVisible(false);
+        }
+    }, [location.pathname]);
 
     return (
         <>
-            {/* Hamburguesa */}
             <div className="hamburger-icon" onClick={() => setIsOpen(!isOpen)}>
                 <FaBars />
             </div>
 
-            {/* Overlay */}
             {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
 
             <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-                {/* Solo mostrar en móviles */}
                 {isOpen && (
                     <div className="sidebar-close" onClick={() => setIsOpen(false)}>
                         <FaTimes />
@@ -59,17 +65,50 @@ const Sidebar = () => {
                 </div>
 
                 <div className="sidebar-menu">
-                    {menuItems.map((item, index) => (
-                        <div
-                            key={index}
-                            className={`sidebar-item ${location.pathname.startsWith(item.path) ? 'active' : ''}`}
-                            onClick={() => handleNavigate(item.path)}
-                        >
-                            <span className="sidebar-icon">{item.icon}</span>
-                            <span className="sidebar-label">{item.label}</span>
-                        </div>
-                    ))}
+                    {menuItems.map((item, index) => {
+                        const isListaVoluntarios = item.label === 'Lista Voluntarios';
+                        const isActive = location.pathname.startsWith(item.path);
+
+                        return (
+                            <div key={index}>
+                                <div
+                                    className={`sidebar-item ${isActive ? 'active' : ''}`}
+                                    onClick={() => handleNavigate(item.path)}
+                                >
+                                    <span className="sidebar-icon">{item.icon}</span>
+                                    <span className="sidebar-label">{item.label}</span>
+                                </div>
+
+                                {isListaVoluntarios && submenuVisible && voluntarioId && (
+                                    <div className="sidebar-submenu">
+                                        <div
+                                            className={`sidebar-item ${location.pathname === `/Voluntario/${voluntarioId}` ? 'active' : ''}`}
+                                            onClick={() => handleNavigate(`/Voluntario/${voluntarioId}`)}
+                                        >
+                                            <span className="sidebar-icon"><IoPerson /></span>
+                                            <span className="sidebar-label">Voluntario</span>
+                                        </div>
+                                        <div
+                                            className={`sidebar-item ${location.pathname === `/Historial/${voluntarioId}` ? 'active' : ''}`}
+                                            onClick={() => handleNavigate(`/Historial/${voluntarioId}`)}
+                                        >
+                                            <span className="sidebar-icon"><FaHistory /></span>
+                                            <span className="sidebar-label">Historial</span>
+                                        </div>
+                                        <div
+                                            className={`sidebar-item ${location.pathname === `/Reportes/${voluntarioId}` ? 'active' : ''}`}
+                                            onClick={() => handleNavigate(`/Reportes/${voluntarioId}`)}
+                                        >
+                                            <span className="sidebar-icon"><MdReport /></span>
+                                            <span className="sidebar-label">Reportes</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
+
 
                 <div className="sidebar-footer">
                     <div className="sidebar-item">

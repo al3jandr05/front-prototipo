@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Sidebar from '../components/Sidebar';
 import {
     FaCalendarAlt, FaVenusMars, FaPhone, FaTint,
     FaMapMarkerAlt, FaIdCard, FaFileAlt, FaChartLine, FaHistory
 } from 'react-icons/fa';
-import { GoReport } from "react-icons/go";
-import { TbListDetails } from 'react-icons/tb';
-import { LuNotebookPen } from 'react-icons/lu';
-import { MdPsychology } from 'react-icons/md';
-import { useParams, useNavigate } from 'react-router-dom';
-import { PiCertificate } from "react-icons/pi";
+import { MdReport } from "react-icons/md";
+import {TbListDetails} from 'react-icons/tb';
+import {LuNotebookPen} from 'react-icons/lu';
+import {MdPsychology} from 'react-icons/md';
+import {useParams, useNavigate} from 'react-router-dom';
+import {PiCertificate} from "react-icons/pi";
 
 import historialVoluntarios from '../data/historialVoluntarios';
 import certificacionesVoluntarios from '../data/cap_cert';
@@ -22,7 +22,7 @@ import '../styles/infoVoluntarios.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const InfoVoluntarios = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     const [showModalCap, setShowModalCap] = useState(false);
@@ -36,18 +36,18 @@ const InfoVoluntarios = () => {
     const reportes = reportesVoluntario?.reportes || [];
 
     const datosPersonales = [
-        { icono: <FaCalendarAlt />, texto: '27/08/1994' },
-        { icono: <FaVenusMars />, texto: 'Masculino' },
-        { icono: <FaPhone />, texto: '+591 76291234' },
-        { icono: <FaTint />, texto: 'RH A+' },
-        { icono: <FaMapMarkerAlt />, texto: 'Av. Banzer, 8vo Anillo' },
-        { icono: <FaIdCard />, texto: '97841123' }
+        {icono: <FaCalendarAlt/>, texto: '27/08/1994'},
+        {icono: <FaVenusMars/>, texto: 'Masculino'},
+        {icono: <FaPhone/>, texto: '+591 76291234'},
+        {icono: <FaTint/>, texto: 'RH A+'},
+        {icono: <FaMapMarkerAlt/>, texto: 'Av. Banzer, 8vo Anillo'},
+        {icono: <FaIdCard/>, texto: '97841123'}
     ];
 
     const evaluacionesPsico = [
-        { icono: <FaFileAlt />, texto: 'Última evaluación: 12/11/2024' },
-        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: 16/04/2025' },
-        { icono: <MdPsychology />, texto: 'Resultado: En observación' }
+        {icono: <FaFileAlt/>, texto: 'Última evaluación: 12/11/2024'},
+        {icono: <FaCalendarAlt/>, texto: 'Próxima evaluación: 16/04/2025'},
+        {icono: <MdPsychology/>, texto: 'Resultado: En observación'}
     ];
 
     const nivelEstres = 1;
@@ -85,7 +85,7 @@ const InfoVoluntarios = () => {
 
     return (
         <div className="container-fluid">
-            <Sidebar />
+            <Sidebar/>
             <div className="info-container">
                 <div className="info-header">
                     <div className="info-avatar"><span>A</span></div>
@@ -98,7 +98,6 @@ const InfoVoluntarios = () => {
                     </div>
                 </div>
 
-                {/* Secciones */}
                 <div className="info-secciones">
                     <div className="info-box">
                         <h4>Datos Personales</h4>
@@ -112,7 +111,14 @@ const InfoVoluntarios = () => {
                         {evaluacionesPsico.map((d, i) => (
                             <p key={i}>{d.icono} {d.texto}</p>
                         ))}
-                        <p><FaChartLine /> Niveles de estrés</p>
+                    </div>
+
+                    <div className="info-box">
+                        <h4>Evaluaciones Psicológicas</h4>
+                        {evaluacionesPsico.map((d, i) => (
+                            <p key={i}>{d.icono} {d.texto}</p>
+                        ))}
+                        <p><FaChartLine/> Niveles de estrés</p>
                         <p className="mt-2">
               <span className={`nivel-estres nivel-estres-${getNivelEstres(nivelEstres)}`}>
                 {getNivelEstres(nivelEstres).toUpperCase()}
@@ -124,18 +130,17 @@ const InfoVoluntarios = () => {
 
                 <div className="opciones-boton">
                     <button className="btn btn-outline-primary" onClick={handleIrHistorial}>
-                        <FaHistory /> Historial
+                        <FaHistory/> Historial
                     </button>
                     <button className="btn btn-outline-primary" onClick={handleIrReportes}>
-                        <GoReport /> Reportes
+                        <MdReport/> Reportes
                     </button>
                     <button className="btn btn-outline-primary" onClick={handleVerCertificaciones}>
-                        <PiCertificate /> Certificaciones
+                        <PiCertificate/> Certificaciones
                     </button>
                 </div>
 
 
-                {/* Detalles y análisis */}
                 <div className="info-reportes">
                     <h2>Detalles y Análisis</h2>
                     <div className="reporte-grid">
@@ -144,8 +149,8 @@ const InfoVoluntarios = () => {
                                 <div key={index} className="reporte-card">
                                     <div className="reporte-icono">
                                         {item.tipo === 'detalle'
-                                            ? <TbListDetails size={24} />
-                                            : <LuNotebookPen size={24} />}
+                                            ? <TbListDetails size={24}/>
+                                            : <LuNotebookPen size={24}/>}
                                     </div>
                                     <div>
                                         <strong>{item.titulo}</strong>
@@ -154,7 +159,7 @@ const InfoVoluntarios = () => {
                                 </div>
                             ))
                         ) : (
-                            <p style={{ fontStyle: 'italic', color: '#555', padding: '10px' }}>
+                            <p style={{fontStyle: 'italic', color: '#555', padding: '10px'}}>
                                 Todavía no hay información disponible.
                             </p>
                         )}
@@ -162,7 +167,6 @@ const InfoVoluntarios = () => {
                 </div>
             </div>
 
-            {/* Modales */}
             <ModalCapacitaciones
                 show={showModalCap}
                 handleClose={() => setShowModalCap(false)}

@@ -91,3 +91,28 @@
 }
 
 
+.buscador-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.buscador-grid input,
+.buscador-grid select {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.buscador-grid input:focus,
+.buscador-grid select:focus {
+    outline: none;
+    border-color: var(--color-cyan);
+}

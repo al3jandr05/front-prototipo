@@ -41,7 +41,7 @@ const ListaVoluntarios = () => {
                             placeholder="Buscar por tipo de sangre"
                             value={tipoSangre}
                             onChange={(e) => setTipoSangre(e.target.value)}
-                        />
+                       />
                         <select value={estado} onChange={(e) => setEstado(e.target.value)}>
                             <option value="">Todos los estados</option>
                             <option value="Activo">Activo</option>

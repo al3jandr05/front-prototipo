@@ -1,21 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardVoluntario from '../components/CardVoluntario';
 import '../styles/listaVoluntarios.css';
-import voluntarios from '../data/voluntarios';
+import { obtenerVoluntarios } from '../api/rest/voluntarioService';
+import { useNavigate } from 'react-router-dom';
 
 const ListaVoluntarios = () => {
+    const [voluntarios, setVoluntarios] = useState([]);
     const [busquedaNombre, setBusquedaNombre] = useState('');
     const [ci, setCi] = useState('');
     const [tipoSangre, setTipoSangre] = useState('');
     const [estado, setEstado] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError('No estás autenticado. Redirigiendo...');
+            setTimeout(() => navigate('/'), 1500);
+            return;
+        }
+
+        const fetchVoluntarios = async () => {
+            try {
+                const data = await obtenerVoluntarios();
+                setVoluntarios(data);
+            } catch (err) {
+                setError('No se pudo cargar la lista de voluntarios');
+                console.error(err);
+            }
+        };
+
+        fetchVoluntarios();
+    }, [navigate]);
 
     const filtrados = voluntarios.filter((v) =>
-        v.nombre.toLowerCase().includes(busquedaNombre.toLowerCase()) &&
-        v.ci.includes(ci) &&
-        v.tipoSangre.toLowerCase().includes(tipoSangre.toLowerCase()) &&
-        (estado === '' || v.estado.toLowerCase() === estado.toLowerCase())
+        (v.nombre?.toLowerCase() || '').includes(busquedaNombre.toLowerCase()) &&
+        (v.ci || '').includes(ci) &&
+        (v.tipoSangre?.toLowerCase() || '').includes(tipoSangre.toLowerCase()) &&
+        (estado === '' || (v.estado?.toLowerCase() || '') === estado.toLowerCase())
     );
+
 
     return (
         <div>
@@ -49,6 +75,8 @@ const ListaVoluntarios = () => {
                         </select>
                     </div>
                 </div>
+
+                {error && <p className="error-message">{error}</p>}
 
                 <div className="lista-voluntarios-scroll">
                     {filtrados.length > 0 ? (

@@ -2,16 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import App from './App';
+import { ApolloProvider } from '@apollo/client';
+import client from './api/apolloClient';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<<<<<<< HEAD
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-=======
     <React.StrictMode>
         <ApolloProvider client={client}>
             <App />
@@ -19,4 +14,3 @@ root.render(
         </ApolloProvider>
     </React.StrictMode>
 );
->>>>>>> nube

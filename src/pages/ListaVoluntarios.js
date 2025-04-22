@@ -22,6 +22,7 @@ const ListaVoluntarios = () => {
             return;
         }
 
+
         const fetchVoluntarios = async () => {
             try {
                 const data = await obtenerVoluntarios();

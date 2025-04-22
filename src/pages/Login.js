@@ -16,6 +16,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
+
             const { access_token } = await login(correo, contrasena);
             localStorage.setItem('token', access_token);
             localStorage.setItem('bearer', 'Bearer');

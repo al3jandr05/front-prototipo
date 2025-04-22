@@ -42,6 +42,7 @@ const Login = () => {
                     </form>
                 </div>
 
+
                 <div className="login-right">
                     <div className="bienvenida">
                         <h1>¡Bienvenido a GEVOPI!</h1>

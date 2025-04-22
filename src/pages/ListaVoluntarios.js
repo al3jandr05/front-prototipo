@@ -19,6 +19,7 @@ const ListaVoluntarios = () => {
 
     return (
         <div>
+
             <Sidebar />
             <div className="contenido-voluntarios">
                 <div className="encabezado-voluntarios">

@@ -3,10 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { PiFireSimpleFill } from "react-icons/pi";
 import React, { useState } from 'react';
+import { login } from '../api/rest/authService';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [correo, setCorreo] = useState('');
+    const [contrasena, setContrasena] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+
+            const { access_token } = await login(correo, contrasena);
+            localStorage.setItem('token', access_token);
+            localStorage.setItem('bearer', 'Bearer');
+            navigate('/Dashboard');
+        } catch (err) {
+            setError('Credenciales incorrectas');
+        }
+    };
 
     return (
         <div className="login-wrapper">
@@ -16,12 +34,20 @@ const Login = () => {
                         <PiFireSimpleFill className="icono-logo" />
                         <span className="texto-logo">GEVOPI</span>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <h1>Iniciar Sesión</h1>
+
+                        {error && <p className="error-message">{error}</p>}
 
                         <div className="input-box">
                             <p>Correo</p>
-                            <input type="text" placeholder="Ingrese su Correo Electrónico" required />
+                            <input
+                                type="text"
+                                placeholder="Ingrese su Correo Electrónico"
+                                value={correo}
+                                onChange={(e) => setCorreo(e.target.value)}
+                                required
+                            />
                         </div>
 
                         <div className="input-box">
@@ -30,6 +56,8 @@ const Login = () => {
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     placeholder="Ingrese su Contraseña"
+                                    value={contrasena}
+                                    onChange={(e) => setContrasena(e.target.value)}
                                     required
                                 />
                                 <span onClick={() => setShowPassword(!showPassword)}>
@@ -38,7 +66,7 @@ const Login = () => {
                             </div>
                         </div>
 
-                        <button type="submit" onClick={() => navigate(`/Dashboard`)}>Iniciar Sesión</button>
+                        <button type="submit">Iniciar Sesión</button>
                     </form>
                 </div>
 

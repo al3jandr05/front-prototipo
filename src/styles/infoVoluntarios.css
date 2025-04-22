@@ -137,7 +137,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: var(--color-cyan);
+    background-color: var(--color-dark-blue);
     border: none;
     padding: 10px 25px;
     border-radius: 12px;

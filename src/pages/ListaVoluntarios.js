@@ -1,84 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardVoluntario from '../components/CardVoluntario';
+import { FaFilter } from 'react-icons/fa';
 import '../styles/listaVoluntarios.css';
-import { obtenerVoluntarios } from '../api/rest/voluntarioService';
-import { useNavigate } from 'react-router-dom';
+import voluntarios from '../data/voluntarios';
 
 const ListaVoluntarios = () => {
-    const [voluntarios, setVoluntarios] = useState([]);
-    const [busquedaNombre, setBusquedaNombre] = useState('');
+    const [nombre, setNombre] = useState('');
     const [ci, setCi] = useState('');
     const [tipoSangre, setTipoSangre] = useState('');
     const [estado, setEstado] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            setError('No estás autenticado. Redirigiendo...');
-            setTimeout(() => navigate('/'), 1500);
-            return;
-        }
+    const hayFiltros =
+        nombre !== '' || ci !== '' || tipoSangre !== '' || estado !== '';
 
-
-        const fetchVoluntarios = async () => {
-            try {
-                const data = await obtenerVoluntarios();
-                setVoluntarios(data);
-            } catch (err) {
-                setError('No se pudo cargar la lista de voluntarios');
-                console.error(err);
-            }
-        };
-
-        fetchVoluntarios();
-    }, [navigate]);
+    const resetFiltros = () => {
+        setNombre('');
+        setCi('');
+        setTipoSangre('');
+        setEstado('');
+    };
 
     const filtrados = voluntarios.filter((v) =>
-        (v.nombre?.toLowerCase() || '').includes(busquedaNombre.toLowerCase()) &&
-        (v.ci || '').includes(ci) &&
-        (v.tipoSangre?.toLowerCase() || '').includes(tipoSangre.toLowerCase()) &&
-        (estado === '' || (v.estado?.toLowerCase() || '') === estado.toLowerCase())
+        v.nombre.toLowerCase().includes(nombre.toLowerCase()) &&
+        v.ci.includes(ci) &&
+        (tipoSangre === '' || v.tipoSangre.toLowerCase() === tipoSangre.toLowerCase()) &&
+        (estado === '' || v.estado.toLowerCase() === estado.toLowerCase())
     );
-
 
     return (
         <div>
-
             <Sidebar />
             <div className="contenido-voluntarios">
                 <div className="encabezado-voluntarios">
                     <h1 className="titulo-voluntarios">Lista de Voluntarios</h1>
-                    <div className="buscador-grid">
+
+                    <div className="filtros-bar">
+                        <button
+                            className={`btn-filtro-icono ${hayFiltros ? 'activo' : ''}`}
+                            title="Limpiar filtros"
+                            onClick={resetFiltros}
+                        >
+                            <FaFilter />
+                        </button>
+
                         <input
                             type="text"
+                            className="input-filtro"
                             placeholder="Buscar por nombre"
-                            value={busquedaNombre}
-                            onChange={(e) => setBusquedaNombre(e.target.value)}
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
                         />
+
                         <input
                             type="text"
-                            placeholder="Buscar por CI"
+                            className="input-filtro"
+                            placeholder="CI"
                             value={ci}
                             onChange={(e) => setCi(e.target.value)}
                         />
-                        <input
-                            type="text"
-                            placeholder="Buscar por tipo de sangre"
+
+                        <select
+                            className="input-filtro"
                             value={tipoSangre}
                             onChange={(e) => setTipoSangre(e.target.value)}
-                        />
-                        <select value={estado} onChange={(e) => setEstado(e.target.value)}>
-                            <option value="">Todos los estados</option>
-                            <option value="Activo">Activo</option>
+                        >
+                            <option value="">Tipo de sangre</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+
+                        <select
+                            className="input-filtro"
+                            value={estado}
+                            onChange={(e) => setEstado(e.target.value)}
+                        >
+                            <option value="">Estado</option>
+                            <option value="Disponible">Disponible</option>
                             <option value="Inactivo">Inactivo</option>
                         </select>
                     </div>
                 </div>
-
-                {error && <p className="error-message">{error}</p>}
 
                 <div className="lista-voluntarios-scroll">
                     {filtrados.length > 0 ? (

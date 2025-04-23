@@ -216,20 +216,26 @@
     flex-wrap: wrap;
     gap: 30px;
     margin-top: 40px;
+    justify-content: space-between;
 }
 
 .chart-card {
     flex: 1;
-    min-width: 300px;
-    max-width: 400px;
-    background: white;
+    min-width: 500px;
+    max-width: 500px;
+    background-color: #ffffff;
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-    text-align: center;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.chart-card h4 {
-    margin-bottom: 20px;
+.chart-title {
     color: var(--color-dark-blue);
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
 }

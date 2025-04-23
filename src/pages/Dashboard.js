@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import '../styles/dashboard.css';
-import { FaBell, FaUserAltSlash ,FaUsers, FaChartBar, FaHeartbeat } from 'react-icons/fa';
-import ChartsDashboard from '../components/ChartsDashboard';
+import { FaBell, FaUserAltSlash, FaUsers, FaChartBar, FaHeartbeat } from 'react-icons/fa';
+import { Pie } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend
+} from 'chart.js';
+import { datosEstres, datosNecesidades, datosCapacitaciones } from '../data/chartData';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
     const [showNotifications, setShowNotifications] = useState(false);
@@ -30,6 +39,8 @@ const Dashboard = () => {
         { nombre: 'Carla Fernández', reporte: 'Fatiga prolongada' },
     ];
 
+
+
     return (
         <div className="dashboard-container">
             <Sidebar />
@@ -56,13 +67,15 @@ const Dashboard = () => {
                     </div>
                 </div>
 
+                {/* Tarjetas resumen */}
                 <div className="tarjetas-resumen">
-                    <div className="tarjeta resumen1"><FaUsers /> <div><h3>Disponibles</h3><p>12 activos</p></div></div>
-                    <div className="tarjeta resumen2"><FaUserAltSlash  /> <div><h3>No Disponibles</h3><p>9 voluntarios</p></div></div>
-                    <div className="tarjeta resumen3"><FaHeartbeat /> <div><h3>Alertas recientes</h3><p>3 reportes</p></div></div>
-                    <div className="tarjeta resumen4"><FaChartBar /> <div><h3>Evaluaciones</h3><p>5 completadas</p></div></div>
+                    <div className="tarjeta resumen1"><FaUsers /><div><h3>Disponibles</h3><p>12 activos</p></div></div>
+                    <div className="tarjeta resumen2"><FaUserAltSlash /><div><h3>No Disponibles</h3><p>9 voluntarios</p></div></div>
+                    <div className="tarjeta resumen3"><FaHeartbeat /><div><h3>Alertas recientes</h3><p>3 reportes</p></div></div>
+                    <div className="tarjeta resumen4"><FaChartBar /><div><h3>Evaluaciones</h3><p>5 completadas</p></div></div>
                 </div>
 
+                {/* Voluntarios y reportes */}
                 <div className="dashboard-paneles">
                     <div className="panel listado-voluntarios">
                         <h3>Últimos voluntarios registrados</h3>
@@ -95,11 +108,22 @@ const Dashboard = () => {
                     </div>
                 </div>
 
+                <div className="charts-container">
+                    <div className="chart-card">
+                        <h4 className="chart-title">Niveles de Estrés</h4>
+                        <Pie data={datosEstres} options={{ plugins: { legend: { position: 'bottom' } } }} />
+                    </div>
+                    <div className="chart-card">
+                        <h4 className="chart-title">Necesidades</h4>
+                        <Pie data={datosNecesidades} options={{ plugins: { legend: { position: 'bottom' } } }} />
+                    </div>
+                    <div className="chart-card">
+                        <h4 className="chart-title">Capacitaciones</h4>
+                        <Pie data={datosCapacitaciones} options={{ plugins: { legend: { position: 'bottom' } } }} />
+                    </div>
+                </div>
             </div>
-            <ChartsDashboard />
-
         </div>
-
     );
 };
 

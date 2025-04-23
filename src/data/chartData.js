@@ -3,7 +3,9 @@ export const datosEstres = {
     datasets: [
         {
             data: [8, 5, 3],
-            backgroundColor: ['#ffd60a', '#f48c06', '#d00000'],
+            backgroundColor: ['#90e0ef', '#00b4d8', '#0077b6'],
+            borderColor: ['#caf0f8', '#caf0f8', '#caf0f8'],
+            borderWidth: 2,
         },
     ],
 };
@@ -13,7 +15,9 @@ export const datosNecesidades = {
     datasets: [
         {
             data: [4, 6, 3, 2],
-            backgroundColor: ['#ffd60a', '#f48c06', '#d00000', '#9d4edd'],
+            backgroundColor: ['#90e0ef', '#00b4d8', '#0077b6', '#03045e'],
+            borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+            borderWidth: 2,
         },
     ],
 };
@@ -23,7 +27,9 @@ export const datosCapacitaciones = {
     datasets: [
         {
             data: [5, 4, 3, 2],
-            backgroundColor: ['#ffd60a', '#f48c06', '#d00000', '#9d4edd'],
+            backgroundColor: ['#90e0ef', '#00b4d8', '#0077b6', '#03045e'],
+            borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+            borderWidth: 2,
         },
     ],
 };

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardVoluntario from '../components/CardVoluntario';
-import { FaFilter } from 'react-icons/fa';
+import { FaSlidersH } from 'react-icons/fa';
 import '../styles/listaVoluntarios.css';
 import voluntarios from '../data/voluntarios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal, Button } from 'react-bootstrap';
 
 const ListaVoluntarios = () => {
     const [nombre, setNombre] = useState('');
@@ -11,14 +13,16 @@ const ListaVoluntarios = () => {
     const [tipoSangre, setTipoSangre] = useState('');
     const [estado, setEstado] = useState('');
 
+    const [mostrarModal, setMostrarModal] = useState(false);
+
     const hayFiltros =
-        nombre !== '' || ci !== '' || tipoSangre !== '' || estado !== '';
+        ci !== '' || tipoSangre !== '' || estado !== '';
 
     const resetFiltros = () => {
-        setNombre('');
         setCi('');
         setTipoSangre('');
         setEstado('');
+        setMostrarModal(false);
     };
 
     const filtrados = voluntarios.filter((v) =>
@@ -38,10 +42,10 @@ const ListaVoluntarios = () => {
                     <div className="filtros-bar">
                         <button
                             className={`btn-filtro-icono ${hayFiltros ? 'activo' : ''}`}
-                            title="Limpiar filtros"
-                            onClick={resetFiltros}
+                            title="Abrir filtros"
+                            onClick={() => setMostrarModal(true)}
                         >
-                            <FaFilter />
+                            <FaSlidersH />
                         </button>
 
                         <input
@@ -51,40 +55,6 @@ const ListaVoluntarios = () => {
                             value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
                         />
-
-                        <input
-                            type="text"
-                            className="input-filtro"
-                            placeholder="CI"
-                            value={ci}
-                            onChange={(e) => setCi(e.target.value)}
-                        />
-
-                        <select
-                            className="input-filtro"
-                            value={tipoSangre}
-                            onChange={(e) => setTipoSangre(e.target.value)}
-                        >
-                            <option value="">Tipo de sangre</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                        </select>
-
-                        <select
-                            className="input-filtro"
-                            value={estado}
-                            onChange={(e) => setEstado(e.target.value)}
-                        >
-                            <option value="">Estado</option>
-                            <option value="Disponible">Disponible</option>
-                            <option value="Inactivo">Inactivo</option>
-                        </select>
                     </div>
                 </div>
 
@@ -97,6 +67,61 @@ const ListaVoluntarios = () => {
                         <p style={{ paddingLeft: '40px' }}>No se encontraron resultados.</p>
                     )}
                 </div>
+
+                <Modal show={mostrarModal} onHide={() => setMostrarModal(false)} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Filtrar Voluntarios</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="filtro-opciones">
+                            <label>CI</label>
+                            <input
+                                type="text"
+                                placeholder="Buscar por CI"
+                                value={ci}
+                                onChange={(e) => setCi(e.target.value)}
+                            />
+
+                            <label>Tipo de Sangre</label>
+                            <select
+                                value={tipoSangre}
+                                onChange={(e) => setTipoSangre(e.target.value)}
+                            >
+                                <option value="">Todos</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+
+                            <label>Disponibilidad</label>
+                            <select
+                                value={estado}
+                                onChange={(e) => setEstado(e.target.value)}
+                            >
+                                <option value="">Todos</option>
+                                <option value="Disponible">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={resetFiltros}>
+                            Reiniciar
+                        </Button>
+                        <Button
+                            variant="primary"
+                            onClick={() => setMostrarModal(false)}
+                            disabled={!ci && !tipoSangre && !estado}
+                        >
+                            Aplicar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </div>
     );

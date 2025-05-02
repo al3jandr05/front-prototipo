@@ -1,0 +1,139 @@
+.capacitaciones-container {
+    margin-left: 13%;
+    margin-top: 20px;
+    width: calc(100% - 13%);
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 100vh;
+    position: absolute;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.titulo-capacitaciones {
+    color: var(--color-dark-blue);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.boton-agregar-wrapper {
+    margin-bottom: 25px;
+}
+
+.agregar-btn {
+    background-color: var(--color-blue);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.agregar-btn:hover {
+    background-color: var(--color-dark-cyan);
+}
+
+.tabla-capacitaciones {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.tabla-capacitaciones thead {
+    background-color: var(--color-lighter-cyan);
+}
+
+.tabla-capacitaciones th, .tabla-capacitaciones td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-light-cyan);
+    color: var(--color-dark-blue);
+    font-size: 18px;
+}
+
+.tabla-capacitaciones tr:last-child td {
+    border-bottom: none;
+}
+
+.btn-acciones {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.btn-accion {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-accion.editar {
+    background-color: var(--color-cyan);
+}
+
+.btn-accion.editar:hover {
+    background-color: var(--color-dark-cyan);
+}
+
+.btn-accion.eliminar {
+    background-color: red;
+}
+
+.btn-accion.eliminar:hover {
+    background-color: darkred;
+}
+
+@media (max-width: 768px) {
+    .titulo-capacitaciones {
+        font-size: 2rem;
+    }
+
+    .agregar-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .tabla-capacitaciones th, .tabla-capacitaciones td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .btn-accion {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+}
+
+.nombre-capacitacion {
+    cursor: pointer;
+    color: var(--color-blue);
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.nombre-capacitacion:hover {
+    text-decoration: underline;
+    color: var(--color-dark-blue);
+}
+
+.modal-body p {
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.error-texto {
+    color: red;
+    font-size: 13px;
+    margin-top: 5px;
+    font-weight: bold;
+}

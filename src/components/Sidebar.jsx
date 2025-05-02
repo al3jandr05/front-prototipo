@@ -23,6 +23,8 @@ const Sidebar = () => {
         { icon: <IoList />, label: 'Lista Voluntarios', path: '/ListaVoluntarios' },
         { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
         { icon: <SiAnswer />, label: 'Resultados', path: '/ListaResultados' },
+        { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
+
     ];
 
     const handleNavigate = (path) => {

@@ -9,6 +9,7 @@ import ListaResultados from "./pages/ListaResultados";
 import ResultadoVoluntario from "./pages/ResultadoVoluntario";
 import Dashboard from "./pages/Dashboard";
 import ReportesVoluntario from "./pages/ReportesVoluntario";
+import Capacitaciones from "./pages/Capacitaciones";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/Historial/:id" element={<History />} />
                 <Route path="/Formulario" element={<Formulario />} />
                 <Route path="/ListaResultados" element={<ListaResultados />} />
+                <Route path="/Capacitaciones" element={<Capacitaciones />} />
                 <Route path="/ResultadoVoluntario/:id" element={<ResultadoVoluntario />} />
             </Routes>
         </Router>

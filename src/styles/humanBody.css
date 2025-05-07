@@ -1,0 +1,101 @@
+.human-body-wrapper {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 500px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+.human-body-wrapper h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #03045e;
+    border-bottom: 2px solid #03045e;
+    padding-bottom: 10px;
+}
+
+.human-body {
+    position: relative;
+    width: 300px;
+    height: 600px;
+    margin: 0 auto;
+}
+
+.human-body svg {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    transition: transform 0.2s ease, fill 0.3s ease;
+}
+
+.human-body svg:hover {
+    transform: scale(1.1);
+}
+
+#head {
+    left: 120px;
+    top: 0;
+}
+
+#chest {
+    left: 110px;
+    top: 70px;
+}
+
+#stomach {
+    left: 115px;
+    top: 130px;
+}
+
+#left-shoulder {
+    left: 40px;
+    top: 70px;
+}
+
+#left-arm {
+    left: 40px;
+    top: 130px;
+}
+
+#left-hand {
+    left: 40px;
+    top: 200px;
+}
+
+#right-shoulder {
+    left: 220px;
+    top: 70px;
+}
+
+#right-arm {
+    left: 220px;
+    top: 130px;
+}
+
+#right-hand {
+    left: 220px;
+    top: 200px;
+}
+
+#left-leg {
+    left: 90px;
+    top: 250px;
+}
+
+#left-foot {
+    left: 90px;
+    top: 340px;
+}
+
+#right-leg {
+    left: 150px;
+    top: 250px;
+}
+
+#right-foot {
+    left: 150px;
+    top: 340px;
+}

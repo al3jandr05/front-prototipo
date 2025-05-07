@@ -1,7 +1,7 @@
 
 .contenido-voluntarios {
-    margin-left: 12%;
-    width: calc(100% - 12%);
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
     padding: 15px;
     box-sizing: border-box;
     overflow: hidden;

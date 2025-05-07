@@ -2,7 +2,7 @@
 
 
 :root {
-  --color-dark-blue: #03045e;
+  --color-dark-blue: rgba(3, 4, 94, 0.67);
   --color-blue: #0077b6;
   --color-cyan: #00b8d8;
   --color-dark-cyan: #3FB7CD;
@@ -24,4 +24,9 @@ body{
   min-height: 100vh;
   background-color: #e7e7e7 !important;
 }
+:root {
+  --sidebar-width: 11%;
+}
+
+
 

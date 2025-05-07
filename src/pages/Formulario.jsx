@@ -4,7 +4,7 @@ import '../styles/formulario.css';
 import { preguntas as preguntasBase, opciones } from '../data/data_formulario';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
-import HumanBody from '../components/HumanBody'; // ✅ IMPORTANTE
+import HumanBody from '../components/HumanBody';
 
 const Formulario = () => {
     const [pagina, setPagina] = useState('fisico');
@@ -13,6 +13,7 @@ const Formulario = () => {
         psicologico: Array(preguntasBase.psicologico.length).fill("")
     });
     const [preguntas, setPreguntas] = useState(preguntasBase);
+    const [partesSeleccionadas, setPartesSeleccionadas] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState('agregar');
     const [preguntaActual, setPreguntaActual] = useState('');
@@ -26,16 +27,6 @@ const Formulario = () => {
 
     const topRef = useRef(null);
 
-    // ✅ Estado para selección de partes del cuerpo
-    const [humanBodySelection, setHumanBodySelection] = useState({
-        'Cabeza': '',
-        'Pecho': '',
-        'Brazo Derecho': '',
-        'Brazo Izquierdo': '',
-        'Pierna Derecha': '',
-        'Pierna Izquierda': ''
-    });
-
     const scrollToTop = () => topRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => scrollToTop(), [pagina]);
 
@@ -48,19 +39,23 @@ const Formulario = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const bodySelections = Object.values(humanBodySelection);
-        if (respuestas.psicologico.includes("") || respuestas.fisico.includes("") || bodySelections.includes("")) {
+        const fisicoCompleto = !respuestas.fisico.includes("");
+        const psicologicoCompleto = !respuestas.psicologico.includes("");
+
+        const tieneSeleccion = Object.keys(partesSeleccionadas).length > 0;
+
+        if (!fisicoCompleto || !psicologicoCompleto || !tieneSeleccion) {
             setShowErrorModal(true);
             return;
         }
 
-        const datos = {
-            fecha: new Date().toISOString(),
+        const datosFinales = {
             respuestas,
-            cuerpo: humanBodySelection
+            partesCuerpo: partesSeleccionadas
         };
 
-        console.log("Datos:", datos);
+        console.log("Datos a enviar:", datosFinales);
+
         setShowSuccessModal(true);
     };
 
@@ -105,25 +100,14 @@ const Formulario = () => {
         setShowModal(true);
     };
 
-    const handleBodySelectionChange = (parte, estado) => {
-        setHumanBodySelection(prev => ({
-            ...prev,
-            [parte]: estado
-        }));
-    };
-
     const renderPreguntas = (seccion) => (
         <div className="seccion-preguntas">
             <h2>{seccion === 'fisico' ? 'Evaluación Física' : 'Evaluación Psicológica'}</h2>
             <div className="formulario-grid">
-
-                {seccion === 'fisico' && (
-                    <div className="formulario-item">
-                        <label>Seleccione el estado de cada parte del cuerpo</label>
-                        <HumanBody onSelectionChange={handleBodySelectionChange} />
-                    </div>
-                )}
-
+                <div className="seleccion-cuerpo-box">
+                    <label className="seleccion-cuerpo-label">Selección de condición del cuerpo</label>
+                    <HumanBody onSeleccionCambio={(selecciones) => setPartesSeleccionadas(selecciones)} />
+                </div>
                 {preguntas[seccion].map((pregunta, idx) => (
                     <div className="formulario-item" key={idx}>
                         <label>{pregunta}</label>
@@ -155,7 +139,6 @@ const Formulario = () => {
                         </div>
                     </div>
                 ))}
-
             </div>
         </div>
     );
@@ -170,7 +153,15 @@ const Formulario = () => {
                 <button className="btn-agregar-pregunta" onClick={abrirAgregar}>+ Agregar Pregunta</button>
 
                 <form onSubmit={handleSubmit}>
-                    {pagina === 'fisico' ? renderPreguntas('fisico') : renderPreguntas('psicologico')}
+                    {pagina === 'fisico' && (
+                        <>
+                            {renderPreguntas('fisico')}
+
+
+                        </>
+                    )}
+
+                    {pagina === 'psicologico' && renderPreguntas('psicologico')}
 
                     {pagina === 'fisico' ? (
                         <button type="button" className="btn-formulario-nav" onClick={() => setPagina('psicologico')}>Siguiente</button>
@@ -183,6 +174,7 @@ const Formulario = () => {
                 </form>
             </div>
 
+            {/* Modales */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{modalMode === 'agregar' ? "Agregar Pregunta" : "Editar Pregunta"}</Modal.Title>
@@ -223,7 +215,7 @@ const Formulario = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Error</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Debes responder todas las preguntas y seleccionar cada parte del cuerpo antes de enviar.</Modal.Body>
+                <Modal.Body>Debes responder todas las preguntas y seleccionar al menos una parte del cuerpo antes de enviar.</Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => setShowErrorModal(false)}>Aceptar</Button>
                 </Modal.Footer>

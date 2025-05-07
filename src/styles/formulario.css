@@ -200,3 +200,19 @@ input[type="radio"] {
     background-color: #ffb3b3;
     color: #9c0d0d;
 }
+.seleccion-cuerpo-box {
+    padding: 1.5rem;
+    border-radius: 12px;
+    height: 650px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(0, 166, 251, 0.2);
+    margin-bottom: 2rem;
+}
+
+.seleccion-cuerpo-box label {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-dark-blue);
+    line-height: 1.8;
+    border-bottom: 2px solid var(--color-dark-blue);
+}

@@ -15,7 +15,7 @@ const CardResultado = ({ voluntario }) => {
             </div>
             <div className="info-resultado">
                 <h4>{voluntario.nombre}</h4>
-                <p>Fecha de encuesta: {voluntario.ultimaEvaluacion}</p>
+                <p>Fecha relizada: {voluntario.fecharealizado}</p>
             </div>
         </div>
     );

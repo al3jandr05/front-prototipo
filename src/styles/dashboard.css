@@ -1,10 +1,13 @@
 
-
 .dashboard-container {
-    margin-left: 10%;
-    width: calc(100% - 10%);
-    padding: 40px;
+    margin-left: var(--sidebar-width);
+    width: calc(100% - 12%);
+    padding: 15px;
     box-sizing: border-box;
+    overflow: hidden;
+    min-height: 100vh;
+    position: absolute;
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
 .dashboard-content {

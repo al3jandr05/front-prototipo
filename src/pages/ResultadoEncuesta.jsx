@@ -1,19 +1,31 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import '../styles/resultadoVoluntario.css';
+import '../styles/resultadoEncuesta.css';
 import resultadosEncuesta from '../data/resultados_encuesta';
+import HumanBodyViewer from '../components/HumanBodyViewer';
 
-const ResultadoVoluntario = () => {
+const ResultadoEncuesta = () => {
     const { id } = useParams();
-    const voluntario = resultadosEncuesta.find(v => v.id === parseInt(id));
+    const encuestaId = parseInt(id);
 
-    if (!voluntario) {
+    // Buscar la encuesta en todos los voluntarios
+    let encuestaEncontrada = null;
+
+    for (let voluntario of resultadosEncuesta) {
+        const encuesta = voluntario.encuestas.find(e => e.encuestaId === encuestaId);
+        if (encuesta) {
+            encuestaEncontrada = encuesta;
+            break;
+        }
+    }
+
+    if (!encuestaEncontrada) {
         return (
             <div className="resultado-container">
                 <Sidebar />
                 <div className="resultado-content">
-                    <h2>No se encontraron resultados para este voluntario.</h2>
+                    <h2>No se encontraron resultados para esta encuesta.</h2>
                 </div>
             </div>
         );
@@ -23,15 +35,15 @@ const ResultadoVoluntario = () => {
         <div className="resultado-container">
             <Sidebar />
             <div className="resultado-content">
-                <h1 className="titulo-resultado">Resultados de la Encuesta</h1>
-                <p className="subtitulo">Resultados de: <strong>{voluntario.nombre}</strong></p>
-                <p className="subtitulo">Fecha de encuesta realizada: <strong>{voluntario.fecha}</strong></p>
+                <h1 className="titulo-resultado">Resultado de Encuesta #{encuestaEncontrada.encuestaId}</h1>
+                <p className="subtitulo"><strong>Fecha realizada:</strong> {encuestaEncontrada.fechaRealizado}</p>
+                <p className="subtitulo"><strong>Fecha entregada:</strong> {encuestaEncontrada.fechaEntregado ?? "No entregada"}</p>
 
                 <div className="resultados">
                     <div className="categoria">
                         <h2 className="categoria-titulo">Físico</h2>
                         <div className="resultado-grid">
-                            {voluntario.resultados.fisico.map((item, index) => (
+                            {encuestaEncontrada.resultados.fisico.map((item, index) => (
                                 <div key={index} className="resultado-card">
                                     <h4>{item.subcategoria}</h4>
                                     <p><strong>Resultado:</strong> {item.resultado}</p>
@@ -44,7 +56,7 @@ const ResultadoVoluntario = () => {
                     <div className="categoria">
                         <h2 className="categoria-titulo">Psicológico</h2>
                         <div className="resultado-grid">
-                            {voluntario.resultados.psicologico.map((item, index) => (
+                            {encuestaEncontrada.resultados.psicologico.map((item, index) => (
                                 <div key={index} className="resultado-card">
                                     <h4>{item.subcategoria}</h4>
                                     <p><strong>Resultado:</strong> {item.resultado}</p>
@@ -53,10 +65,15 @@ const ResultadoVoluntario = () => {
                             ))}
                         </div>
                     </div>
+
+                    <div className="categoria">
+                        <h2 className="categoria-titulo">Condición del cuerpo</h2>
+                        <HumanBodyViewer partes={encuestaEncontrada.resultados.cuerpo} />
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default ResultadoVoluntario;
+export default ResultadoEncuesta;

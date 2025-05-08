@@ -67,7 +67,6 @@ const Sidebar = () => {
 
                 <div className="sidebar-menu">
                     {menuItems.map((item, index) => {
-                        const isListaVoluntarios = item.label === 'Lista Voluntarios';
                         const isActive = location.pathname.startsWith(item.path);
 
                         return (
@@ -80,31 +79,6 @@ const Sidebar = () => {
                                     <span className="sidebar-label">{item.label}</span>
                                 </div>
 
-                                {isListaVoluntarios && submenuVisible && voluntarioId && (
-                                    <div className="sidebar-submenu">
-                                        <div
-                                            className={`sidebar-item ${location.pathname === `/Voluntario/${voluntarioId}` ? 'active' : ''}`}
-                                            onClick={() => handleNavigate(`/Voluntario/${voluntarioId}`)}
-                                        >
-                                            <span className="sidebar-icon"><IoPerson /></span>
-                                            <span className="sidebar-label">Voluntario</span>
-                                        </div>
-                                        <div
-                                            className={`sidebar-item ${location.pathname === `/Historial/${voluntarioId}` ? 'active' : ''}`}
-                                            onClick={() => handleNavigate(`/Historial/${voluntarioId}`)}
-                                        >
-                                            <span className="sidebar-icon"><FaHistory /></span>
-                                            <span className="sidebar-label">Historial</span>
-                                        </div>
-                                        <div
-                                            className={`sidebar-item ${location.pathname === `/Reportes/${voluntarioId}` ? 'active' : ''}`}
-                                            onClick={() => handleNavigate(`/Reportes/${voluntarioId}`)}
-                                        >
-                                            <span className="sidebar-icon"><MdReport /></span>
-                                            <span className="sidebar-label">Reportes</span>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                         );
                     })}

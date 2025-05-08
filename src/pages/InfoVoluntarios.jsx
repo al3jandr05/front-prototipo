@@ -4,6 +4,7 @@ import {
     FaCalendarAlt, FaVenusMars, FaPhone, FaTint,
     FaMapMarkerAlt, FaIdCard, FaFileAlt, FaChartLine, FaHistory
 } from 'react-icons/fa';
+import { FaFileWaveform } from "react-icons/fa6";
 import { MdReport } from "react-icons/md";
 import {TbListDetails} from 'react-icons/tb';
 import {LuNotebookPen} from 'react-icons/lu';
@@ -14,7 +15,7 @@ import {PiCertificate} from "react-icons/pi";
 import historialVoluntarios from '../data/historialVoluntarios';
 import certificacionesVoluntarios from '../data/cap_cert';
 import reportesData from '../data/detalles_analisis';
-
+import listadoEncuestas from "../data/resultados_encuesta";
 import ModalCapacitaciones from '../components/ModalCapacitaciones';
 import ModalNulo from '../components/ModalNulo';
 
@@ -30,6 +31,7 @@ const InfoVoluntarios = () => {
     const [showModalNuloCap, setShowModalNuloCap] = useState(false);
     const [certificacionesVoluntario, setCertificacionesVoluntario] = useState([]);
 
+    const tieneEncuesta = listadoEncuestas.some(v => v.voluntarioId === parseInt(id));
     const tieneHistorial = historialVoluntarios.some(v => v.id === parseInt(id));
     const tieneReporte = reportesData.some(v => v.id === parseInt(id));
     const reportesVoluntario = reportesData.find(v => v.id === parseInt(id));
@@ -68,6 +70,14 @@ const InfoVoluntarios = () => {
     const handleIrReportes = () => {
         if (tieneReporte) {
             navigate(`/Reportes/${id}`);
+        } else {
+            setShowModalNuloCap(true);
+        }
+    };
+
+    const handleIrEncuestas = () => {
+        if (tieneEncuesta) {
+            navigate(`/ListaEncuestas/${id}`);
         } else {
             setShowModalNuloCap(true);
         }
@@ -137,6 +147,9 @@ const InfoVoluntarios = () => {
                     </button>
                     <button className="btn btn-outline-primary" onClick={handleVerCertificaciones}>
                         <PiCertificate/> Certificaciones
+                    </button>
+                    <button className="btn btn-outline-primary" onClick={handleIrEncuestas}>
+                        <FaFileWaveform /> Encuestas Realizadas
                     </button>
                 </div>
 

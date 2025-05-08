@@ -5,8 +5,8 @@ import ListaVoluntarios from './pages/ListaVoluntarios';
 import InfoVoluntarios from './pages/InfoVoluntarios';
 import History from './pages/Historial';
 import Formulario from './pages/Formulario';
-import ListaResultados from "./pages/ListaResultados";
-import ResultadoVoluntario from "./pages/ResultadoVoluntario";
+import ListaEncuestas from "./pages/ListaEncuestas";
+import ResultadoEncuesta from "./pages/ResultadoEncuesta";
 import Dashboard from "./pages/Dashboard";
 import ReportesVoluntario from "./pages/ReportesVoluntario";
 import Capacitaciones from "./pages/Capacitaciones";
@@ -22,9 +22,9 @@ function App() {
                 <Route path="/Reportes/:id" element={<ReportesVoluntario />} />
                 <Route path="/Historial/:id" element={<History />} />
                 <Route path="/Formulario" element={<Formulario />} />
-                <Route path="/ListaResultados" element={<ListaResultados />} />
+                <Route path="/ListaEncuestas/:id" element={<ListaEncuestas />} />
                 <Route path="/Capacitaciones" element={<Capacitaciones />} />
-                <Route path="/ResultadoVoluntario/:id" element={<ResultadoVoluntario />} />
+                <Route path="/ResultadoEncuesta/:id" element={<ResultadoEncuesta />} />
             </Routes>
         </Router>
     );

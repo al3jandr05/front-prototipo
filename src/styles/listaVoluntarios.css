@@ -167,3 +167,97 @@
 .filtro-opciones .row {
     margin-top: 12px;
 }
+
+.filtros-panel {
+    padding: 20px 30px;
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.filtros-panel.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.filtros-panel.hide {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.filtros-grid label {
+    font-weight: bold;
+    color: var(--color-dark-blue);
+}
+
+.filtros-grid input,
+.filtros-grid select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.filtro-botones {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.btn-filtro-icono.activo {
+    background-color: var(--color-blue);
+    color: white;
+}
+
+.reset-filtro-container {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease;
+}
+
+.reset-filtro-container.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.btn-reset-filtros {
+    background-color: #ff4d4d;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-reset-filtros:hover {
+    background-color: #e60000;
+}
+
+.filtro-botones{
+    text-align: center  ;
+    background-color: var(--color-dark-blue) ;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+
+.filtro-botones:hover {
+    background-color: var(--color-blue);
+    color: white;
+}

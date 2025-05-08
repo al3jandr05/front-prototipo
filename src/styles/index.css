@@ -3,7 +3,7 @@
 
 :root {
   --color-dark-blue: rgba(3, 4, 94, 0.67);
-  --color-blue: #0077b6;
+  --color-blue: rgb(0, 119, 182);
   --color-cyan: #00b8d8;
   --color-dark-cyan: #3FB7CD;
   --color-light-cyan: #90e0ef;

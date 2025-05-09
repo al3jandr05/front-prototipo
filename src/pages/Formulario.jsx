@@ -4,7 +4,8 @@ import '../styles/formulario.css';
 import { preguntas as preguntasBase, opciones } from '../data/data_formulario';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
-import HumanBody from '../components/HumanBody';
+import HumanBodyViewer from "../components/HumanBodyViewer";
+import {useNavigate} from "react-router-dom";
 
 const Formulario = () => {
     const [pagina, setPagina] = useState('fisico');
@@ -26,6 +27,7 @@ const Formulario = () => {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const topRef = useRef(null);
+    const navigate = useNavigate();
 
     const scrollToTop = () => topRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => scrollToTop(), [pagina]);
@@ -35,7 +37,10 @@ const Formulario = () => {
         copia[index] = valor;
         setRespuestas({ ...respuestas, [seccion]: copia });
     };
+    const handleIrVistaVoluntario = () => {
+        navigate(`/FormularioVoluntario`);
 
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -104,10 +109,7 @@ const Formulario = () => {
         <div className="seccion-preguntas">
             <h2>{seccion === 'fisico' ? 'Evaluación Física' : 'Evaluación Psicológica'}</h2>
             <div className="formulario-grid">
-                <div className="seleccion-cuerpo-box">
-                    <label className="seleccion-cuerpo-label">Selección de condición del cuerpo</label>
-                    <HumanBody onSeleccionCambio={(selecciones) => setPartesSeleccionadas(selecciones)} />
-                </div>
+
                 {preguntas[seccion].map((pregunta, idx) => (
                     <div className="formulario-item" key={idx}>
                         <label>{pregunta}</label>
@@ -144,19 +146,28 @@ const Formulario = () => {
     );
 
     return (
-        <div className="formulario-container">
+        <div className="formulario-container" >
             <Sidebar />
             <div className="formulario-content" ref={topRef}>
                 <div className="formulario-header">
                     <h1 className="titulo-formulario">Formulario de Evaluación Post-Incendio</h1>
                 </div>
-                <button className="btn-agregar-pregunta" onClick={abrirAgregar}>+ Agregar Pregunta</button>
+                <div className="botones">
+                    <button className="btn-agregar-pregunta" onClick={abrirAgregar}>+ Agregar Pregunta</button>
+                    <button className="btn-agregar-pregunta" onClick={handleIrVistaVoluntario}>Formulario Voluntario</button>
+                </div>
+
+
 
                 <form onSubmit={handleSubmit}>
                     {pagina === 'fisico' && (
                         <>
-                            {renderPreguntas('fisico')}
 
+                            {renderPreguntas('fisico')}
+                            <div className="seleccion-cuerpo-box">
+                                <label className="seleccion-cuerpo-label">Selección de condición del cuerpo</label>
+                                <HumanBodyViewer />
+                            </div>
 
                         </>
                     )}

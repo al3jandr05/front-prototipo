@@ -1,7 +1,8 @@
 
 .contenido-voluntarios {
-    margin-left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
+    margin-left: 13%;
+    margin-top: 20px;
+    width: calc(100% - 13%);
     padding: 15px;
     box-sizing: border-box;
     overflow: hidden;
@@ -11,13 +12,7 @@
 }
 
 
-.encabezado-voluntarios {
-    background-color: transparent;
-    padding: 30px 40px 10px 40px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+
 
 .titulo-voluntarios {
     color: var(--color-dark-blue);

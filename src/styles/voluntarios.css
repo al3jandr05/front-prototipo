@@ -1,0 +1,103 @@
+.voluntarios-container {
+    margin-left: 13%;
+    margin-top: 20px;
+    width: calc(100% - 13%);
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 100vh;
+    position: absolute;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.titulo-voluntarios {
+    color: var(--color-dark-blue);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.boton-agregar-wrapper {
+    margin-bottom: 25px;
+}
+
+.agregar-btn {
+    background-color: var(--color-blue);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.agregar-btn:hover {
+    background-color: var(--color-dark-cyan);
+}
+
+.tabla-voluntarios {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.tabla-voluntarios thead {
+    background-color: var(--color-lighter-cyan);
+}
+
+.tabla-voluntarios th,
+.tabla-voluntarios td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-light-cyan);
+    color: var(--color-dark-blue);
+    font-size: 18px;
+}
+
+.nombre-link {
+    color: var(--color-blue);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.nombre-link:hover {
+    text-decoration: underline;
+    color: var(--color-dark-blue);
+}
+
+.btn-acciones {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-accion {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-accion.editar {
+    background-color: var(--color-cyan);
+}
+
+.btn-accion.editar:hover {
+    background-color: var(--color-dark-cyan);
+}
+
+.btn-accion.eliminar {
+    background-color: red;
+}
+
+.btn-accion.eliminar:hover {
+    background-color: darkred;
+}

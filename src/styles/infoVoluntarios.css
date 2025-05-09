@@ -303,3 +303,60 @@ input[type="range"] {
     font-size: 13px;
     color: #666;
 }
+.estado-badge {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.estado-badge .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.estado-badge.activo {
+    background-color: #e0f7e9;
+    color: #2e7d32;
+}
+
+.estado-badge.activo .dot {
+    background-color: #2e7d32;
+}
+
+.estado-badge.inactivo {
+    background-color: #fdecea;
+    color: #c62828;
+}
+
+.estado-badge.inactivo .dot {
+    background-color: #c62828;
+}
+.no-evaluacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    color: var(--color-dark-blue);
+    font-style: italic;
+}
+
+.no-evaluacion p {
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+.icono-vacio {
+    font-size: 28px;
+    color: var(--color-dark-blue);
+}

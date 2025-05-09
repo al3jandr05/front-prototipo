@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/sidebar.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
     FaWpforms, FaInfoCircle, FaSignOutAlt, FaBars, FaTimes,
-    FaHistory
+
 } from 'react-icons/fa';
-import { SiAnswer } from "react-icons/si";
-import { MdSpaceDashboard } from "react-icons/md";
+import { MdSpaceDashboard, MdPersonAddAlt1  } from "react-icons/md";
 import { PiFireSimpleFill } from "react-icons/pi";
 import { IoList, IoPerson } from "react-icons/io5";
 import { MdReport } from "react-icons/md";
+import { FaHandHoldingMedical } from "react-icons/fa";
+
 
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
-    const [voluntarioId, setVoluntarioId] = useState(null);
-    const [submenuVisible, setSubmenuVisible] = useState(false);
 
     const menuItems = [
         { icon: <MdSpaceDashboard />, label: 'Dashboard', path: '/Dashboard' },
         { icon: <IoList />, label: 'Lista Voluntarios', path: '/ListaVoluntarios' },
         { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
+        { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
+        // { icon: <MdPersonAddAlt1 />, label: 'Voluntarios', path: '/Voluntarios' },
+
 
     ];
 
@@ -31,19 +33,6 @@ const Sidebar = () => {
         setIsOpen(false);
     };
 
-    useEffect(() => {
-        const id = localStorage.getItem('voluntarioId');
-        const path = location.pathname;
-
-        const isInfoRuta = /^\/(Voluntario|Historial|Reportes)\/\d+/.test(path);
-
-        if (id && isInfoRuta) {
-            setVoluntarioId(id);
-            setSubmenuVisible(true);
-        } else {
-            setSubmenuVisible(false);
-        }
-    }, [location.pathname]);
 
     return (
         <>

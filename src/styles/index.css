@@ -2,12 +2,13 @@
 
 
 :root {
-  --color-dark-blue: rgba(3, 4, 94, 0.67);
-  --color-blue: rgb(0, 119, 182);
+  --color-dark-blue: #03045e;
+  --color-blue: #0077b6;
   --color-cyan: #00b8d8;
   --color-dark-cyan: #3FB7CD;
   --color-light-cyan: #90e0ef;
   --color-lighter-cyan: #caf0f8;
+  --color-white: #ffffff;
 }
 
 *{
@@ -20,13 +21,10 @@ body{
   font-family: 'Roboto', serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display: flex;
   min-height: 100vh;
   background-color: #e7e7e7 !important;
 }
-:root {
-  --sidebar-width: 11%;
-}
+
 
 
 

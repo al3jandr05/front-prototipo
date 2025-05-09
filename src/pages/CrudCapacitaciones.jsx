@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
-const Capacitaciones = () => {
+const CrudCapacitaciones = () => {
   const [capacitaciones, setCapacitaciones] = useState([
     { id: 1, nombre: 'Primeros auxilios', descripcion: 'Capacitación sobre primeros auxilios básicos.', voluntarios: 5 },
     { id: 2, nombre: 'Manejo de estrés', descripcion: 'Técnicas para manejar el estrés en situaciones de emergencia.', voluntarios: 3 },
@@ -138,10 +138,10 @@ const Capacitaciones = () => {
                     value={nombreActual}
                     onChange={(e) => {
                       setNombreActual(e.target.value);
-                      setErrorNombre(e.target.value.length > 100);
+                      setErrorNombre(e.target.value.length > 50);
                     }}
                 />
-                {errorNombre && <div className="error-texto">Has superado el límite de 100 caracteres.</div>}
+                {errorNombre && <div className="error-texto">Has superado el límite de 50 caracteres.</div>}
               </Form.Group>
 
               <Form.Group className="mt-3">
@@ -153,10 +153,10 @@ const Capacitaciones = () => {
                     value={descripcionActual}
                     onChange={(e) => {
                       setDescripcionActual(e.target.value);
-                      setErrorDescripcion(e.target.value.length > 400);
+                      setErrorDescripcion(e.target.value.length > 200);
                     }}
                 />
-                {errorDescripcion && <div className="error-texto">Has superado el límite de 400 caracteres.</div>}
+                {errorDescripcion && <div className="error-texto">Has superado el límite de 200 caracteres.</div>}
               </Form.Group>
 
 
@@ -210,4 +210,4 @@ const Capacitaciones = () => {
   );
 };
 
-export default Capacitaciones;
+export default CrudCapacitaciones;

@@ -21,7 +21,6 @@ const CardVoluntario = ({ voluntario }) => {
                 <p>{voluntario.estado}</p>
                 <p>CI: {voluntario.ci}</p>
                 <p>Tipo de Sangre: {voluntario.tipoSangre}</p>
-                <p>Última evaluación: {voluntario.ultimaEvaluacion}</p>
             </div>
         </div>
     );

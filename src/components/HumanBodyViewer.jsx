@@ -17,21 +17,14 @@ const bodyGroups = {
     'right-foot': 'Pierna Izquierda'
 };
 
-const estadoColores = {
-    bueno: 'green',
-    regular: 'yellow',
-    malo: 'red'
-};
 
 const HumanBodyViewer = ({ partes }) => {
 
     useEffect(() => {
         // Pintar las partes
         for (let key in bodyGroups) {
-            const area = bodyGroups[key];
             const svg = document.getElementById(key);
-            const estado = partes[area];
-            const color = estado ? estadoColores[estado] : '#57c9d5';
+            const color = '#57c9d5';
 
             if (svg) {
                 svg.querySelector('path').style.fill = color;

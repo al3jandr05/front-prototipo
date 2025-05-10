@@ -1,9 +1,10 @@
 
+
 .dashboard-container {
     margin-left: 13%;
     margin-top: 20px;
     width: calc(100% - 13%);
-    padding: 15px;
+    padding: 20px;
     box-sizing: border-box;
     overflow: hidden;
     min-height: 100vh;
@@ -16,8 +17,9 @@
     box-sizing: border-box;
     transition: margin-left 0.3s ease;
 }
+
 .titulo-dashboard {
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
     font-size: 2.5rem;
     margin-bottom: 20px;
 }
@@ -29,57 +31,7 @@
     position: relative;
 }
 
-.notificacion-wrapper {
-    position: relative;
-}
 
-.notificacion-icon {
-    font-size: 24px;
-    color: var(--color-dark-blue);
-    cursor: pointer;
-}
-
-.notificacion-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-}
-
-.notificacion-popup {
-    position: absolute;
-    top: 30px;
-    right: 0;
-    background: white;
-    width: 260px;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 15px;
-    z-index: 10;
-    border-radius: 10px;
-}
-
-.notificacion-popup h4 {
-    margin: 0 0 10px;
-    color: var(--color-blue);
-}
-
-.notificacion-item {
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 6px;
-    background-color: var(--color-lighter-cyan);
-    margin-bottom: 6px;
-    cursor: pointer;
-}
-
-.notificacion-item.leido {
-    background-color: var(--color-light-cyan);
-    color: #666;
-}
 
 .tarjetas-resumen {
     display: grid;
@@ -88,33 +40,67 @@
     margin: 40px 0;
 }
 
-.tarjeta {
-    background: white;
+.tarjeta{
+    background: var(--color-card);
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    box-shadow: var(--sombra-suave);
     display: flex;
-    gap: 20px;
     align-items: center;
+    gap: 16px;
+    border-bottom: 4px solid var(--color-verde-principal);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+.voluntario-tarjeta,
+.reporte-tarjeta{
+    background: var(--color-card);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 6px solid var(--color-verde-principal);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+.chart-card {
+    background: var(--color-card);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.tarjeta:hover,
+.voluntario-tarjeta:hover,
+.reporte-tarjeta:hover,
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    background-color: var(--color-verde-hover-card);
 }
 
 .tarjeta h3 {
     margin: 0;
     font-size: 18px;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-principal);
 }
 
 .tarjeta p {
     margin: 4px 0 0;
     font-size: 14px;
-    color: #555;
+    color: var(--color-texto-principal);
 }
 
 .tarjeta svg {
     font-size: 30px;
-    color: var(--color-blue);
+    color: var(--color-verde-principal);
 }
 
+/* 📊 Paneles */
 .dashboard-paneles {
     display: flex;
     gap: 30px;
@@ -123,7 +109,7 @@
 
 .panel {
     flex: 1;
-    background: white;
+    background: var(--color-verde-suave);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.05);
@@ -131,7 +117,7 @@
 }
 
 .panel h3 {
-    color: var(--color-blue);
+    color: var(--color-verde-oscuro);
     margin-bottom: 15px;
 }
 
@@ -145,46 +131,24 @@
     margin-bottom: 10px;
     color: #333;
 }
-.voluntarios-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
 
-.voluntario-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background-color: var(--color-light-cyan);
-    padding: 12px 16px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-}
+/* 👥 Listas */
+.voluntarios-lista,
 .reportes-lista {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.reporte-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background-color: var(--color-light-cyan);
-    padding: 12px 16px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-}
-
 .reporte-tipo {
     margin: 4px 0 0;
     font-size: 14px;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-principal);
     font-style: italic;
 }
 
 .avatar-voluntario {
-    background-color: var(--color-dark-blue);
+    background-color: var(--color-verde-principal);
     color: white;
     font-weight: bold;
     width: 42px;
@@ -201,14 +165,15 @@
     font-size: 14px;
 }
 
-.estado.verde {
+.estado.activo {
     color: green;
 }
 
-.estado.rojo {
+.estado.inactivo {
     color: red;
 }
 
+/* 📈 Gráficas */
 .charts-container {
     display: flex;
     flex-wrap: wrap;
@@ -219,7 +184,7 @@
 
 .chart-card {
     flex: 1 1 300px;
-    background-color: #ffffff;
+    background-color: var(--color-card);
     padding: 25px;
     border-radius: 14px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -230,15 +195,76 @@
     max-width: 500px;
     box-sizing: border-box;
 }
+
 .chart-card canvas {
     width: 100% !important;
     height: auto !important;
 }
 
 .chart-title {
-    color: var(--color-dark-blue);
+    color: var(--color-verde-principal);
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 20px;
     text-align: center;
+}
+
+.voluntario-card,
+.reporte-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: var(--color-card);
+    padding: 12px 16px;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+}
+
+.voluntario-card:hover,
+.reporte-card:hover {
+    transform: translateY(-4px);
+}
+
+.avatar-voluntario {
+    background-color: var(--color-verde-principal);
+    color: white;
+    font-weight: bold;
+    min-width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.informacion-voluntario {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.informacion-voluntario strong {
+    font-weight: 600;
+    color: var(--color-texto-principal);
+}
+
+.estado,
+.reporte-tipo {
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.estado.verde {
+    color: #1B5E20;
+    background-color: rgba(76, 175, 80, 0.2);
+}
+
+.estado.rojo {
+    color: #C62828;
+    background-color: rgba(244, 67, 54, 0.15);
 }

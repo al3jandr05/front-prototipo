@@ -9,18 +9,19 @@ const CardVoluntario = ({ voluntario }) => {
         navigate(`/Voluntario/${voluntario.id}`);
     };
 
-
     return (
         <div className="card-voluntario" onClick={handleClick}>
-
-        <div className="avatar">
+            <div className="avatar">
                 <span>{voluntario.nombre[0]}</span>
             </div>
             <div className="info-voluntario">
-                <h4>{voluntario.nombre}</h4>
-                <p>{voluntario.estado}</p>
-                <p>CI: {voluntario.ci}</p>
-                <p>Tipo de Sangre: {voluntario.tipoSangre}</p>
+                <div className="nombre-estado">
+                    <h4>{voluntario.nombre}</h4>
+                    <span className={`estado ${voluntario.estado === 'Activo' ? 'activo' : 'inactivo'}`}>
+                        {voluntario.estado}
+                    </span>
+                </div>
+                <p>CI: {voluntario.ci} &nbsp; | &nbsp; Tipo de Sangre: {voluntario.tipoSangre}</p>
             </div>
         </div>
     );

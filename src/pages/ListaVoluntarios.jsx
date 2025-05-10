@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardVoluntario from '../components/CardVoluntario';
-import { FaSlidersH, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import '../styles/listaVoluntarios.css';
 import voluntarios from '../data/voluntarios';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ListaVoluntarios = () => {
     const [nombre, setNombre] = useState('');
@@ -12,146 +11,93 @@ const ListaVoluntarios = () => {
     const [tipoSangreFiltro, setTipoSangreFiltro] = useState('');
     const [estadoFiltro, setEstadoFiltro] = useState('');
 
-    const [ci, setCi] = useState('');
-    const [tipoSangre, setTipoSangre] = useState('');
-    const [estado, setEstado] = useState('');
-
-    const [mostrarFiltros, setMostrarFiltros] = useState(false);
-    const [ocultarFiltros, setOcultarFiltros] = useState(false);
-    const [filtrosAplicados, setFiltrosAplicados] = useState(false);
-
-    const hayFiltros = ci !== '' || tipoSangre !== '' || estado !== '';
-
     const resetFiltros = () => {
-        setCi('');
-        setTipoSangre('');
-        setEstado('');
-        setFiltrosAplicados(false);
-    };
-
-    const aplicarFiltros = () => {
-        setCi(ciFiltro);
-        setTipoSangre(tipoSangreFiltro);
-        setEstado(estadoFiltro);
-        setFiltrosAplicados(ciFiltro !== '' || tipoSangreFiltro !== '' || estadoFiltro !== '');
-        cerrarFiltros();
-    };
-
-    const cerrarFiltros = () => {
-        setOcultarFiltros(true);
-        setTimeout(() => {
-            setMostrarFiltros(false);
-            setOcultarFiltros(false);
-        }, 300);
+        setNombre('');
+        setCiFiltro('');
+        setTipoSangreFiltro('');
+        setEstadoFiltro('');
     };
 
     const filtrados = voluntarios.filter((v) =>
         v.nombre.toLowerCase().includes(nombre.toLowerCase()) &&
-        v.ci.includes(ci) &&
-        (tipoSangre === '' || v.tipoSangre.toLowerCase() === tipoSangre.toLowerCase()) &&
-        (estado === '' || v.estado.toLowerCase() === estado.toLowerCase())
+        v.ci.includes(ciFiltro) &&
+        (tipoSangreFiltro === '' || v.tipoSangre.toLowerCase() === tipoSangreFiltro.toLowerCase()) &&
+        (estadoFiltro === '' || v.estado.toLowerCase() === estadoFiltro.toLowerCase())
     );
 
     return (
-        <div>
+        <div className="listado-container">
             <Sidebar />
-            <div className="contenido-voluntarios">
-                <div className="encabezado-voluntarios">
-                    <h1 className="titulo-voluntarios">Lista de Voluntarios</h1>
+            <main className="listado-content">
+                <header className="listado-header">
+                    <h1 className="titulo-listado">Lista de Voluntarios</h1>
+                </header>
 
-                    <div className="filtros-bar">
-                        <button
-                            className={`btn-filtro-icono ${filtrosAplicados ? 'activo' : ''}`}
-                            title="Abrir filtros"
-                            onClick={() => setMostrarFiltros(!mostrarFiltros)}
-                        >
-                            <FaSlidersH />
-                        </button>
+                <section className="listado-paneles">
+                    <div className="panel-barrabusqueda">
+                        <div className="barra-busqueda">
+                            <input
+                                type="text"
+                                className="input-busqueda"
+                                placeholder="Buscar por nombre"
+                                value={nombre}
+                                onChange={(e) => setNombre(e.target.value)}
+                            />
+                        </div>
 
-                        <input
-                            type="text"
-                            className="input-filtro"
-                            placeholder="Buscar por nombre"
-                            value={nombre}
-                            onChange={(e) => setNombre(e.target.value)}
-                        />
-
-                        {filtrosAplicados && (
-                            <div className="reset-filtro-container show">
-                                <button
-                                    className="btn-reset-filtros"
-                                    title="Reiniciar filtros"
-                                    onClick={resetFiltros}
-                                >
-                                    <FaTimes />
+                        <div className="filtros-grid">
+                            <div>
+                                <label>CI</label>
+                                <input
+                                    type="text"
+                                    placeholder="Buscar por CI"
+                                    value={ciFiltro}
+                                    onChange={(e) => setCiFiltro(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label>Tipo de Sangre</label>
+                                <select value={tipoSangreFiltro} onChange={(e) => setTipoSangreFiltro(e.target.value)}>
+                                    <option value="">Todos</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Disponibilidad</label>
+                                <select value={estadoFiltro} onChange={(e) => setEstadoFiltro(e.target.value)}>
+                                    <option value="">Todos</option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                            <div className="filtro-limpiar">
+                                <button onClick={resetFiltros} title="Limpiar filtros">
+                                    <FaTimes /> Limpiar filtros
                                 </button>
                             </div>
-                        )}
+                        </div>
                     </div>
 
-                    {(mostrarFiltros || ocultarFiltros) && (
-                        <div className={`filtros-panel ${ocultarFiltros ? 'hide' : 'show'}`}>
-                            <div className="filtros-grid">
-                                <div>
-                                    <label>CI</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Buscar por CI"
-                                        value={ciFiltro}
-                                        onChange={(e) => setCiFiltro(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label>Tipo de Sangre</label>
-                                    <select
-                                        value={tipoSangreFiltro}
-                                        onChange={(e) => setTipoSangreFiltro(e.target.value)}
-                                    >
-                                        <option value="">Todos</option>
-                                        <option value="O+">O+</option>
-                                        <option value="O-">O-</option>
-                                        <option value="A+">A+</option>
-                                        <option value="A-">A-</option>
-                                        <option value="B+">B+</option>
-                                        <option value="B-">B-</option>
-                                        <option value="AB+">AB+</option>
-                                        <option value="AB-">AB-</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label>Disponibilidad</label>
-                                    <select
-                                        value={estadoFiltro}
-                                        onChange={(e) => setEstadoFiltro(e.target.value)}
-                                    >
-                                        <option value="">Todos</option>
-                                        <option value="Disponible">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
-                                    </select>
-                                </div>
-
-                                <div >
-                                    <button onClick={aplicarFiltros} className="filtro-botones">Aplicar Filtros</button>
-                                </div>
-                            </div>
-
-
+                    <div className="panel-listadovol">
+                        <div className="lista">
+                            {filtrados.length > 0 ? (
+                                filtrados.map((v) => (
+                                    <CardVoluntario key={v.id} voluntario={v} />
+                                ))
+                            ) : (
+                                <p className="mensaje-vacio">No se encontraron resultados.</p>
+                            )}
                         </div>
-                    )}
-                </div>
-
-                <div className="lista-voluntarios-scroll">
-                    {filtrados.length > 0 ? (
-                        filtrados.map((v) => (
-                            <CardVoluntario key={v.id} voluntario={v} />
-                        ))
-                    ) : (
-                        <p style={{ paddingLeft: '40px' }}>No se encontraron resultados.</p>
-                    )}
-                </div>
-            </div>
+                    </div>
+                </section>
+            </main>
         </div>
     );
 };

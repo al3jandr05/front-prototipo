@@ -18,7 +18,7 @@ const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const menuItems = [
-        { icon: <MdSpaceDashboard />, label: 'Dashboard', path: '/Dashboard' },
+        { icon: <MdSpaceDashboard />, label: 'Estadísticas', path: '/Dashboard' },
         { icon: <IoList />, label: 'Lista Voluntarios', path: '/ListaVoluntarios' },
         { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },

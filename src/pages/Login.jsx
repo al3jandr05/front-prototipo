@@ -39,59 +39,48 @@ const Login = () => {
     return (
         <>
             {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
-            <div className={`login-wrapper ${showSplash ? 'oculto' : ''}`}>
-                <div className="login-container">
-                    <div className="login-left">
-                        <div className="login-logo">
-                            <PiFireSimpleFill className="icono-logo" />
-                            <span className="texto-logo">GEVOPI</span>
-                        </div>
-                        <form onSubmit={handleSubmit}>
-                            <h1>Iniciar Sesión</h1>
-                            {error && <p className="error-message">{error}</p>}
+            <div className={`login-wrapper background-login ${showSplash ? 'oculto' : ''}`}>
+                <div className="login-card glass-effect">
+                    <div className="login-logo">
+                        <PiFireSimpleFill className="icono-logo" />
+                        <span className="texto-logo">GEVOPI</span>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <h1>Iniciar Sesión</h1>
+                        {error && <p className="error-message">{error}</p>}
 
-                            <div className="input-box">
-                                <p>Correo</p>
+                        <div className="input-box">
+                            <p>Correo</p>
+                            <input
+                                type="text"
+                                placeholder="Ingrese su Correo Electrónico"
+                                value={correo}
+                                onChange={(e) => setCorreo(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className="input-box">
+                            <p>Contraseña</p>
+                            <div className="password-wrapper">
                                 <input
-                                    type="text"
-                                    placeholder="Ingrese su Correo Electrónico"
-                                    value={correo}
-                                    onChange={(e) => setCorreo(e.target.value)}
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="Ingrese su Contraseña"
+                                    value={contrasena}
+                                    onChange={(e) => setContrasena(e.target.value)}
                                     required
                                 />
+                                <span onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <FaEyeSlash className="eye-icon" /> : <FaEye className="eye-icon" />}
+          </span>
                             </div>
-
-                            <div className="input-box">
-                                <p>Contraseña</p>
-                                <div className="password-wrapper">
-                                    <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        placeholder="Ingrese su Contraseña"
-                                        value={contrasena}
-                                        onChange={(e) => setContrasena(e.target.value)}
-                                        required
-                                    />
-                                    <span onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? <FaEyeSlash className="eye-icon" /> : <FaEye className="eye-icon" />}
-                  </span>
-                                </div>
-                            </div>
-
-                            <button type="submit">Iniciar sesión</button>
-                        </form>
-                    </div>
-
-                    <div className="login-right">
-                        <div className="bienvenida">
-                            <h1>¡Bienvenido a GEVOPI!</h1>
-                            <p>
-                                Esta plataforma te permitirá gestionar voluntarios,
-                                monitorear su bienestar y acceder a sus evaluaciones.
-                            </p>
                         </div>
-                    </div>
+
+                        <button type="submit">Iniciar sesión</button>
+                    </form>
                 </div>
             </div>
+
 
         </>
 

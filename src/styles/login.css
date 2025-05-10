@@ -1,5 +1,4 @@
 
-
 .login-wrapper {
     width: 100vw;
     height: 100vh;
@@ -7,6 +6,17 @@
     justify-content: center;
     align-items: center;
 }
+
+.background-login {
+    width: 100vw;
+    height: 100vh;
+    background: url('../resources/incendio2.avif') center center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
 
 .login-container {
     width: 1000px;
@@ -16,6 +26,61 @@
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.login-card h1 {
+    color: white;
+}
+
+.input-box input,
+.password-wrapper input {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.input-box input::placeholder,
+.password-wrapper input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.eye-icon {
+    color: white;
+}
+
+/* Logo arriba */
+.login-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.icono-logo {
+    font-size: 28px;
+}
+
+/* Error */
+.error-message {
+    color: #ff5c5c;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .login-left {
@@ -85,7 +150,7 @@
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 18px;
-    color: var(--color-verde-oscuro);
+    color: white;
 }
 
 form h3 {

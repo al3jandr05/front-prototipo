@@ -20,10 +20,25 @@
 
 .titulo-formulario {
     font-size: 2.5rem;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
     padding-bottom: 0.5rem;
     position: relative;
 }
+
+
+.formulario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.botones-navegacion {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
 
 .titulo-formulario::after {
     content: '';
@@ -36,10 +51,10 @@
 
 h2 {
     font-size: 1.7rem;
-    color: var(--color-blue);
+    color: var(--color-verde-principal);
     margin-bottom: 1.5rem;
     padding-left: 1rem;
-    border-left: 5px solid var(--color-cyan);
+    border-left: 5px solid var(--color-verde-principal);
 
 }
 
@@ -49,7 +64,7 @@ h2 {
     padding: 1.5rem;
     border-radius: 12px;
     transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid rgba(0, 166, 251, 0.2);
+    border: 1px solid var(--color-verde-oscuro);
     margin-bottom: 2rem;
 
 
@@ -59,9 +74,9 @@ h2 {
 .formulario-item label {
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
     line-height: 1.8;
-    border-bottom: 2px solid var(--color-dark-blue);
+    border-bottom: 2px solid var(--color-verde-oscuro);
 }
 
 .radio-group {
@@ -86,12 +101,12 @@ h2 {
 }
 
 .radio-group label:hover {
-    background: rgba(0, 166, 251, 0.1);
+    background: var(--color-verde-suave);
 }
 
 input[type="radio"] {
     transform: scale(1.2);
-    accent-color: var(--color-blue);
+    accent-color: var(--color-verde-principal);
     cursor: pointer;
 }
 
@@ -113,23 +128,23 @@ input[type="radio"] {
 }
 
 .btn-formulario-nav {
-    background: var(--color-blue);
+    background: var(--color-verde-oscuro);
     color: white;
 }
 
 .btn-enviar {
-    background: var(--color-cyan);
+    background: var(--color-verde-oscuro);
     color: white;
 }
 
 .btn-formulario-nav:hover {
-    background: #005180;
+    background-color: var(--color-verde-suave);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-enviar:hover {
-    background: #0088b0;
+    background-color: var(--color-verde-suave);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -147,10 +162,11 @@ input[type="radio"] {
 }
 
 .btn-agregar-pregunta {
-    background-color: var(--color-cyan);
+    background-color: var(--color-verde-oscuro);
     color: white;
     font-weight: 600;
     border: none;
+    margin-bottom: 20px;
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 16px;
@@ -159,7 +175,7 @@ input[type="radio"] {
 }
 
 .btn-agregar-pregunta:hover {
-    background-color: #0088b0;
+    background-color: var(--color-verde-suave);
 }
 
 .botones{
@@ -183,13 +199,12 @@ input[type="radio"] {
 }
 
 .acciones button.btn-editar {
-    background-color: var(--color-cyan);
-    color: var(--color-dark-blue);
+    background-color: var(--color-verde-oscuro);
+    color: white;
 }
 
 .acciones button.btn-editar:hover {
-    background-color: #90e0ef;
-    color: #03045e;
+    background-color: var(--color-verde-suave);
 }
 
 .acciones button.btn-eliminar {
@@ -206,14 +221,14 @@ input[type="radio"] {
     border-radius: 12px;
     height: 650px;
     transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid rgba(0, 166, 251, 0.2);
+    border: 1px solid var(--color-verde-oscuro);
     margin-bottom: 2rem;
 }
 
 .seleccion-cuerpo-box label {
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
     line-height: 1.8;
-    border-bottom: 2px solid var(--color-dark-blue);
+    border-bottom: 2px solid var(--color-verde-oscuro);
 }

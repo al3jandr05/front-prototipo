@@ -10,6 +10,7 @@ import { PiFireSimpleFill } from "react-icons/pi";
 import { IoList, IoPerson } from "react-icons/io5";
 import { MdReport } from "react-icons/md";
 import { FaHandHoldingMedical } from "react-icons/fa";
+import { MdContactSupport } from "react-icons/md";
 
 
 const Sidebar = () => {
@@ -23,6 +24,8 @@ const Sidebar = () => {
         { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
         { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
+        { icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
+
         // { icon: <MdPersonAddAlt1 />, label: 'Voluntarios', path: '/Voluntarios' },
 
 

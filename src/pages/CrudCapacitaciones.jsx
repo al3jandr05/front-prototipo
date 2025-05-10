@@ -24,7 +24,6 @@ const CrudCapacitaciones = () => {
   const [errorNombre, setErrorNombre] = useState(false);
   const [errorDescripcion, setErrorDescripcion] = useState(false);
 
-
   const abrirAgregar = () => {
     setModalMode('agregar');
     setNombreActual('');
@@ -82,47 +81,48 @@ const CrudCapacitaciones = () => {
   return (
       <div className="capacitaciones-container">
         <Sidebar />
-        <div className="capacitaciones-content">
-          <h1 className="titulo-capacitaciones">Capacitaciones</h1>
+        <main className="capacitaciones-content">
+          <header className="capacitaciones-header">
+            <h1 className="titulo-capacitaciones">Capacitaciones</h1>
+            <button className="agregar-capacitacion" onClick={abrirAgregar}>+ Agregar Capacitación</button>
+          </header>
 
-          <div className="boton-agregar-wrapper">
-            <button className="agregar-btn" onClick={abrirAgregar}>+ Agregar Capacitación</button>
-          </div>
-
-          <table className="tabla-capacitaciones">
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            {capacitaciones.map((cap, index) => (
-                <tr key={cap.id}>
-                  <td>{index + 1}</td>
-                  <td>
-                <span className="nombre-capacitacion" onClick={() => abrirDetalle(cap)}>
-                    {cap.nombre}
-                </span>
-                  </td>
-                  <td>
-                    <div className="btn-acciones">
-                      <button className="btn-accion editar" onClick={() => abrirEditar(cap)}>
-                        <FaEdit /> Editar
-                      </button>
-                      <button className="btn-accion eliminar" onClick={() => {
-                        setDeleteId(cap.id);
-                        setShowDeleteModal(true);
-                      }}>
-                        <FaTrash /> Eliminar
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-            ))}
-            </tbody>
-          </table>
+          <section className="capacitaciones-tabla-wrapper">
+            <table className="tabla-capacitaciones">
+              <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+              </tr>
+              </thead>
+              <tbody>
+              {capacitaciones.map((cap, index) => (
+                  <tr key={cap.id}>
+                    <td>{index + 1}</td>
+                    <td>
+                    <span className="nombre-capacitacion" onClick={() => abrirDetalle(cap)}>
+                      {cap.nombre}
+                    </span>
+                    </td>
+                    <td>
+                      <div className="btn-accion-capacitacion">
+                        <button className="btn-accion-capacitacion editar" onClick={() => abrirEditar(cap)}>
+                          <FaEdit /> Editar
+                        </button>
+                        <button className="btn-accion-capacitacion eliminar" onClick={() => {
+                          setDeleteId(cap.id);
+                          setShowDeleteModal(true);
+                        }}>
+                          <FaTrash /> Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+              ))}
+              </tbody>
+            </table>
+          </section>
 
           {/* Modal Agregar / Editar */}
           <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -158,9 +158,6 @@ const CrudCapacitaciones = () => {
                 />
                 {errorDescripcion && <div className="error-texto">Has superado el límite de 200 caracteres.</div>}
               </Form.Group>
-
-
-
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
@@ -171,7 +168,6 @@ const CrudCapacitaciones = () => {
               >
                 {modalMode === 'agregar' ? 'Agregar' : 'Guardar Cambios'}
               </Button>
-
             </Modal.Footer>
           </Modal>
 
@@ -205,7 +201,7 @@ const CrudCapacitaciones = () => {
               <Button variant="primary" onClick={() => setShowDetailModal(false)}>Cerrar</Button>
             </Modal.Footer>
           </Modal>
-        </div>
+        </main>
       </div>
   );
 };

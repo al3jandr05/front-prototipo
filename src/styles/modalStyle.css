@@ -23,3 +23,12 @@
     padding: 16px 24px;
     background-color: #f1f1f1;
 }
+
+.btn-primary{
+    background-color: var(--color-verde-oscuro) !important;
+    border-color: var(--color-verde-oscuro) !important;
+}
+
+.btn-primary:hover{
+    background-color: var(--color-verde-hover) !important;
+}

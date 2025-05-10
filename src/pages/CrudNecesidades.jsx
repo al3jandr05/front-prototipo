@@ -7,9 +7,8 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const CrudNecesidades = () => {
     const [necesidades, setNecesidades] = useState([
-        { id: 1, nombre: 'Reposo físico', descripcion: 'Voluntarios con indicación de descanso prolongado.' },
-        { id: 2, nombre: 'Atención psicológica', descripcion: 'Necesidad de seguimiento terapéutico post-evento.' },
-        { id: 3, nombre: 'Evaluación médica', descripcion: 'Seguimiento clínico general requerido.' }
+        { id: 1, nombre: 'Terapia psicológica', descripcion: 'Apoyo psicológico después de intervención.' },
+        { id: 2, nombre: 'Revisión médica', descripcion: 'Chequeo físico preventivo post-incendio.' }
     ]);
 
     const [showModal, setShowModal] = useState(false);
@@ -33,11 +32,11 @@ const CrudNecesidades = () => {
         setShowModal(true);
     };
 
-    const abrirEditar = (nec) => {
+    const abrirEditar = (necesidad) => {
         setModalMode('editar');
-        setNombreActual(nec.nombre);
-        setDescripcionActual(nec.descripcion);
-        setEditId(nec.id);
+        setNombreActual(necesidad.nombre);
+        setDescripcionActual(necesidad.descripcion);
+        setEditId(necesidad.id);
         setErrorNombre(false);
         setErrorDescripcion(false);
         setShowModal(true);
@@ -53,10 +52,10 @@ const CrudNecesidades = () => {
             ]);
         } else {
             setNecesidades(
-                necesidades.map(nec =>
-                    nec.id === editId
-                        ? { ...nec, nombre: nombreActual, descripcion: descripcionActual }
-                        : nec
+                necesidades.map(n =>
+                    n.id === editId
+                        ? { ...n, nombre: nombreActual, descripcion: descripcionActual }
+                        : n
                 )
             );
         }
@@ -68,60 +67,61 @@ const CrudNecesidades = () => {
     };
 
     const eliminarNecesidad = () => {
-        setNecesidades(necesidades.filter(nec => nec.id !== deleteId));
+        setNecesidades(necesidades.filter(n => n.id !== deleteId));
         setShowDeleteModal(false);
         setDeleteId(null);
     };
 
-    const abrirDetalle = (nec) => {
-        setDetalleNecesidad(nec);
+    const abrirDetalle = (necesidad) => {
+        setDetalleNecesidad(necesidad);
         setShowDetailModal(true);
     };
 
     return (
         <div className="necesidades-container">
             <Sidebar />
-            <div className="necesidades-content">
-                <h1 className="titulo-necesidades">Necesidades</h1>
+            <main className="necesidades-content">
+                <header className="necesidades-header">
+                    <h1 className="titulo-necesidades">Necesidades</h1>
+                    <button className="agregar-necesidad" onClick={abrirAgregar}>+ Agregar Necesidad</button>
+                </header>
 
-                <div className="boton-agregar-wrapper">
-                    <button className="agregar-btn" onClick={abrirAgregar}>+ Agregar Necesidad</button>
-                </div>
-
-                <table className="tabla-necesidades">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Acciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {necesidades.map((nec, index) => (
-                        <tr key={nec.id}>
-                            <td>{index + 1}</td>
-                            <td>
-                  <span className="nombre-necesidad" onClick={() => abrirDetalle(nec)}>
-                    {nec.nombre}
-                  </span>
-                            </td>
-                            <td>
-                                <div className="btn-acciones">
-                                    <button className="btn-accion editar" onClick={() => abrirEditar(nec)}>
-                                        <FaEdit /> Editar
-                                    </button>
-                                    <button className="btn-accion eliminar" onClick={() => {
-                                        setDeleteId(nec.id);
-                                        setShowDeleteModal(true);
-                                    }}>
-                                        <FaTrash /> Eliminar
-                                    </button>
-                                </div>
-                            </td>
+                <section className="necesidades-tabla-wrapper">
+                    <table className="tabla-necesidades">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {necesidades.map((n, index) => (
+                            <tr key={n.id}>
+                                <td>{index + 1}</td>
+                                <td>
+                    <span className="nombre-necesidad" onClick={() => abrirDetalle(n)}>
+                      {n.nombre}
+                    </span>
+                                </td>
+                                <td>
+                                    <div className="btn-acciones">
+                                        <button className="btn-accion-necesidad editar" onClick={() => abrirEditar(n)}>
+                                            <FaEdit /> Editar
+                                        </button>
+                                        <button className="btn-accion-necesidad eliminar" onClick={() => {
+                                            setDeleteId(n.id);
+                                            setShowDeleteModal(true);
+                                        }}>
+                                            <FaTrash /> Eliminar
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </section>
 
                 {/* Modal Agregar / Editar */}
                 <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -199,7 +199,7 @@ const CrudNecesidades = () => {
                         <Button variant="primary" onClick={() => setShowDetailModal(false)}>Cerrar</Button>
                     </Modal.Footer>
                 </Modal>
-            </div>
+            </main>
         </div>
     );
 };

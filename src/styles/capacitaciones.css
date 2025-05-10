@@ -9,19 +9,29 @@
     position: absolute;
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
+.capacitaciones-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.capacitaciones-tabla-wrapper {
+    margin-top: 20px;
+}
 
 .titulo-capacitaciones {
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
     font-size: 2.5rem;
     margin-bottom: 15px;
 }
 
-.boton-agregar-wrapper {
+.boton-agregar-capacitacion-wrapper {
     margin-bottom: 25px;
 }
 
-.agregar-btn {
-    background-color: var(--color-blue);
+.agregar-capacitacion {
+    background-color: var(--color-verde-oscuro);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -30,8 +40,8 @@
     transition: background-color 0.3s ease;
 }
 
-.agregar-btn:hover {
-    background-color: var(--color-dark-cyan);
+.agregar-capacitacion:hover {
+    background-color: var(--color-verde-hover);
 }
 
 .tabla-capacitaciones {
@@ -44,14 +54,22 @@
 }
 
 .tabla-capacitaciones thead {
-    background-color: var(--color-lighter-cyan);
+    background-color: var(--color-verde-oscuro);
 }
 
-.tabla-capacitaciones th, .tabla-capacitaciones td {
+.tabla-capacitaciones th {
     padding: 15px 20px;
     text-align: left;
-    border-bottom: 1px solid var(--color-light-cyan);
-    color: var(--color-dark-blue);
+    border-bottom: 1px solid var(--color-verde-suave);
+    color: white;
+    font-size: 18px;
+}
+
+
+.tabla-capacitaciones td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-verde-suave);
     font-size: 18px;
 }
 
@@ -66,7 +84,7 @@
     flex-wrap: wrap;
 }
 
-.btn-accion {
+.btn-accion-capacitacion {
     padding: 6px 12px;
     border-radius: 6px;
     border: none;
@@ -79,19 +97,19 @@
     transition: background-color 0.3s ease;
 }
 
-.btn-accion.editar {
-    background-color: var(--color-cyan);
+.btn-accion-capacitacion.editar {
+    background-color: var(--color-verde-suave);
 }
 
-.btn-accion.editar:hover {
-    background-color: var(--color-dark-cyan);
+.btn-accion-capacitacion.editar:hover {
+    background-color: var(--color-verde-hover);
 }
 
-.btn-accion.eliminar {
+.btn-accion-capacitacion.eliminar {
     background-color: red;
 }
 
-.btn-accion.eliminar:hover {
+.btn-accion-capacitacion.eliminar:hover {
     background-color: darkred;
 }
 
@@ -100,7 +118,7 @@
         font-size: 2rem;
     }
 
-    .agregar-btn {
+    .agregar-capacitacion {
         padding: 8px 16px;
         font-size: 14px;
     }
@@ -110,7 +128,7 @@
         font-size: 13px;
     }
 
-    .btn-accion {
+    .btn-accion-capacitacion {
         padding: 5px 8px;
         font-size: 12px;
     }

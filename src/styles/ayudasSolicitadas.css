@@ -1,0 +1,221 @@
+.ayudas-container {
+    margin-left: 13%;
+    margin-top: 20px;
+    width: calc(100% - 13%);
+    padding: 15px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    position: absolute;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.encabezado-ayudas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.titulo-ayudas {
+    color: var(--color-verde-oscuro);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.filtros-ayudas {
+    display: flex;
+    gap: 16px;
+    padding: 10px 0 20px 0;
+    flex-wrap: wrap;
+}
+
+.filtros-ayudas select {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--color-verde-suave);
+    font-size: 16px;
+    color: var(--color-verde-oscuro);
+    background-color: white;
+}
+
+.lista-ayudas-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-right: 10px;
+}
+
+.ayuda-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    cursor: pointer;
+    border-left: 6px solid var(--color-verde-principal);
+}
+
+.ayuda-card:hover {
+    transform: translateY(-4px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge-prioridad {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+}
+
+.prioridad-alta {
+    background-color: #d00000;
+}
+
+.prioridad-media {
+    background-color: #ffcd00;
+    color: #333;
+}
+
+.prioridad-baja {
+    background-color: #1b9e3a;
+}
+
+.estado {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.fecha {
+    font-style: italic;
+    font-size: 13px;
+    margin-top: 6px;
+    color: #555;
+}
+
+.detalle {
+    margin: 10px 0;
+    font-size: 15px;
+}
+
+.mensaje-vacio {
+    color: var(--color-verde-principal);
+    font-style: italic;
+}
+
+.mapa-container {
+    margin-top: 20px;
+}
+.card-ayuda {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: var(--color-card, white);
+    padding: 18px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    border-left: 6px solid var(--color-verde-principal);
+}
+
+.card-ayuda:hover {
+    transform: translateY(-4px);
+    background-color: var(--color-verde-hover-card);
+}
+
+.avatar-ayuda {
+    min-width: 48px;
+    height: 48px;
+    background-color: var(--color-verde-oscuro);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.info-ayuda {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.nombre-prioridad {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nombre-prioridad h4 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-verde-oscuro);
+}
+
+.badge-prioridad {
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+
+.prioridad-alta {
+    background-color: #d00000;
+}
+
+.prioridad-media {
+    background-color: #ffcd00;
+    color: #333;
+}
+
+.prioridad-baja {
+    background-color: #1b9e3a;
+}
+
+.detalle-ayuda {
+    margin: 8px 0 4px;
+    font-size: 14px;
+    color: var(--color-texto-principal);
+}
+
+.estado-ayuda {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.fecha-ayuda {
+    margin: 2px 0 4px;
+    font-size: 14px;
+    color: var(--color-texto-principal);
+}
+
+.card-ayuda.card-pendiente {
+    background-color: #fff8e1;
+    border-left-color: #ff9800;
+}
+
+.card-ayuda.card-resuelto {
+    background-color: #e0f2f1;
+    border-left-color: #00796b;
+}
+
+.estado-ayuda.estado-pendiente {
+    color: #e65100;
+}
+
+.estado-ayuda.estado-resuelto {
+    color: #00695c;
+}
+

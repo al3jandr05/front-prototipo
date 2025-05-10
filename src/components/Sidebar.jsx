@@ -78,10 +78,10 @@ const Sidebar = () => {
 
 
                 <div className="sidebar-footer">
-                    <div className="sidebar-item">
+                    {/*<div className="sidebar-item">
                         <span className="sidebar-icon"><FaInfoCircle /></span>
                         <span className="sidebar-label">Información</span>
-                    </div>
+                    </div>*/}
                     <div className="sidebar-item" onClick={() => navigate('/')}>
                         <span className="sidebar-icon"><FaSignOutAlt /></span>
                         <span className="sidebar-label">Cerrar sesión</span>

@@ -1,6 +1,6 @@
-import React from 'react';
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import Login from './pages/Login';
 import ListaVoluntarios from './pages/ListaVoluntarios';
 import InfoVoluntarios from './pages/InfoVoluntarios';
@@ -14,6 +14,7 @@ import CrudVoluntarios from "./pages/CrudVoluntarios";
 import AyudasSolicitadas from "./pages/AyudasSolicitadas";
 
 function App() {
+
     return (
         <Router>
             <Routes>
@@ -28,7 +29,6 @@ function App() {
                 <Route path="/Voluntarios" element={<CrudVoluntarios />} />
                 <Route path="/ResultadoEncuesta/:id" element={<ResultadoEncuesta />} />
                 <Route path="/AyudasSolicitadas" element={<AyudasSolicitadas />} />
-
             </Routes>
         </Router>
     );

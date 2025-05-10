@@ -21,6 +21,10 @@ const FormularioVoluntarioView = () => {
     const [hideInfoIcon, setHideInfoIcon] = useState(false);
     const topRef = useRef(null);
 
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [isReady, setIsReady] = useState(null); // Sí o No (true / false)
+
+
     const scrollToTop = () => topRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => scrollToTop(), [pagina]);
 
@@ -72,15 +76,20 @@ const FormularioVoluntarioView = () => {
             setShowErrorModal(true);
             return;
         }
-
+        setShowConfirmModal(true);
+    };
+    const confirmarEnvio = () => {
         const datosFinales = {
             respuestas,
-            partesCuerpo: partesSeleccionadas
+            partesCuerpo: partesSeleccionadas,
+            aptoParaOtroIncendio: isReady,
         };
 
-        console.log("Datos enviados:", datosFinales);
+        console.log(" Datos enviados:", datosFinales);
+        setShowConfirmModal(false);
         setShowSuccessModal(true);
     };
+
 
     const renderPreguntas = (seccion) => {
         const isInvalid = errores[seccion];
@@ -213,6 +222,34 @@ const FormularioVoluntarioView = () => {
                 </Modal.Footer>
             </Modal>
 
+            <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>¿Te encuentras apto para otro incendio?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <p>Tu evaluación será registrada, pero antes responde:</p>
+                    <div className="d-flex justify-content-center gap-4 mt-4">
+                        <Button
+                            variant="success"
+                            onClick={() => {
+                                setIsReady(true);
+                                confirmarEnvio();
+                            }}
+                        >
+                            Sí
+                        </Button>
+                        <Button
+                            variant="danger"
+                            onClick={() => {
+                                setIsReady(false);
+                                confirmarEnvio();
+                            }}
+                        >
+                            No
+                        </Button>
+                    </div>
+                </Modal.Body>
+            </Modal>
 
 
 

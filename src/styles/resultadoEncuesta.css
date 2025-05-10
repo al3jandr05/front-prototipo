@@ -14,7 +14,7 @@
 
 .titulo-resultado {
     font-size: 2.5rem;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
     margin-bottom: 10px;
 }
 
@@ -38,7 +38,7 @@
 
 .categoria-titulo {
     font-size: 1.5rem;
-    color: var(--color-blue);
+    color: var(--color-verde-principal);
     margin-bottom: 20px;
     padding-bottom: 5px;
 }
@@ -50,14 +50,15 @@
 }
 
 .resultado-card {
-    background-color: var(--color-light-cyan);
+    background-color: var(--color-card);
     padding: 15px 20px;
     border-radius: 10px;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    border-left: 6px solid var(--color-verde-principal);
 }
 
 .resultado-card h4 {
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
     margin-bottom: 8px;
     font-size: 1.1rem;
 }

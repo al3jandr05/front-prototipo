@@ -7,16 +7,20 @@ const axiosClient = axios.create({
     },
 });
 
-axiosClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    const bearer = localStorage.getItem('bearer');
+axiosClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        const bearer = localStorage.getItem('bearer');
 
-    if (token && bearer) {
-        config.headers.Authorization = `${bearer} ${token}`;
+        if (token && bearer) {
+            config.headers.Authorization = `${bearer} ${token}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-
-
-    return config;
-});
+);
 
 export default axiosClient;

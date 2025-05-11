@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardVoluntario from '../components/CardVoluntario';
 import { FaSlidersH, FaTimes } from 'react-icons/fa';
 import '../styles/listaVoluntarios.css';
-import voluntarios from '../data/voluntarios';
+import { obtenerVoluntarios } from '../api/rest/voluntarioService';  // Importa el servicio
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ListaVoluntarios = () => {
+    const [voluntarios, setVoluntarios] = useState([]);  // Estado para almacenar los voluntarios
     const [nombre, setNombre] = useState('');
     const [ciFiltro, setCiFiltro] = useState('');
     const [tipoSangreFiltro, setTipoSangreFiltro] = useState('');
@@ -21,6 +22,20 @@ const ListaVoluntarios = () => {
     const [filtrosAplicados, setFiltrosAplicados] = useState(false);
 
     const hayFiltros = ci !== '' || tipoSangre !== '' || estado !== '';
+
+    // Cargar los voluntarios desde la API cuando el componente se monta
+    useEffect(() => {
+        const fetchVoluntarios = async () => {
+            try {
+                const data = await obtenerVoluntarios();  // Llama al servicio que obtiene los voluntarios
+                setVoluntarios(data);  // Almacena los voluntarios en el estado
+            } catch (error) {
+                console.error("Error al obtener los voluntarios:", error);
+            }
+        };
+
+        fetchVoluntarios();  // Llamar la función al montar el componente
+    }, []);  // El arreglo vacío asegura que se ejecute solo una vez
 
     const resetFiltros = () => {
         setCi('');
@@ -136,8 +151,6 @@ const ListaVoluntarios = () => {
                                     <button onClick={aplicarFiltros} className="filtro-botones">Aplicar Filtros</button>
                                 </div>
                             </div>
-
-
                         </div>
                     )}
                 </div>

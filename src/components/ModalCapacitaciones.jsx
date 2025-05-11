@@ -20,7 +20,7 @@ const ModalCapacitaciones = ({ show, handleClose, certificaciones }) => {
                                 <div>
                                     <strong>{item.nombre}</strong><br />
                                     <small className="text-muted">
-                                        {item.tipo === 'capacitacion' ? 'Capacitación' : 'Certificación'}
+                                        {item.descripcion}
                                     </small>
                                 </div>
                             </div>

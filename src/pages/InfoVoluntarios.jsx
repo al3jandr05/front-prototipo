@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import {
     FaCalendarAlt, FaVenusMars, FaPhone, FaTint,
@@ -12,11 +12,9 @@ import { MdPsychology } from 'react-icons/md';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PiCertificate } from "react-icons/pi";
 
-import historialVoluntarios from '../data/historialVoluntarios';
-import certificacionesVoluntarios from '../data/cap_cert';
-import reportesData from '../data/detalles_analisis';
-import listadoEncuestas from "../data/resultados_encuesta";
-import voluntarios from "../data/voluntarios";
+import { obtenerVoluntario } from '../api/rest/voluntarioService';  // Asumimos que existe un servicio para obtener los detalles del voluntario
+import { OBTENER_ULTIMO_REPORTE } from '../api/graphql/querys/perfilVoluntario'; // Importa la consulta de GraphQL
+import { useQuery } from '@apollo/client';
 
 import ModalCapacitaciones from '../components/ModalCapacitaciones';
 import ModalNulo from '../components/ModalNulo';
@@ -26,36 +24,67 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const InfoVoluntarios = () => {
     const { id } = useParams();
+    const historialId = parseInt(id);
+
     const navigate = useNavigate();
 
+    const [voluntario, setVoluntario] = useState(null);
     const [showModalCap, setShowModalCap] = useState(false);
     const [showModalHistorial, setShowModalHistorial] = useState(false);
     const [showModalNuloCap, setShowModalNuloCap] = useState(false);
     const [certificacionesVoluntario, setCertificacionesVoluntario] = useState([]);
 
-    const voluntario = voluntarios.find(v => v.id === parseInt(id));
-    const tieneEncuesta = listadoEncuestas.some(v => v.voluntarioId === parseInt(id));
-    const tieneHistorial = historialVoluntarios.some(v => v.id === parseInt(id));
-    const tieneReporte = reportesData.some(v => v.id === parseInt(id));
-    const reportesVoluntario = reportesData.find(v => v.id === parseInt(id));
-    const reportes = reportesVoluntario?.reportes || [];
+    useEffect(() => {
+        const fetchVoluntario = async () => {
+            try {
+                const data = await obtenerVoluntario(id);
+                setVoluntario(data);
+            } catch (error) {
+                console.error("Error al obtener el voluntario:", error);
+            }
+        };
+        fetchVoluntario();
+    }, [id]);
 
     const nombreEmail = voluntario?.nombre.toLowerCase().replace(/\s+/g, '') || '';
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
 
     const datosPersonales = [
-        { icono: <FaCalendarAlt />, texto: voluntario?.fechanacimiento || 'N/D' },
+        { icono: <FaCalendarAlt />, texto: voluntario?.fecha_nacimiento || 'N/D' },
         { icono: <FaVenusMars />, texto: voluntario?.genero || 'N/D' },
         { icono: <FaPhone />, texto: voluntario?.telefono || 'N/D' },
-        { icono: <FaTint />, texto: voluntario?.tipoSangre || 'N/D' },
-        { icono: <FaMapMarkerAlt />, texto: voluntario?.direccion || 'N/D' },
+        { icono: <FaTint />, texto: voluntario?.tipo_sangre || 'N/D' },
+        { icono: <FaMapMarkerAlt />, texto: voluntario?.ubicacion || 'N/D' },
         { icono: <FaIdCard />, texto: voluntario?.ci || 'N/D' }
     ];
 
+    const { loading, error, data } = useQuery(OBTENER_ULTIMO_REPORTE, {
+        variables: { historialId }
+    });
+
+    if (loading) return <p>Cargando...</p>;
+    if (error) return <p>Error al cargar los datos: {error.message}</p>;
+
+    const ultimoReporte = data?.ultimoReporteVoluntario;
+
+    // Sumar 7 días a la fecha generada para calcular la próxima evaluación
+    const fechaGenerado = new Date(ultimoReporte?.fechaGenerado);
+    const proximaEvaluacion = new Date(fechaGenerado);
+    proximaEvaluacion.setDate(proximaEvaluacion.getDate() + 7);
+
+    const evaluacionesFisicas = ultimoReporte?.resumenFisico || 'No disponible';
+    const evaluacionesEmocionales = ultimoReporte?.resumenEmocional || 'No disponible';
+
+    const evaluacionesfisic = [
+        { icono: <FaFileAlt />, texto: 'Última evaluación: ' + fechaGenerado.toLocaleDateString() },
+        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + proximaEvaluacion.toLocaleDateString() },
+        { icono: <MdPsychology />, texto: 'Resultado: ' + evaluacionesFisicas }
+    ];
+
     const evaluacionesPsico = [
-        { icono: <FaFileAlt />, texto: 'Última evaluación: 12/11/2024' },
-        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: 16/04/2025' },
-        { icono: <MdPsychology />, texto: 'Resultado: En observación' }
+        { icono: <FaFileAlt />, texto: 'Última evaluación: ' + fechaGenerado.toLocaleDateString() },
+        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + proximaEvaluacion.toLocaleDateString() },
+        { icono: <MdPsychology />, texto: 'Resultado: ' + evaluacionesEmocionales }
     ];
 
     const nivelEstres = 1;
@@ -66,38 +95,31 @@ const InfoVoluntarios = () => {
     };
 
     const handleIrHistorial = () => {
-        if (tieneHistorial) {
-            navigate(`/Historial/${id}`);
-        } else {
-            setShowModalNuloCap(true);
-        }
+        navigate(`/Historial/${id}`);
     };
 
     const handleIrReportes = () => {
-        if (tieneReporte) {
-            navigate(`/Reportes/${id}`);
-        } else {
-            setShowModalNuloCap(true);
-        }
+        navigate(`/Reportes/${id}`);
     };
 
     const handleIrEncuestas = () => {
-        if (tieneEncuesta) {
-            navigate(`/ListaEncuestas/${id}`);
-        } else {
-            setShowModalNuloCap(true);
-        }
+        navigate(`/ListaEncuestas/${id}`);
     };
 
     const handleVerCertificaciones = () => {
-        const encontrado = certificacionesVoluntarios.find(v => v.id === parseInt(id));
+        const encontrado = ultimoReporte?.capacitaciones;
         if (encontrado) {
-            setCertificacionesVoluntario(encontrado.certificaciones);
+            setCertificacionesVoluntario(encontrado);
             setShowModalCap(true);
         } else {
             setShowModalNuloCap(true);
         }
     };
+
+
+    if (!voluntario) {
+        return <p>Cargando...</p>;  // Mientras se obtienen los datos
+    }
 
     return (
         <div className="container-fluid">
@@ -115,7 +137,6 @@ const InfoVoluntarios = () => {
                     </div>
                 </div>
 
-
                 <div className="info-secciones">
                     <div className="info-box">
                         <h4>Datos Personales</h4>
@@ -126,38 +147,22 @@ const InfoVoluntarios = () => {
 
                     <div className="info-box">
                         <h4>Evaluaciones Físicas</h4>
-                        {parseInt(id) % 2 === 0 ? (
-                            <div className="no-evaluacion">
-                                <FaFileAlt className="icono-vacio" />
-                                <p>No hay evaluaciones físicas registradas para este voluntario.</p>
-                            </div>
-                        ) : (
-                            evaluacionesPsico.map((d, i) => (
-                                <p key={i}>{d.icono} {d.texto}</p>
-                            ))
-                        )}
+                        {evaluacionesfisic.map((d, i) => (
+                            <p key={i}>{d.icono} {d.texto}</p>
+                        ))}
                     </div>
 
                     <div className="info-box">
                         <h4>Evaluaciones Psicológicas</h4>
-                        {parseInt(id) % 2 === 0 ? (
-                            <div className="no-evaluacion">
-                                <MdPsychology className="icono-vacio" />
-                                <p>No hay evaluaciones psicológicas registradas para este voluntario.</p>
-                            </div>
-                        ) : (
-                            <>
-                                {evaluacionesPsico.map((d, i) => (
-                                    <p key={i}>{d.icono} {d.texto}</p>
-                                ))}
-                                <p><FaChartLine /> Niveles de estrés</p>
-                                <p className="mt-2">
-        <span className={`nivel-estres nivel-estres-${getNivelEstres(nivelEstres)}`}>
-          {getNivelEstres(nivelEstres).toUpperCase()}
-        </span>
-                                </p>
-                            </>
-                        )}
+                        {evaluacionesPsico.map((d, i) => (
+                            <p key={i}>{d.icono} {d.texto}</p>
+                        ))}
+                        <p><FaChartLine /> Niveles de estrés</p>
+                        <p className="mt-2">
+                            <span className={`nivel-estres nivel-estres-${getNivelEstres(nivelEstres)}`}>
+                                {getNivelEstres(nivelEstres).toUpperCase()}
+                            </span>
+                        </p>
                     </div>
 
                 </div>
@@ -172,16 +177,15 @@ const InfoVoluntarios = () => {
                 <div className="info-reportes">
                     <h2>Detalles y Análisis</h2>
                     <div className="reporte-grid">
-                        {reportes.length > 0 ? (
-                            reportes.map((item, index) => (
+                        {ultimoReporte?.necesidades?.length > 0 ? (
+                            ultimoReporte.necesidades.map((item, index) => (
                                 <div key={index} className="reporte-card">
                                     <div className="reporte-icono">
-                                        {item.tipo === 'detalle'
-                                            ? <TbListDetails size={24} />
-                                            : <LuNotebookPen size={24} />}
+                                        {/* Puedes elegir el icono que se adapte mejor a las necesidades */}
+                                        <TbListDetails size={24} />
                                     </div>
                                     <div>
-                                        <strong>{item.titulo}</strong>
+                                        <strong>{item.tipo}</strong>
                                         <p>{item.descripcion}</p>
                                     </div>
                                 </div>

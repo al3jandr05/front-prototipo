@@ -7,7 +7,7 @@ import { login } from '../api/rest/authService';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [correo, setCorreo] = useState('');
+    const [email, setEmail] = useState('');
     const [contrasena, setContrasena] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Login = () => {
 
         try {
 
-            const { access_token } = await login(correo, contrasena);
+            const { access_token } = await login(email, contrasena);
             localStorage.setItem('token', access_token);
             localStorage.setItem('bearer', 'Bearer');
             navigate('/Dashboard');
@@ -44,8 +44,8 @@ const Login = () => {
                             <input
                                 type="text"
                                 placeholder="Ingrese su Correo Electrónico"
-                                value={correo}
-                                onChange={(e) => setCorreo(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>

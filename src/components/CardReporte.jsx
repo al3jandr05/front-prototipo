@@ -2,15 +2,17 @@ import React from 'react';
 import '../styles/reportesVoluntario.css';
 
 const CardReporte = ({ reporte, onClick }) => {
+    const { fechaGenerado, resumenFisico, resumenEmocional, estadoGeneral, capacitaciones, necesidades } = reporte;
+
+
     return (
         <div className="card-voluntario card-reporte" onClick={onClick}>
             <div className="avatar">
                 <span>R</span>
             </div>
             <div className="info-voluntario">
-                <h4>{reporte.titulo}</h4>
-                <p>Fecha generado: {reporte.fecha}</p>
-                <p>Estado general: {reporte.estado}</p>
+                <p><strong>Fecha Generada:</strong> {new Date(fechaGenerado).toLocaleDateString()}</p>
+                <p><strong>Estado General:</strong> {estadoGeneral || 'No disponible'}</p>
             </div>
         </div>
     );

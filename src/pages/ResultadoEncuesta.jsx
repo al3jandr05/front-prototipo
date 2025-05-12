@@ -74,6 +74,14 @@ const ResultadoEncuesta = () => {
             estado: r.respuestaTexto,
         }));
     });
+
+    const respuestaTextoMap = {
+        "1": "Nunca",
+        "2": "Raramente",
+        "3": "A veces",
+        "4": "Frecuentemente",
+        "5": "Siempre"
+    };
     return (
         <div className="resultado-container">
             <Sidebar />
@@ -91,8 +99,7 @@ const ResultadoEncuesta = () => {
                                     {respuestasFiltradas.map((item, index) => (
                                         <div key={index} className="resultado-card">
                                             <h4>{item.textoPregunta}</h4>
-                                            <p><strong>Resultado:</strong> {item.textoPregunta}</p>
-                                            <p><strong>Observación:</strong> {item.respuestaTexto}</p>
+                                            <p><strong>Resultado:</strong> {respuestaTextoMap[item.respuestaTexto] || item.respuestaTexto}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -113,7 +120,7 @@ const ResultadoEncuesta = () => {
                                 {encuesta.respuestas.map((item, index) => (
                                     <div key={index} className="resultado-card">
                                         <h4>{item.textoPregunta}</h4>
-                                        <p><strong>Resultado:</strong> {item.respuestaTexto}</p>
+                                        <p><strong>Resultado:</strong> {respuestaTextoMap[item.respuestaTexto] || item.respuestaTexto}</p>
                                     </div>
                                 ))}
                             </div>

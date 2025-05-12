@@ -96,7 +96,19 @@ const InfoVoluntarios = () => {
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
 
 
-    const datosReportes = data?.reportesVoluntarios || [];
+    const formatFecha = (fecha) => {
+        const date = new Date(fecha);
+        return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
+    };
+
+    const datosReportes = data?.reportesVoluntarios
+        ? data.reportesVoluntarios
+            .filter(reporte => reporte.observaciones && reporte.observaciones.trim() !== '') // Filtra los reportes que tienen observaciones
+            .map(reporte => ({
+                ...reporte,  // Mantiene todas las propiedades del reporte
+                fechaGenerado: formatFecha(reporte.fechaGenerado), // Cambia la fecha al formato deseado
+            }))
+        : [];
 
 
     const tieneCapacitaciones = datosReportes && datosReportes?.length > 0;
@@ -110,11 +122,18 @@ const InfoVoluntarios = () => {
     );
 
     const tieneEncuestas = datosReportes && datosReportes?.length > 0;
+
+    const forma = (fecha) => {
+        const date = new Date(fecha);
+        if (isNaN(date)) return fecha;  // Si la fecha es inválida, se devuelve tal cual
+        return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
+    };
+
     const evaluaciones = datosReportes
         .flatMap(reporte => reporte.evaluaciones || [])
         .map(evaluacion => ({
             id: evaluacion.id,
-            fecha: evaluacion.fecha,
+            fecha: forma(evaluacion.fecha), // Aquí formateamos la fecha
             nombreTest: evaluacion.test.nombre,
         }));
 

@@ -236,7 +236,7 @@ const Formulario = () => {
                 </div>
                 <div className="botones">
                     <button className="btn-agregar-pregunta" onClick={abrirAgregar}>+ Agregar Pregunta</button>
-                    <button className="btn-agregar-pregunta" onClick={handleIrVistaVoluntario}>Formulario Voluntario</button>
+                    {/*<button className="btn-agregar-pregunta" onClick={handleIrVistaVoluntario}>Formulario Voluntario</button>*/}
                 </div>
 
 
@@ -245,7 +245,7 @@ const Formulario = () => {
                     {pagina === 'fisico' && (
                         <>
 
-                            {renderPreguntas('fisico')}
+                            {renderPreguntas(   'fisico')}
                             <div className="seleccion-cuerpo-box">
                                 <label className="seleccion-cuerpo-label">Selección de condición del cuerpo</label>
                                 <HumanBodyViewer />

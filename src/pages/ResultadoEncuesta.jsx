@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/resultadoEncuesta.css';
-
 import { useQuery } from '@apollo/client';
 import { OBTENER_EVALUACION_POR_ID } from '../api/graphql/SQL/querys/evaluacionId';
 import HumanBodyViewer from '../components/HumanBodyViewer';
@@ -16,21 +15,24 @@ const ResultadoEncuesta = () => {
         variables: { id: encuestaId },
     });
 
-    if (loading) return(
+    // Función para formatear la fecha en formato "dd/mm/yyyy"
+    const formatFecha = (fecha) => {
+        const date = new Date(fecha);
+        return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
+    };
+
+    if (loading) return (
         <div className="resultado-container">
             <Sidebar />
             <main className="resultado-content">
-                <LoadingCircle/>
+                <LoadingCircle />
             </main>
-
-
         </div>
-
     );
+
     if (error) return <p>Error al obtener los datos: {error.message}</p>;
 
     const encuesta = data?.obtenerEvaluacionPorId;
-
 
     if (!encuesta) {
         return (
@@ -82,12 +84,14 @@ const ResultadoEncuesta = () => {
         "4": "Frecuentemente",
         "5": "Siempre"
     };
+
     return (
         <div className="resultado-container">
             <Sidebar />
             <div className="resultado-content">
                 <h1 className="titulo-resultado">Resultado de Encuesta #{encuesta.id}</h1>
-                <p className="subtitulo"><strong>Fecha realizada:</strong> {encuesta.fecha}</p>
+                {/* Formateo de la fecha */}
+                <p className="subtitulo"><strong>Fecha realizada:</strong> {formatFecha(encuesta.fecha)}</p>
 
                 <div className="resultados">
                     {/* FÍSICO */}

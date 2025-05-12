@@ -13,12 +13,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {PiCertificate, PiFireSimpleFill} from "react-icons/pi";
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-import listadoEncuestas from "../data/resultados_encuesta";
-import resultadosEncuesta from '../data/resultados_encuesta';
-
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation  } from '@apollo/client';
 import { obtenerVoluntario } from '../api/rest/voluntarioService';
 import { OBTENER_REPORTES_VOLUNTARIOS } from '../api/graphql/SQL/querys/reportes';
+
+import { OBTENER_CAPACITACIONES } from '../api/graphql/SQL/querys/capacitaciones';
+import { OBTENER_NECESIDADES } from '../api/graphql/SQL/querys/necesidades';
+
+import { AGREGAR_NECESIDADES } from '../api/graphql/SQL/mutations/agregarNecesidades';
+import { AGREGAR_CAPACITACIONES } from '../api/graphql/SQL/mutations/agregarCapacitaciones';
+
+import { CREAR_EVALUACION } from '../api/graphql/SQL/mutations/crearEvaluacion';
+import ModalCapacitaciones from '../components/franco/ModalCapacitaciones';
+import ModalNecesidades from '../components/franco/ModalNecesidades';
+
 
 import ModalNulo from '../components/ModalNulo';
 
@@ -31,12 +39,13 @@ import LoadingCircle from "../components/LoadingCircle";
 const InfoVoluntarios = () => {
     const { id } = useParams();
     const historialId = parseInt(id);
+    const historialIdString = id.toString();
 
     const [voluntario, setVoluntario] = useState(null);
     const navigate = useNavigate();
 
     const [showModalCap, setShowModalCap] = useState(false);
-    const [showModalHistorial, setShowModalHistorial] = useState(false);
+    const [ShowModalNecesidad, setShowModalNecesidad] = useState(false);
 
     const [vistaActual, setVistaActual] = useState(null);
     const [mostrarClinico, setMostrarClinico] = useState(true);
@@ -47,6 +56,24 @@ const InfoVoluntarios = () => {
 
     const [reporteSeleccionado, setReporteSeleccionado] = useState(null);
     const [showModalReporte, setShowModalReporte] = useState(false);
+
+    const [crearEvaluacion] = useMutation(CREAR_EVALUACION);
+
+    const handleEnviarFormulario = async () => {
+        try {
+            const { data } = await crearEvaluacion({ variables: { id: historialIdString } });
+
+            if (data?.crearEvaluacion === true) {
+                alert("Formulario enviado correctamente ✔️");
+            } else {
+                alert("Ya existe un formulario en espera ⏳. No se puede enviar otro hasta que se complete.");
+            }
+        } catch (error) {
+            console.error("Error al enviar formulario:", error);
+            alert("Hubo un error al enviar el formulario ❌");
+        }
+    };
+
 
     useEffect(() => {
         const fetchVoluntario = async () => {
@@ -136,8 +163,25 @@ const InfoVoluntarios = () => {
     );
 
     return (
+
         <div className="infovoluntarios-container">
             <Sidebar />
+            {showModalCap && (
+                <ModalCapacitaciones
+                    reporteId={reporteMasReciente?.id}
+                    capacitacionesYaAsignadas={reporteMasReciente?.capacitaciones || []}
+                    onClose={() => setShowModalCap(false)}
+                />
+            )}
+
+            {ShowModalNecesidad && (
+                <ModalNecesidades
+                    reporteId={reporteMasReciente?.id}
+                    necesidadesYaAsignadas={reporteMasReciente?.necesidades || []}
+                    onClose={() => setShowModalNecesidad(false)}
+                />
+            )}
+
             <main className="infovoluntarios-content">
                 <header className="infovoluntarios-header">
                     <div className="info-avatar"><span>{inicial}</span></div>
@@ -150,7 +194,7 @@ const InfoVoluntarios = () => {
                                 {voluntario?.estado}
                             </div>
 
-                            <button className="btn-formulario-voluntario">
+                            <button className="btn-formulario-voluntario" onClick={handleEnviarFormulario}>
                                 Enviar Formulario
                             </button>
                         </div>
@@ -307,20 +351,30 @@ const InfoVoluntarios = () => {
                     </h2>
 
                     {/* Vista: Análisis */}
-                    {vistaActual === 'analisis' && tieneAnalisis && (
-                        <div className="panel-analisis">
-                            <div className="analisis-grid">
-                                {reporteMasReciente.necesidades.map((item, index) => (
-                                    <div key={index} className="vista-card">
-                                        <div>
-                                            <strong>{item.tipo}</strong>
-                                            <p>{item.descripcion}</p>
+                    {vistaActual === 'capacitaciones' && tieneCapacitaciones && (
+                        <div className="panel-capacitaciones">
+                            <button
+                                className="btn-opcion"
+                                onClick={() => setShowModalCap(true)}
+                            >
+                                Agregar
+                            </button>
+
+                            <div className={`historial-seccion ${mostrarCaps ? 'visible' : 'oculto'}`}>
+                                <div className="capacitaciones-grid">
+                                    {reporteMasReciente?.capacitaciones.map((item, index) => (
+                                        <div key={index} className="vista-card">
+                                            <div>
+                                                <strong>{item.nombre}</strong>
+                                                <p>{item.descripcion}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     )}
+
 
 
                     {/* Vista: Historial */}
@@ -426,26 +480,27 @@ const InfoVoluntarios = () => {
 
 
                     {/* Vista: Certificaciones */}
-                    {vistaActual === 'capacitaciones' && tieneCapacitaciones && (
-                        <div className="panel-capacitaciones">
-                            {/* CAPACITACIONES */}
-                            <div className={`historial-seccion ${mostrarCaps ? 'visible' : 'oculto'}`}>
-                                <div className="capacitaciones-grid">
-                                    {reporteMasReciente?.capacitaciones.map((item, index) => (
-                                        <div key={index} className="vista-card">
-                                            <div>
-                                                <strong>{item.nombre}</strong>
-                                                <p>{item.descripcion}</p>
-                                            </div>
+                    {vistaActual === 'analisis' && tieneAnalisis && (
+                        <div className="panel-analisis">
+                            <button
+                                className="btn-opcion"
+                                onClick={() => setShowModalNecesidad(true)}
+                            >
+                                Agregar
+                            </button>
+
+                            <div className="analisis-grid">
+                                {reporteMasReciente.necesidades.map((item, index) => (
+                                    <div key={index} className="vista-card">
+                                        <div>
+                                            <strong>{item.tipo}</strong>
+                                            <p>{item.descripcion}</p>
                                         </div>
-                                    ))}
-                                </div>
+                                    </div>
+                                ))}
                             </div>
-
-
                         </div>
                     )}
-
                 </section>
 
             </main>

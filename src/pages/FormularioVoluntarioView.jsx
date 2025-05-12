@@ -1,4 +1,5 @@
-    import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import '../styles/formularioView.css';
 import { preguntas as preguntasBase, opciones } from '../data/data_formulario';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,11 +7,20 @@ import { Modal, Button } from 'react-bootstrap';
 import HumanBody from '../components/HumanBody';
 import { GrCircleInformation } from "react-icons/gr";
 
+import { useQuery, useMutation } from '@apollo/client';
+import { PREGUNTAS_POR_TEST } from '../api/graphql/SQL/querys/preguntas'
+import { ENVIAR_RESPUESTAS } from '../api/graphql/SQL/mutations/respuestas'
+
 const FormularioVoluntarioView = () => {
+
+    const { reporteId, evaluacionFisicaId, evaluacionEmocionalId } = useParams();
+
+    const preguntasExcluidas = [9, 10, 11, 12, 13, 14];
+
     const [pagina, setPagina] = useState('fisico');
     const [respuestas, setRespuestas] = useState({
-        fisico: Array(preguntasBase.fisico.length).fill(""),
-        psicologico: Array(preguntasBase.psicologico.length).fill("")
+        fisico: [],
+        psicologico: [],
     });
     const [partesSeleccionadas, setPartesSeleccionadas] = useState({});
     const [showErrorModal, setShowErrorModal] = useState(false);
@@ -24,6 +34,57 @@ const FormularioVoluntarioView = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [isReady, setIsReady] = useState(null); // Sí o No (true / false)
 
+    const { loading: loadingFisico, error: errorFisico, data: dataFisico } = useQuery(PREGUNTAS_POR_TEST, {
+        variables: { testId: 3 },
+    });
+
+    const { loading: loadingPsicologico, error: errorPsicologico, data: dataPsicologico } = useQuery(PREGUNTAS_POR_TEST, {
+        variables: { testId: 4 },
+    });
+
+
+    const [enviarRespuestasMutation] = useMutation(ENVIAR_RESPUESTAS);
+
+    const preguntasFiltradasFisico = dataFisico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
+    const preguntasFiltradasPsicologico = dataPsicologico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
+    const preguntasCuerpo = dataFisico?.preguntasPorTest.filter(p => preguntasExcluidas.includes(p.id)) || []
+
+    const mapeoCuerpo = {
+        "Brazo Izquierdo": preguntasCuerpo.find(p => p.id === 10),
+        "Brazo Derecho": preguntasCuerpo.find(p => p.id === 9),
+        "Pierna Izquierda": preguntasCuerpo.find(p => p.id === 12),
+        "Pierna Derecha": preguntasCuerpo.find(p => p.id === 11),
+        "Torso": preguntasCuerpo.find(p => p.id === 13),
+        "Cabeza": preguntasCuerpo.find(p => p.id === 14),
+    };
+
+    const valorOpciones = {
+        "Nunca": 1,
+        "Raramente": 2,
+        "A veces": 3,
+        "Frecuentemente": 4,
+        "Siempre": 5,
+    };
+
+    const valorEstadoCuerpo = {
+        "muymal": 1,
+        "mal": 2,
+        "normal": 3,
+        "bien": 4,
+        "muybien": 5
+    };
+
+    useEffect(() => {
+        if (dataFisico && dataPsicologico) {
+            const preguntasFiltradasFisico = dataFisico.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id));
+            const preguntasFiltradasPsicologico = dataPsicologico.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id));
+
+            setRespuestas({
+                fisico: Array(preguntasFiltradasFisico.length).fill(""),
+                psicologico: Array(preguntasFiltradasPsicologico.length).fill(""),
+            });
+        }
+    }, [dataFisico, dataPsicologico]);
 
     const scrollToTop = () => topRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => scrollToTop(), [pagina]);
@@ -77,34 +138,74 @@ const FormularioVoluntarioView = () => {
             return;
         }
         setShowConfirmModal(true);
-    };
-    const confirmarEnvio = () => {
-        const datosFinales = {
-            respuestas,
-            partesCuerpo: partesSeleccionadas,
-            aptoParaOtroIncendio: isReady,
+    }
+
+    const confirmarEnvio = async () => {
+        const respuestasFisico = respuestas.fisico.map((texto, idx) => ({
+            preguntaId: parseInt(preguntasFiltradasFisico[idx]?.id),
+            textoPregunta: preguntasFiltradasFisico[idx]?.texto,
+            respuestaTexto: (valorOpciones[texto] || 0).toString(),
+        }));
+
+        const respuestasPsicologico = respuestas.psicologico.map((texto, idx) => ({
+            preguntaId: parseInt(preguntasFiltradasPsicologico[idx]?.id),
+            textoPregunta: preguntasFiltradasPsicologico[idx]?.texto,
+            respuestaTexto: (valorOpciones[texto] || 0).toString(),
+        }));
+
+        const respuestasCuerpo = Object.entries(partesSeleccionadas).reduce((acc, [parte, estado]) => {
+            const pregunta = mapeoCuerpo[parte];
+            const valor = valorEstadoCuerpo[estado] || 0;
+
+            if (pregunta) {
+                acc.push({
+                    preguntaId: parseInt(pregunta.id),
+                    textoPregunta: pregunta.texto,
+                    respuestaTexto: valor.toString(),
+                });
+            }
+            return acc;
+        }, []);
+
+        const input = {
+            reporteId: parseInt(reporteId),
+            estado: isReady ? "Disponible" : "No disponible",
+            evaluaciones: [
+                {
+                    evaluacionId: parseInt(evaluacionFisicaId),
+                    respuestas: [...respuestasFisico, ...respuestasCuerpo]
+                },
+                {
+                    evaluacionId: parseInt(evaluacionEmocionalId),
+                    respuestas: respuestasPsicologico
+                }
+            ]
         };
-
-        console.log(" Datos enviados:", datosFinales);
-        setShowConfirmModal(false);
-        setShowSuccessModal(true);
+        console.log("🔍 ENVIANDO INPUT:", JSON.stringify(input, null, 2));
+        try {
+            await enviarRespuestasMutation({ variables: { input } });
+            setShowConfirmModal(false);
+            setShowSuccessModal(true);
+        } catch (err) {
+            console.error("❌ Error al enviar respuestas:", err);
+            setErrorTexto("Hubo un error al enviar las respuestas.");
+            setShowErrorModal(true);
+        }
     };
-
-
-    const renderPreguntas = (seccion) => {
+    const renderPreguntas = (seccion, preguntas) => {
         const isInvalid = errores[seccion];
 
         return (
             <div className="seccion-preguntas">
                 <h2>{seccion === 'fisico' ? 'Evaluación Física' : 'Evaluación Psicológica'}</h2>
                 <div className={`formulario-grid`}>
-                    {preguntasBase[seccion].map((pregunta, idx) => {
+                    {preguntas.map((pregunta, idx) => {
                         const respuesta = respuestas[seccion][idx];
                         const showError = isInvalid && respuesta === "";
 
                         return (
-                            <div className={`formulario-item ${showError ? 'incompleto' : ''}`} key={idx}>
-                                <label>{pregunta}</label>
+                            <div className={`formulario-item ${showError ? 'incompleto' : ''}`} key={pregunta.id}>
+                                <label>{pregunta.texto}</label>
                                 <div className="radio-group">
                                     {opciones.map((opcion) => (
                                         <label key={opcion}>
@@ -128,6 +229,7 @@ const FormularioVoluntarioView = () => {
     };
 
 
+
     return (
         <div className="formulariovol-container">
             <div className="formulariovol-content" ref={topRef}>
@@ -149,7 +251,7 @@ const FormularioVoluntarioView = () => {
                 <form>
                     {pagina === 'fisico' && (
                         <>
-                            {renderPreguntas('fisico')}
+                            {renderPreguntas('fisico', preguntasFiltradasFisico)}
                             <div className="seleccion-cuerpo-box">
                                 <label className="seleccion-cuerpo-label">Selección de condición del cuerpo</label>
                                 <HumanBody
@@ -160,7 +262,7 @@ const FormularioVoluntarioView = () => {
                         </>
                     )}
 
-                    {pagina === 'psicologico' && renderPreguntas('psicologico')}
+                    {pagina === 'psicologico' && renderPreguntas('psicologico', preguntasFiltradasPsicologico)}
 
                     {pagina === 'fisico' ? (
                         <button type="button" className="btn-formulario-nav" onClick={() => setPagina('psicologico')}>Siguiente</button>

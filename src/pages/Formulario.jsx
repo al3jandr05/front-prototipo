@@ -7,13 +7,16 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import HumanBodyViewer from "../components/HumanBodyViewer";
 import {useNavigate} from "react-router-dom";
 
+import { useQuery, useMutation } from '@apollo/client';
+import {AGREGAR_PREGUNTA, ACTUALIZAR_PREGUNTA, ELIMINAR_PREGUNTA } from '../api/graphql/SQL/mutations/mutPre';
+
+import { PREGUNTAS_POR_TEST} from '../api/graphql/SQL/querys/preguntas';
+
+
 const Formulario = () => {
     const [pagina, setPagina] = useState('fisico');
-    const [respuestas, setRespuestas] = useState({
-        fisico: Array(preguntasBase.fisico.length).fill(""),
-        psicologico: Array(preguntasBase.psicologico.length).fill("")
-    });
-    const [preguntas, setPreguntas] = useState(preguntasBase);
+    const [preguntas, setPreguntas] = useState({ fisico: [], psicologico: [] });
+    const [respuestas, setRespuestas] = useState({ fisico: [], psicologico: [] });
     const [partesSeleccionadas, setPartesSeleccionadas] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState('agregar');
@@ -28,10 +31,31 @@ const Formulario = () => {
 
     const topRef = useRef(null);
     const navigate = useNavigate();
+    const { data: dataFisico } = useQuery(PREGUNTAS_POR_TEST, { variables: { testId: 3 } });
+    const { data: dataPsico } = useQuery(PREGUNTAS_POR_TEST, { variables: { testId: 4 } });
+
+    const [agregarPreguntaMutation] = useMutation(AGREGAR_PREGUNTA);
+    const [actualizarPreguntaMutation] = useMutation(ACTUALIZAR_PREGUNTA);
+    const [eliminarPreguntaMutation] = useMutation(ELIMINAR_PREGUNTA);
 
     const scrollToTop = () => topRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => scrollToTop(), [pagina]);
+    useEffect(() => {
+        if (dataFisico && dataPsico) {
+            const excluirIds = [9, 10, 11, 12, 13, 14];
 
+            const filtrar = (arr) => arr.filter(p => !excluirIds.includes(p.id));
+
+            const preguntasFis = filtrar(dataFisico.preguntasPorTest);
+            const preguntasPsi = filtrar(dataPsico.preguntasPorTest);
+
+            setPreguntas({ fisico: preguntasFis, psicologico: preguntasPsi });
+            setRespuestas({
+                fisico: Array(preguntasFis.length).fill(""),
+                psicologico: Array(preguntasPsi.length).fill("")
+            });
+        }
+    }, [dataFisico, dataPsico]);
     const handleChange = (seccion, index, valor) => {
         const copia = [...respuestas[seccion]];
         copia[index] = valor;
@@ -64,31 +88,89 @@ const Formulario = () => {
         setShowSuccessModal(true);
     };
 
-    const agregarPregunta = () => {
+    const agregarPregunta = async () => {
         if (!preguntaActual.trim()) return;
-        const nuevas = { ...preguntas };
-        nuevas[tipoActual] = [...nuevas[tipoActual], preguntaActual];
-        setPreguntas(nuevas);
-        setShowModal(false);
-        setPreguntaActual('');
+
+        try {
+            const testId = tipoActual === 'fisico' ? 3 : 4;
+
+            const { data } = await agregarPreguntaMutation({
+                variables: {
+                    testId,
+                    tipo: tipoActual,
+                    texto: preguntaActual
+                }
+            });
+
+            const nuevaPregunta = data.agregarPregunta;
+
+            const nuevas = { ...preguntas };
+            nuevas[tipoActual] = [...nuevas[tipoActual], nuevaPregunta];
+
+            setPreguntas(nuevas);
+            setRespuestas(prev => ({
+                ...prev,
+                [tipoActual]: [...prev[tipoActual], ""]
+            }));
+
+            setShowModal(false);
+            setPreguntaActual('');
+        } catch (error) {
+            console.error("Error al agregar pregunta:", error.message);
+        }
     };
 
-    const editarPregunta = () => {
+    const editarPregunta = async () => {
         if (!preguntaActual.trim()) return;
-        const nuevas = { ...preguntas };
-        nuevas[tipoActual][editIndex] = preguntaActual;
-        setPreguntas(nuevas);
-        setShowModal(false);
-        setPreguntaActual('');
-        setEditIndex(null);
+
+        try {
+            const preguntaId = preguntas[tipoActual][editIndex].id;
+
+            await actualizarPreguntaMutation({
+                variables: {
+                    id: preguntaId,
+                    texto: preguntaActual
+                }
+            });
+
+            const nuevas = { ...preguntas };
+            nuevas[tipoActual][editIndex].texto = preguntaActual;
+
+            setPreguntas(nuevas);
+            setShowModal(false);
+            setPreguntaActual('');
+            setEditIndex(null);
+        } catch (error) {
+            console.error("Error al editar pregunta:", error.message);
+        }
     };
 
-    const eliminarPregunta = () => {
-        const nuevas = { ...preguntas };
-        nuevas[deleteTipo].splice(deleteIndex, 1);
-        setPreguntas(nuevas);
-        setShowDeleteModal(false);
+    const eliminarPregunta = async () => {
+        try {
+            const preguntaId = preguntas[deleteTipo][deleteIndex].id;
+
+            await eliminarPreguntaMutation({
+                variables: { id: preguntaId }
+            });
+
+            const nuevas = { ...preguntas };
+            nuevas[deleteTipo].splice(deleteIndex, 1);
+
+            setPreguntas(nuevas);
+            setRespuestas(prev => {
+                const copia = [...prev[deleteTipo]];
+                copia.splice(deleteIndex, 1);
+                return { ...prev, [deleteTipo]: copia };
+            });
+
+            setShowDeleteModal(false);
+            setDeleteIndex(null);
+            setDeleteTipo(null);
+        } catch (error) {
+            console.error("Error al eliminar pregunta:", error.message);
+        }
     };
+
 
     const abrirAgregar = () => {
         setModalMode('agregar');
@@ -99,7 +181,7 @@ const Formulario = () => {
 
     const abrirEditar = (tipo, index) => {
         setModalMode('editar');
-        setPreguntaActual(preguntas[tipo][index]);
+        setPreguntaActual(preguntas[tipo][index].texto);
         setTipoActual(tipo);
         setEditIndex(index);
         setShowModal(true);
@@ -112,7 +194,7 @@ const Formulario = () => {
 
                 {preguntas[seccion].map((pregunta, idx) => (
                     <div className="formulario-item" key={idx}>
-                        <label>{pregunta}</label>
+                        <label>{pregunta.texto}</label>
                         <div className="radio-group">
                             {opciones.map((opcion) => (
                                 <label key={opcion}>

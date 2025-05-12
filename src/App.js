@@ -23,7 +23,7 @@ function App() {
                 <Route path="/ListaVoluntarios" element={<ListaVoluntarios />} />
                 <Route path="/Voluntario/:id" element={<InfoVoluntarios />} />
                 <Route path="/Formulario" element={<Formulario />} />
-                <Route path="/FormularioVoluntario" element={<FormularioVoluntarioView />} />
+                <Route path="/FormularioVoluntario/:reporteId/:evaluacionFisicaId/:evaluacionEmocionalId" element={<FormularioVoluntarioView />} />
                 <Route path="/Capacitaciones" element={<CrudCapacitaciones />} />
                 <Route path="/Necesidades" element={<CrudNecesidades />} />
                 <Route path="/Voluntarios" element={<CrudVoluntarios />} />

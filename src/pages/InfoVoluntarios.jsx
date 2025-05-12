@@ -13,13 +13,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { PiCertificate } from "react-icons/pi";
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-import historialVoluntarios from '../data/historialVoluntarios';
-import certificacionesVoluntarios from '../data/cap_cert';
-import detallesAnalisis from '../data/detalles_analisis';
 import listadoEncuestas from "../data/resultados_encuesta";
-import voluntarios from "../data/voluntarios";
-import reportesVoluntarios from '../data/reportesVoluntario';
 import resultadosEncuesta from '../data/resultados_encuesta';
+
+import { useQuery } from '@apollo/client';
+import { obtenerVoluntario } from '../api/rest/voluntarioService';
+import { OBTENER_REPORTES_VOLUNTARIOS } from '../api/graphql/SQL/querys/reportes';
 
 import ModalNulo from '../components/ModalNulo';
 
@@ -27,11 +26,12 @@ import '../styles/infoVoluntarios.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalReporte from "../components/ModalReporte";
 import CardReporte from "../components/CardReporte";
-import {GrDocumentText} from "react-icons/gr";
-import {IoBookOutline} from "react-icons/io5";
 
 const InfoVoluntarios = () => {
-    const {id} = useParams();
+    const { id } = useParams();
+    const historialId = parseInt(id);
+
+    const [voluntario, setVoluntario] = useState(null);
     const navigate = useNavigate();
 
     const [showModalCap, setShowModalCap] = useState(false);
@@ -43,61 +43,81 @@ const InfoVoluntarios = () => {
     const [activeTab, setActiveTab] = useState('clinico');
     const [showModalNuloCap, setShowModalNuloCap] = useState(false);
     const [mostrarCaps, setMostrarCaps] = useState(true);
-    const [mostrarCerts, setMostrarCerts] = useState(true);
 
     const [reporteSeleccionado, setReporteSeleccionado] = useState(null);
     const [showModalReporte, setShowModalReporte] = useState(false);
 
-    const voluntario = voluntarios.find(v => v.id === parseInt(id));
+    useEffect(() => {
+        const fetchVoluntario = async () => {
+            try {
+                const data = await obtenerVoluntario(id);
+                setVoluntario(data);
+            } catch (error) {
+                console.error("Error al obtener el voluntario:", error);
+            }
+        };
+        fetchVoluntario();
+    }, [id]);
+
+    const { loading, error, data } = useQuery(OBTENER_REPORTES_VOLUNTARIOS, {
+        variables: { historialId },
+    });
+    console.log(data)
+
     const tieneEncuesta = listadoEncuestas.some(v => v.voluntarioId === parseInt(id));
 
-    const nombreEmail = voluntario?.nombre.toLowerCase().replace(/\s+/g, '') || '';
+    const nombreEmail = voluntario?.email || ' ';
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
 
-    const certificacionesVoluntario = certificacionesVoluntarios.find(v => v.id === parseInt(id));
-    const tieneCapacitaciones = certificacionesVoluntario && certificacionesVoluntario.certificaciones?.length > 0;
-    const certificaciones = certificacionesVoluntario?.certificaciones || [];
-    const capacitaciones = certificaciones.filter(c => c.tipo === 'capacitacion');
-    const certificados = certificaciones.filter(c => c.tipo === 'certificacion');
 
-    const historial = historialVoluntarios.find(v => v.id === parseInt(id));
-    const tieneHistorial = historial && (
-        (historial.historialClinico?.length > 0) ||
-        (historial.historialPsicologico?.length > 0)
+    const datosReportes = data?.reportesVoluntarios || [];
+
+
+    const tieneCapacitaciones = datosReportes && datosReportes?.length > 0;
+
+    const reporteMasReciente = datosReportes.length > 0
+        ? [...datosReportes].sort((a, b) => new Date(b.fechaGenerado) - new Date(a.fechaGenerado))[0]
+        : null;
+
+    const tieneHistorial = datosReportes && (
+        (datosReportes?.length > 0)
     );
+    console.log(reporteMasReciente);
 
-    const encuestasVoluntario = resultadosEncuesta.find(v => v.voluntarioId === parseInt(id));
-    const tieneEncuestas = encuestasVoluntario && encuestasVoluntario.encuestas?.length > 0;
-    const encuestas = encuestasVoluntario?.encuestas || [];
+    const tieneEncuestas = datosReportes && datosReportes?.length > 0;
+    const evaluaciones = datosReportes
+        .flatMap(reporte => reporte.evaluaciones || [])
+        .map(evaluacion => ({
+            id: evaluacion.id,
+            fecha: evaluacion.fecha,
+            nombreTest: evaluacion.test.nombre,
+        }));
 
-    const analisisVoluntario = detallesAnalisis.find(v => v.id === parseInt(id));
-    const tieneAnalisis = analisisVoluntario && analisisVoluntario.reportes?.length > 0;
-    const reportes = analisisVoluntario?.reportes || [];
 
-    const datosReportes = reportesVoluntarios.find(v => v.id === parseInt(id));
-    const tieneReportes = datosReportes && datosReportes.reportes?.length > 0;
+    const tieneAnalisis = datosReportes && datosReportes?.length > 0;
+
+    const tieneReportes = datosReportes && datosReportes?.length > 0;
 
     const datosPersonales = [
-        { icono: <FaCalendarAlt />, texto: voluntario?.fechanacimiento || 'N/D' },
+        { icono: <FaCalendarAlt />, texto: voluntario?.fecha_nacimiento || 'N/D' },
         { icono: <FaVenusMars />, texto: voluntario?.genero || 'N/D' },
         { icono: <FaPhone />, texto: voluntario?.telefono || 'N/D' },
-        { icono: <FaTint />, texto: voluntario?.tipoSangre || 'N/D' },
-        { icono: <FaMapMarkerAlt />, texto: voluntario?.direccion || 'N/D' },
+        { icono: <FaTint />, texto: voluntario?.tipo_sangre || 'N/D' },
+        { icono: <FaMapMarkerAlt />, texto: voluntario?.ubicacion || 'N/D' },
         { icono: <FaIdCard />, texto: voluntario?.ci || 'N/D' }
     ];
 
-    const evaluacionesPsico = [
-        { icono: <FaFileAlt />, texto: 'Última evaluación: 12/11/2024' },
-        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: 16/04/2025' },
-        { icono: <MdPsychology />, texto: 'Resultado: En observación' }
-    ];
+    const evaluacionesfisic = reporteMasReciente ? [
+        { icono: <FaFileAlt />, texto: 'Última evaluación: ' + new Date(reporteMasReciente.fechaGenerado).toLocaleDateString() },
+        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + new Date(new Date(reporteMasReciente.fechaGenerado).setDate(new Date(reporteMasReciente.fechaGenerado).getDate() + 7)).toLocaleDateString() },
+        { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
+    ] : [];
 
-    const nivelEstres = 10;
-    const getNivelEstres = (valor) => {
-        if (valor <= 3) return 'bajo';
-        if (valor <= 6) return 'moderado';
-        return 'alto';
-    };
+    const evaluacionesPsico = reporteMasReciente ? [
+        { icono: <FaFileAlt />, texto: 'Última evaluación: ' + new Date(reporteMasReciente.fechaGenerado).toLocaleDateString() },
+        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + new Date(new Date(reporteMasReciente.fechaGenerado).setDate(new Date(reporteMasReciente.fechaGenerado).getDate() + 7)).toLocaleDateString() },
+        { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
+    ] : [];
 
     useEffect(() => {
         if (vistaActual === 'historial' && !tieneHistorial) {
@@ -114,8 +134,8 @@ const InfoVoluntarios = () => {
                 <header className="infovoluntarios-header">
                     <div className="info-avatar"><span>{inicial}</span></div>
                     <div>
-                        <h1 className="nombre-voluntario">{voluntario?.nombre || 'Voluntario'}</h1>
-                        <p className="email-voluntario">{`${nombreEmail}@gmail.com`}</p>
+                        <h1 className="nombre-voluntario">{voluntario?.nombre  || 'Voluntario'} {voluntario?.apellido || 'Voluntario'}</h1>
+                        <p className="email-voluntario">{`${nombreEmail}`}</p>
                         <div className="header-status-group">
                             <div className={`estado-badge ${voluntario?.estado?.toLowerCase()}`}>
                                 <span className="dot"></span>
@@ -132,7 +152,7 @@ const InfoVoluntarios = () => {
 
 
                 <section className="infovoluntarios-paneles">
-                    {/* Datos personales */}
+
                     <div className="panel panel-hover">
                         <h4>Datos Personales</h4>
                         {datosPersonales.map((d, i) => (
@@ -142,25 +162,19 @@ const InfoVoluntarios = () => {
 
                     <div className="panel panel-hover">
                         <h4>Evaluaciones Físicas</h4>
-                        {parseInt(id) % 2 === 0 ? (
+                        {evaluacionesfisic.length === 0 ? (
                             <div className="no-evaluacion diseño-vacio">
                                 <FaFileAlt className="icono-vacio" />
                                 <p>No hay evaluaciones físicas registradas para este voluntario.</p>
                             </div>
                         ) : (
                             <div className="evaluacion-contenido">
-                                <div className="item-evaluacion">
-                                    <FaFileAlt />
-                                    <span>Última evaluación: 12/11/2024</span>
-                                </div>
-                                <div className="item-evaluacion">
-                                    <FaCalendarAlt />
-                                    <span>Próxima evaluación: 16/04/2025</span>
-                                </div>
-                                <div className="item-evaluacion">
-                                    <MdPsychology />
-                                    <span>Resultado: En observación</span>
-                                </div>
+                                {evaluacionesfisic.map((d, i) => (
+                                    <div key={i} className="item-evaluacion">
+                                        {d.icono}
+                                        <span>{d.texto}</span>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>
@@ -168,32 +182,19 @@ const InfoVoluntarios = () => {
 
                     <div className="panel panel-hover">
                         <h4>Evaluaciones Psicológicas</h4>
-                        {parseInt(id) % 2 === 0 ? (
+                        {evaluacionesPsico.length === 0 ? (
                             <div className="no-evaluacion diseño-vacio">
                                 <MdPsychology className="icono-vacio" />
                                 <p>No hay evaluaciones psicológicas registradas para este voluntario.</p>
                             </div>
                         ) : (
                             <div className="evaluacion-contenido">
-                                <div className="item-evaluacion">
-                                    <FaFileAlt />
-                                    <span>Última evaluación: 12/11/2024</span>
-                                </div>
-                                <div className="item-evaluacion">
-                                    <FaCalendarAlt />
-                                    <span>Próxima evaluación: 16/04/2025</span>
-                                </div>
-                                <div className="item-evaluacion">
-                                    <MdPsychology />
-                                    <span>Resultado: En observación</span>
-                                </div>
-                                <div className="item-evaluacion">
-                                    <FaChartLine />
-                                    <span>Niveles de estrés</span>
-                                </div>
-                                <div className={`nivel-estres-badge ${getNivelEstres(nivelEstres)}`}>
-                                    {getNivelEstres(nivelEstres).toUpperCase()}
-                                </div>
+                                {evaluacionesPsico.map((d, i) => (
+                                    <div key={i} className="item-evaluacion">
+                                        {d.icono}
+                                        <span>{d.texto}</span>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>
@@ -301,10 +302,10 @@ const InfoVoluntarios = () => {
                     {vistaActual === 'analisis' && tieneAnalisis && (
                         <div className="panel-analisis">
                             <div className="analisis-grid">
-                                {reportes.map((item, index) => (
+                                {reporteMasReciente.necesidades.map((item, index) => (
                                     <div key={index} className="vista-card">
                                         <div>
-                                            <strong>{item.titulo}</strong>
+                                            <strong>{item.tipo}</strong>
                                             <p>{item.descripcion}</p>
                                         </div>
                                     </div>
@@ -330,12 +331,11 @@ const InfoVoluntarios = () => {
                             </div>
                             <div className={`historial-seccion ${mostrarClinico ? 'visible' : 'oculto'}`}>
                                 <div className="historial-grid">
-                                    {historial?.historialClinico?.length > 0 ? (
-                                        historial.historialClinico.map((item, index) => (
+                                    {datosReportes?.length > 0 ? (
+                                        datosReportes.map((item, index) => (
                                             <div key={index} className="vista-card">
-                                                <strong>{item.tipo}</strong>
-                                                <p>{item.descripcion}</p>
-                                                <small>{item.fecha}</small>
+                                                <p>{item.resumenFisico}</p>
+                                                <small>{item.fechaGenerado}</small>
                                             </div>
                                         ))
                                     ) : (
@@ -357,12 +357,11 @@ const InfoVoluntarios = () => {
                             </div>
                             <div className={`historial-seccion ${mostrarPsicologico ? 'visible' : 'oculto'}`}>
                                 <div className="historial-grid">
-                                    {historial?.historialPsicologico?.length > 0 ? (
-                                        historial.historialPsicologico.map((item, index) => (
+                                    {datosReportes?.length > 0 ? (
+                                        datosReportes.map((item, index) => (
                                             <div key={index} className="vista-card">
-                                                <strong>{item.tipo}</strong>
-                                                <p>{item.descripcion}</p>
-                                                <small>{item.fecha}</small>
+                                                <p>{item.resumenEmocional}</p>
+                                                <small>{item.fechaGenerado}</small>
                                             </div>
                                         ))
                                     ) : (
@@ -381,7 +380,7 @@ const InfoVoluntarios = () => {
                     {vistaActual === 'reportes' && tieneReportes && (
                         <div className="panel-reporte">
                             <div className="reportes-grid">
-                                {datosReportes.reportes.map((reporte, index) => (
+                                {datosReportes.map((reporte, index) => (
                                     <CardReporte
                                         key={index}
                                         reporte={reporte}
@@ -401,27 +400,15 @@ const InfoVoluntarios = () => {
                     {vistaActual === 'encuestas' && tieneEncuestas && (
                         <div className="panel-encuestas">
                             <div className="encuestas-grid">
-                                {encuestas.map(encuesta => (
+                                {evaluaciones.map(evaluacion => (
                                     <div
-                                        key={encuesta.encuestaId}
-                                        className={`vista-card card-voluntario ${encuesta.estado === 'entregada' ? 'clickable' : ''}`}
-                                        onClick={() => {
-                                            if (encuesta.estado === 'entregada') {
-                                                navigate(`/ResultadoEncuesta/${encuesta.encuestaId}`);
-                                            }
-                                        }}
+                                        key={evaluacion.id}
+                                        className="vista-card card-voluntario clickable"
+                                        onClick={() => navigate(`/ResultadoEvaluacion/${evaluacion.id}`)}
                                     >
                                         <div className="info-resultado">
-                                            <h4>Encuesta #{encuesta.encuestaId}</h4>
-                                            <p>Fecha realizada: {encuesta.fechaRealizado}</p>
-                                            {encuesta.estado === 'entregada' ? (
-                                                <>
-                                                    <p>Fecha entregada: {encuesta.fechaEntregado}</p>
-                                                    <span className="badge-entregada">Entregada</span>
-                                                </>
-                                            ) : (
-                                                <span className="badge-noentregada">No Entregada</span>
-                                            )}
+                                            <h4>{evaluacion.nombreTest}</h4>
+                                            <p>Fecha realizada: {evaluacion.fecha}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -434,53 +421,19 @@ const InfoVoluntarios = () => {
                     {vistaActual === 'capacitaciones' && tieneCapacitaciones && (
                         <div className="panel-capacitaciones">
                             {/* CAPACITACIONES */}
-                            <div className="historial-toggle" onClick={() => setMostrarCaps(!mostrarCaps)}>
-                                <h4>
-                                    Capacitaciones
-                                    {mostrarCaps ? (
-                                        <FaChevronUp className="flecha-historial" />
-                                    ) : (
-                                        <FaChevronDown className="flecha-historial" />
-                                    )}
-                                </h4>
-                            </div>
                             <div className={`historial-seccion ${mostrarCaps ? 'visible' : 'oculto'}`}>
                                 <div className="capacitaciones-grid">
-                                    {capacitaciones.map((item, index) => (
+                                    {reporteMasReciente?.capacitaciones.map((item, index) => (
                                         <div key={index} className="vista-card">
                                             <div>
                                                 <strong>{item.nombre}</strong>
-                                                <p>Tipo: Capacitación</p>
+                                                <p>{item.descripcion}</p>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
 
-
-                            {/* CERTIFICACIONES */}
-                            <div className="historial-toggle" onClick={() => setMostrarCerts(!mostrarCerts)}>
-                                <h4>
-                                    Certificaciones
-                                    {mostrarCerts ? (
-                                        <FaChevronUp className="flecha-historial" />
-                                    ) : (
-                                        <FaChevronDown className="flecha-historial" />
-                                    )}
-                                </h4>
-                            </div>
-                            <div className={`historial-seccion ${mostrarCerts ? 'visible' : 'oculto'}`}>
-                                <div className="capacitaciones-grid">
-                                    {certificados.map((item, index) => (
-                                        <div key={index} className="vista-card">
-                                            <div>
-                                                <strong>{item.nombre}</strong>
-                                                <p>Tipo: Certificación</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
 
                         </div>
                     )}

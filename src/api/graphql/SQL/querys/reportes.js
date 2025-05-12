@@ -1,4 +1,3 @@
-// api/graphql/querys/reportes.js
 import { gql } from '@apollo/client';
 
 export const OBTENER_REPORTES_VOLUNTARIOS = gql`
@@ -9,6 +8,7 @@ export const OBTENER_REPORTES_VOLUNTARIOS = gql`
             resumenFisico
             capacitaciones {
                 nombre
+                descripcion
             }
             estadoGeneral
             id
@@ -16,6 +16,14 @@ export const OBTENER_REPORTES_VOLUNTARIOS = gql`
             observaciones
             necesidades {
                 tipo
+                descripcion
+            }
+            evaluaciones {
+                id
+                fecha
+                test {
+                    nombre
+                }
             }
         }
     }

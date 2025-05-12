@@ -11,22 +11,71 @@ import {
 } from 'chart.js';
 import {datosEstres, datosNecesidades, datosCapacitaciones} from '../data/chartData';
 
+import { useQuery } from '@apollo/client';
+import { OBTENER_DASHBOARD } from '../api/graphql/SQL/querys/dashboard';
+import {obtenerVoluntarios} from "../api/rest/voluntarioService";
+import {PiFireSimpleFill} from "react-icons/pi";
+
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
-    const voluntarios = [
-        {nombre: 'Alejandro Ormachea', estado: 'Disponible'},
-        {nombre: 'Luis Mamani', estado: 'No disponible'},
-        {nombre: 'Carla Fernández', estado: 'Disponible'},
-    ];
 
-    const reportes = [
-        {nombre: 'Alejandro Ormachea', reporte: 'Altos niveles de estrés'},
-        {nombre: 'Luis Mamani', reporte: 'Inactividad física'},
-        {nombre: 'Carla Fernández', reporte: 'Fatiga prolongada'},
-    ];
+    const [voluntarios, setVoluntarios] = useState([]);
+    const [reportesRecientes, setReportesRecientes] = useState([]);
+
+    // Ejecutar la consulta GraphQL con useQuery
+    const { loading, error, data } = useQuery(OBTENER_DASHBOARD);
+
+    useEffect(() => {
+        const fetchVoluntarios = async () => {
+            try {
+                const data = await obtenerVoluntarios();
+                setVoluntarios(data);
+            } catch (error) {
+                console.error("Error al obtener los voluntarios:", error);
+            }
+        };
+
+        fetchVoluntarios();
+    }, []);
+
+    useEffect(() => {
+        if (data && data.obtenerDashboard && voluntarios.length > 0) {
+            const reportes = data.obtenerDashboard.reportes || [];
+
+            const reportesAsociados = reportes.map((reporte, index) => {
+                const voluntario = voluntarios.find(
+                    (v) => v.id === parseInt(reporte.historialClinico?.id)
+                );
+                return {
+                    id: reporte.historialClinico?.id ?? index,
+                    estado: reporte.estadoGeneral || 'Sin especificar',
+                    nombre: voluntario?.nombre + " "+voluntario?.apellido || 'Desconocido',
+                    voluntarioId: voluntario?.id || null
+                };
+            });
 
 
+            setReportesRecientes(reportesAsociados);
+        }
+    }, [data, voluntarios]);
+
+    if (loading) return(
+        <div className="dashboard-container">
+            <Sidebar/>
+            <main className="dashboard-main">
+                <div className="login-logo">
+                    <PiFireSimpleFill className="icono-logo" />
+                    <span className="texto-logo">GEVOPI</span>
+                </div>
+            </main>
+        </div>
+    );
+    if (error) return <p>Error al cargar datos del dashboard: {error.message}</p>;
+
+    const cantidadEvaluaciones = data.obtenerDashboard.eva_cantidad || 0;
+    const cantidadReportes = data.obtenerDashboard.report_cantidad || 0;
 
     return (
             <div className="dashboard-container">
@@ -44,10 +93,10 @@ const Dashboard = () => {
                             <div><h3>Inactivos</h3><p>9 voluntarios</p></div>
                         </div>
                         <div className="tarjeta resumen"><FaHeartbeat/>
-                            <div><h3>Alertas recientes</h3><p>3 reportes</p></div>
+                            <div><h3>Alertas recientes</h3><p>{cantidadReportes} reportes</p></div>
                         </div>
                         <div className="tarjeta resumen"><FaChartBar/>
-                            <div><h3>Evaluaciones</h3><p>5 completadas</p></div>
+                            <div><h3>Evaluaciones</h3><p>{cantidadEvaluaciones} completadas</p></div>
                         </div>
                     </section>
 
@@ -55,14 +104,14 @@ const Dashboard = () => {
                         <div className="panel listado-voluntarios">
                             <h3>Últimos voluntarios registrados</h3>
                             <div className="voluntarios-lista">
-                                {voluntarios.map((v, i) => (
+                                {voluntarios.slice(-3).map((v, i) => (
                                     <div key={i} className="voluntario-tarjeta">
                                         <div className="avatar-voluntario">{v.nombre[0]}</div>
                                         <div className="informacion-voluntario">
-                                            <strong>{v.nombre}</strong>
+                                            <strong>{v.nombre} {v.apellido}</strong>
                                             <span className={v.estado === 'Activo' ? 'estado activo' : 'estado inactivo'}>
                         {v.estado}
-                      </span>
+                    </span>
                                         </div>
                                     </div>
                                 ))}
@@ -72,12 +121,12 @@ const Dashboard = () => {
                         <div className="panel listado-reportes">
                             <h3>Últimos reportes generados</h3>
                             <div className="reportes-lista">
-                                {reportes.map((r, i) => (
+                                {reportesRecientes.map((r, i) => (
                                     <div key={i} className="reporte-tarjeta">
                                         <div className="avatar-voluntario">{r.nombre[0]}</div>
                                         <div className="informacion-voluntario">
                                             <strong>{r.nombre}</strong>
-                                            <span className="reporte-tipo">{r.reporte}</span>
+                                            <span className="reporte-tipo">{r.estado}</span>
                                         </div>
                                     </div>
                                 ))}

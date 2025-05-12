@@ -6,8 +6,6 @@ import '../styles/listaVoluntarios.css';
 
 import { obtenerVoluntarios } from '../api/rest/voluntarioService';
 
-import voluntarios from '../data/voluntarios';
-
 const ListaVoluntarios = () => {
     const [voluntarios, setVoluntarios] = useState([]);
 
@@ -19,7 +17,7 @@ const ListaVoluntarios = () => {
     useEffect(() => {
         const fetchVoluntarios = async () => {
             try {
-                const data = await obtenerVoluntarios();  // Llama al servicio que obtiene los voluntarios
+                const data = await obtenerVoluntarios();
                 setVoluntarios(data);  // Almacena los voluntarios en el estado
             } catch (error) {
                 console.error("Error al obtener los voluntarios:", error);

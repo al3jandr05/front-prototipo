@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardVoluntario from '../components/CardVoluntario';
 import { FaTimes } from 'react-icons/fa';
 import '../styles/listaVoluntarios.css';
+
+import { obtenerVoluntarios } from '../api/rest/voluntarioService';
+
 import voluntarios from '../data/voluntarios';
 
 const ListaVoluntarios = () => {
+    const [voluntarios, setVoluntarios] = useState([]);
+
     const [nombre, setNombre] = useState('');
     const [ciFiltro, setCiFiltro] = useState('');
     const [tipoSangreFiltro, setTipoSangreFiltro] = useState('');
     const [estadoFiltro, setEstadoFiltro] = useState('');
+
+    useEffect(() => {
+        const fetchVoluntarios = async () => {
+            try {
+                const data = await obtenerVoluntarios();  // Llama al servicio que obtiene los voluntarios
+                setVoluntarios(data);  // Almacena los voluntarios en el estado
+            } catch (error) {
+                console.error("Error al obtener los voluntarios:", error);
+            }
+        };
+
+        fetchVoluntarios();  // Llamar la función al montar el componente
+    }, []);
 
     const resetFiltros = () => {
         setNombre('');

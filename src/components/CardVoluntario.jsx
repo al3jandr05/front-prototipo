@@ -16,12 +16,12 @@ const CardVoluntario = ({ voluntario }) => {
             </div>
             <div className="info-voluntario">
                 <div className="nombre-estado">
-                    <h4>{voluntario.nombre}</h4>
+                    <h4>{voluntario.nombre+" "+voluntario.apellido }</h4>
                     <span className={`estado ${voluntario.estado === 'Activo' ? 'activo' : 'inactivo'}`}>
                         {voluntario.estado}
                     </span>
                 </div>
-                <p>CI: {voluntario.ci} &nbsp; | &nbsp; Tipo de Sangre: {voluntario.tipoSangre}</p>
+                <p>CI: {voluntario.ci} &nbsp; | &nbsp; Tipo de Sangre: {voluntario.tipo_sangre}</p>
             </div>
         </div>
     );

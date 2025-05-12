@@ -10,7 +10,7 @@ import { TbListDetails } from 'react-icons/tb';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdPsychology } from 'react-icons/md';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PiCertificate } from "react-icons/pi";
+import {PiCertificate, PiFireSimpleFill} from "react-icons/pi";
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 import listadoEncuestas from "../data/resultados_encuesta";
@@ -62,9 +62,7 @@ const InfoVoluntarios = () => {
     const { loading, error, data } = useQuery(OBTENER_REPORTES_VOLUNTARIOS, {
         variables: { historialId },
     });
-    console.log(data)
 
-    const tieneEncuesta = listadoEncuestas.some(v => v.voluntarioId === parseInt(id));
 
     const nombreEmail = voluntario?.email || ' ';
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
@@ -82,7 +80,6 @@ const InfoVoluntarios = () => {
     const tieneHistorial = datosReportes && (
         (datosReportes?.length > 0)
     );
-    console.log(reporteMasReciente);
 
     const tieneEncuestas = datosReportes && datosReportes?.length > 0;
     const evaluaciones = datosReportes
@@ -125,7 +122,17 @@ const InfoVoluntarios = () => {
             setShowModalNuloCap(true);
         }
     }, [vistaActual, tieneHistorial]);
-
+    if (loading) return(
+        <div className="dashboard-container">
+            <Sidebar/>
+            <main className="dashboard-main">
+                <div className="login-logo">
+                    <PiFireSimpleFill className="icono-logo" />
+                    <span className="texto-logo">GEVOPI</span>
+                </div>
+            </main>
+        </div>
+    );
 
     return (
         <div className="infovoluntarios-container">
@@ -404,7 +411,7 @@ const InfoVoluntarios = () => {
                                     <div
                                         key={evaluacion.id}
                                         className="vista-card card-voluntario clickable"
-                                        onClick={() => navigate(`/ResultadoEvaluacion/${evaluacion.id}`)}
+                                        onClick={() => navigate(`/ResultadoEncuesta/${evaluacion.id}`)}
                                     >
                                         <div className="info-resultado">
                                             <h4>{evaluacion.nombreTest}</h4>

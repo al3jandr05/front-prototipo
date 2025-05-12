@@ -2,25 +2,25 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/resultadoEncuesta.css';
-import resultadosEncuesta from '../data/resultados_encuesta';
+
+import { useQuery } from '@apollo/client';
+import { OBTENER_EVALUACION_POR_ID } from '../api/graphql/SQL/querys/evaluacionId';
 import HumanBodyViewer from '../components/HumanBodyViewer';
 
 const ResultadoEncuesta = () => {
     const { id } = useParams();
     const encuestaId = parseInt(id);
 
-    // Buscar la encuesta en todos los voluntarios
-    let encuestaEncontrada = null;
+    const { loading, error, data } = useQuery(OBTENER_EVALUACION_POR_ID, {
+        variables: { id: encuestaId },
+    });
 
-    for (let voluntario of resultadosEncuesta) {
-        const encuesta = voluntario.encuestas.find(e => e.encuestaId === encuestaId);
-        if (encuesta) {
-            encuestaEncontrada = encuesta;
-            break;
-        }
-    }
+    if (loading) return <p>Cargando resultados...</p>;
+    if (error) return <p>Error al obtener los datos: {error.message}</p>;
 
-    if (!encuestaEncontrada) {
+    const encuesta = data?.obtenerEvaluacionPorId;
+
+    if (!encuesta) {
         return (
             <div className="resultado-container">
                 <Sidebar />
@@ -31,45 +31,82 @@ const ResultadoEncuesta = () => {
         );
     }
 
+    const testId = parseInt(encuesta.test?.id);
+
+    let respuestasFiltradas = [];
+    let respuestasCondicionCuerpo = [];
+
+    if (testId === 3 && Array.isArray(encuesta.respuestas)) {
+        respuestasFiltradas = encuesta.respuestas.filter(
+            (r) => r.pregunta.id < 9 || r.pregunta.id > 14
+        );
+
+        respuestasCondicionCuerpo = encuesta.respuestas.filter(
+            (r) => r.pregunta.id >= 9 && r.pregunta.id <= 14
+        );
+    }
+
+    const preguntaIdToSvgIds = {
+        9: ['right-arm', 'right-hand', 'right-shoulder'],  // Brazo izquierdo
+        10: ['left-arm', 'left-hand', 'left-shoulder'],    // Brazo derecho
+        11: ['right-leg', 'right-foot'],                   // Pierna izquierda
+        12: ['left-leg', 'left-foot'],                     // Pierna derecha
+        13: ['chest', 'stomach'],                          // Torso
+        14: ['head'],                                      // Cabeza
+    };
+
+    const partesCondicion = respuestasCondicionCuerpo.flatMap((r) => {
+        const ids = preguntaIdToSvgIds[r.pregunta.id] || [];
+        return ids.map((svgId) => ({
+            svgId,
+            estado: r.respuestaTexto,
+        }));
+    });
     return (
         <div className="resultado-container">
             <Sidebar />
             <div className="resultado-content">
-                <h1 className="titulo-resultado">Resultado de Encuesta #{encuestaEncontrada.encuestaId}</h1>
-                <p className="subtitulo"><strong>Fecha realizada:</strong> {encuestaEncontrada.fechaRealizado}</p>
-                <p className="subtitulo"><strong>Fecha entregada:</strong> {encuestaEncontrada.fechaEntregado ?? "No entregada"}</p>
+                <h1 className="titulo-resultado">Resultado de Encuesta #{encuesta.id}</h1>
+                <p className="subtitulo"><strong>Fecha realizada:</strong> {encuesta.fecha}</p>
 
                 <div className="resultados">
-                    <div className="categoria">
-                        <h2 className="categoria-titulo">Físico</h2>
-                        <div className="resultado-grid">
-                            {encuestaEncontrada.resultados.fisico.map((item, index) => (
-                                <div key={index} className="resultado-card">
-                                    <h4>{item.subcategoria}</h4>
-                                    <p><strong>Resultado:</strong> {item.resultado}</p>
-                                    <p><strong>Observación:</strong> {item.observacion}</p>
+                    {/* FÍSICO */}
+                    {testId === 3 && (
+                        <>
+                            <div className="categoria">
+                                <h2 className="categoria-titulo">Físico</h2>
+                                <div className="resultado-grid">
+                                    {respuestasFiltradas.map((item, index) => (
+                                        <div key={index} className="resultado-card">
+                                            <h4>{item.textoPregunta}</h4>
+                                            <p><strong>Resultado:</strong> {item.textoPregunta}</p>
+                                            <p><strong>Observación:</strong> {item.respuestaTexto}</p>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            </div>
 
-                    <div className="categoria">
-                        <h2 className="categoria-titulo">Psicológico</h2>
-                        <div className="resultado-grid">
-                            {encuestaEncontrada.resultados.psicologico.map((item, index) => (
-                                <div key={index} className="resultado-card">
-                                    <h4>{item.subcategoria}</h4>
-                                    <p><strong>Resultado:</strong> {item.resultado}</p>
-                                    <p><strong>Observación:</strong> {item.observacion}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                            <div className="categoria">
+                                <h2 className="categoria-titulo">Condición del cuerpo</h2>
+                                <HumanBodyViewer partes={partesCondicion} />
+                            </div>
+                        </>
+                    )}
 
-                    <div className="categoria">
-                        <h2 className="categoria-titulo">Condición del cuerpo</h2>
-                        <HumanBodyViewer partes={encuestaEncontrada.resultados.cuerpo} />
-                    </div>
+                    {/* PSICOLÓGICO */}
+                    {testId === 4 && (
+                        <div className="categoria">
+                            <h2 className="categoria-titulo">Psicológico</h2>
+                            <div className="resultado-grid">
+                                {encuesta.respuestas.map((item, index) => (
+                                    <div key={index} className="resultado-card">
+                                        <h4>{item.textoPregunta}</h4>
+                                        <p><strong>Resultado:</strong> {item.respuestaTexto}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+    import React, { useState, useEffect, useRef } from 'react';
 import '../styles/formularioView.css';
 import { preguntas as preguntasBase, opciones } from '../data/data_formulario';
 import 'bootstrap/dist/css/bootstrap.min.css';

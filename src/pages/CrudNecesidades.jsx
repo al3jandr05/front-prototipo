@@ -4,12 +4,24 @@ import '../styles/necesidades.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useQuery, useMutation } from '@apollo/client';
+import {
+    OBTENER_NECESIDADES,
+} from '../api/graphql/SQL/querys/necesidades';
+import {
+    CREAR_NECESIDAD,
+    EDITAR_NECESIDAD,
+    ELIMINAR_NECESIDAD
+} from '../api/graphql/SQL/mutations/mutNec';
+import {PiFireSimpleFill} from "react-icons/pi";
+
+
 
 const CrudNecesidades = () => {
-    const [necesidades, setNecesidades] = useState([
-        { id: 1, nombre: 'Terapia psicológica', descripcion: 'Apoyo psicológico después de intervención.' },
-        { id: 2, nombre: 'Revisión médica', descripcion: 'Chequeo físico preventivo post-incendio.' }
-    ]);
+    const { loading, error, data, refetch } = useQuery(OBTENER_NECESIDADES);
+    const [crearNecesidad] = useMutation(CREAR_NECESIDAD);
+    const [editarNecesidad] = useMutation(EDITAR_NECESIDAD);
+    const [eliminarNecesidad] = useMutation(ELIMINAR_NECESIDAD);
 
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState('agregar');
@@ -34,7 +46,7 @@ const CrudNecesidades = () => {
 
     const abrirEditar = (necesidad) => {
         setModalMode('editar');
-        setNombreActual(necesidad.nombre);
+        setNombreActual(necesidad.tipo);
         setDescripcionActual(necesidad.descripcion);
         setEditId(necesidad.id);
         setErrorNombre(false);
@@ -42,40 +54,68 @@ const CrudNecesidades = () => {
         setShowModal(true);
     };
 
-    const guardarNecesidad = () => {
+    const guardarNecesidad = async () => {
         if (!nombreActual.trim()) return;
 
-        if (modalMode === 'agregar') {
-            setNecesidades([
-                ...necesidades,
-                { id: Date.now(), nombre: nombreActual, descripcion: descripcionActual }
-            ]);
-        } else {
-            setNecesidades(
-                necesidades.map(n =>
-                    n.id === editId
-                        ? { ...n, nombre: nombreActual, descripcion: descripcionActual }
-                        : n
-                )
-            );
+        try {
+            if (modalMode === 'agregar') {
+                await crearNecesidad({
+                    variables: {
+                        tipo: nombreActual,
+                        descripcion: descripcionActual
+                    }
+                });
+            } else {
+                await editarNecesidad({
+                    variables: {
+                        id: editId,
+                        tipo: nombreActual,
+                        descripcion: descripcionActual
+                    }
+                });
+            }
+            await refetch();
+            setShowModal(false);
+            setNombreActual('');
+            setDescripcionActual('');
+            setEditId(null);
+        } catch (error) {
+            console.error('Error al guardar la necesidad:', error);
         }
-
-        setShowModal(false);
-        setNombreActual('');
-        setDescripcionActual('');
-        setEditId(null);
     };
 
-    const eliminarNecesidad = () => {
-        setNecesidades(necesidades.filter(n => n.id !== deleteId));
-        setShowDeleteModal(false);
-        setDeleteId(null);
+    const confirmarEliminarNecesidad = async () => {
+        try {
+            await eliminarNecesidad({
+                variables: {
+                    id: deleteId
+                }
+            });
+            await refetch();
+            setShowDeleteModal(false);
+            setDeleteId(null);
+        } catch (error) {
+            console.error('Error al eliminar la necesidad:', error);
+        }
     };
 
     const abrirDetalle = (necesidad) => {
         setDetalleNecesidad(necesidad);
         setShowDetailModal(true);
     };
+
+    if (loading) return(
+        <div className="dashboard-container">
+            <Sidebar/>
+            <main className="dashboard-main">
+                <div className="login-logo">
+                    <PiFireSimpleFill className="icono-logo" />
+                    <span className="texto-logo">GEVOPI</span>
+                </div>
+            </main>
+        </div>
+    );
+    if (error) return <p>Error al cargar las necesidades.</p>;
 
     return (
         <div className="necesidades-container">
@@ -96,12 +136,12 @@ const CrudNecesidades = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {necesidades.map((n, index) => (
+                        {data.obtenerNecesidades.map((n, index) => (
                             <tr key={n.id}>
                                 <td>{index + 1}</td>
                                 <td>
                     <span className="nombre-necesidad" onClick={() => abrirDetalle(n)}>
-                      {n.nombre}
+                      {n.tipo}
                     </span>
                                 </td>
                                 <td>
@@ -178,7 +218,7 @@ const CrudNecesidades = () => {
                     <Modal.Body>¿Estás seguro de que deseas eliminar esta necesidad?</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>Cancelar</Button>
-                        <Button variant="danger" onClick={eliminarNecesidad}>Eliminar</Button>
+                        <Button variant="danger" onClick={confirmarEliminarNecesidad}>Eliminar</Button>
                     </Modal.Footer>
                 </Modal>
 
@@ -190,7 +230,7 @@ const CrudNecesidades = () => {
                     <Modal.Body>
                         {detalleNecesidad && (
                             <>
-                                <h5>{detalleNecesidad.nombre}</h5>
+                                <h5>{detalleNecesidad.tipo}</h5>
                                 <p><strong>Descripción:</strong> {detalleNecesidad.descripcion}</p>
                             </>
                         )}

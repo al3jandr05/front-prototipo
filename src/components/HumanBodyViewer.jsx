@@ -18,18 +18,40 @@ const bodyGroups = {
 };
 
 
-const HumanBodyViewer = ({ partes }) => {
+const estadoToColor = (valor) => {
+    const n = parseInt(valor);
+    if (isNaN(n)) return '#57c9d5';
 
+    switch (n) {
+        case 1: return '#ff3131';  // Rojo
+        case 2: return '#fd8697';  // Naranja oscuro
+        case 3: return '#f3f39d';  // Amarillo
+        case 4: return '#a9ffa9';  // Verde claro
+        case 5: return '#4afb4a';  // Verde fuerte
+        default: return '#57c9d5'; // Default
+    }
+};
+
+
+const HumanBodyViewer = ({ partes = [] }) => {
     useEffect(() => {
-        // Pintar las partes
+        if (!Array.isArray(partes)) return;
+
+        // Resetear colores base
         for (let key in bodyGroups) {
             const svg = document.getElementById(key);
-            const color = '#57c9d5';
-
-            if (svg) {
-                svg.querySelector('path').style.fill = color;
+            if (svg?.querySelector('path')) {
+                svg.querySelector('path').style.fill = '#3b8c1b';
             }
         }
+
+        // Pintar partes personalizadas
+        partes.forEach(({ svgId, estado }) => {
+            const svg = document.getElementById(svgId);
+            if (svg?.querySelector('path')) {
+                svg.querySelector('path').style.fill = estadoToColor(estado);
+            }
+        });
     }, [partes]);
 
     return (

@@ -6,8 +6,15 @@ export const OBTENER_EVALUACION_POR_ID = gql`
             id
             fecha
             respuestas {
-                textoPregunta
+                id
+                pregunta {
+                    id
+                }
                 respuestaTexto
+                textoPregunta
+            }
+            test {
+                id
             }
         }
     }

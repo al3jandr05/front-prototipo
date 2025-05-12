@@ -10,7 +10,7 @@
 .background-login {
     width: 100vw;
     height: 100vh;
-    background: url('../resources/incendio2.avif') center center/cover no-repeat;
+    background: url('../resources/incendio3.jpeg') center center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,7 +124,7 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     background-color: transparent;
-    color: var(--color-verde-oscuro);
+    color: #ffffff;
 }
 
 .password-wrapper {
@@ -140,7 +140,7 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     background-color: transparent;
-    color: var(--color-verde-oscuro);
+    color: #ffffff;
 }
 
 .eye-icon {

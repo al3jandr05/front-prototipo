@@ -4,13 +4,22 @@ import '../styles/capacitaciones.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useQuery, useMutation } from '@apollo/client';
+import {
+  CREAR_CAPACITACION,
+  EDITAR_CAPACITACION,
+  ELIMINAR_CAPACITACION
+} from '../api/graphql/SQL/mutations/mutCap';
+import {
+  OBTENER_CAPACITACIONES
+} from '../api/graphql/SQL/querys/capacitaciones';
+import {PiFireSimpleFill} from "react-icons/pi";
 
 const CrudCapacitaciones = () => {
-  const [capacitaciones, setCapacitaciones] = useState([
-    { id: 1, nombre: 'Primeros auxilios', descripcion: 'Capacitación sobre primeros auxilios básicos.', voluntarios: 5 },
-    { id: 2, nombre: 'Manejo de estrés', descripcion: 'Técnicas para manejar el estrés en situaciones de emergencia.', voluntarios: 3 },
-    { id: 3, nombre: 'Prevención de incendios', descripcion: 'Cómo prevenir incendios y actuar en caso de uno.', voluntarios: 7 }
-  ]);
+  const { data, loading, error, refetch } = useQuery(OBTENER_CAPACITACIONES);
+  const [crearCapacitacion] = useMutation(CREAR_CAPACITACION);
+  const [editarCapacitacion] = useMutation(EDITAR_CAPACITACION);
+  const [eliminarCapacitacion] = useMutation(ELIMINAR_CAPACITACION);
 
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('agregar');
@@ -43,40 +52,65 @@ const CrudCapacitaciones = () => {
     setShowModal(true);
   };
 
-  const guardarCapacitacion = () => {
+  const guardarCapacitacion = async () => {
     if (!nombreActual.trim()) return;
 
-    if (modalMode === 'agregar') {
-      setCapacitaciones([
-        ...capacitaciones,
-        { id: Date.now(), nombre: nombreActual, descripcion: descripcionActual, voluntarios: 0 }
-      ]);
-    } else {
-      setCapacitaciones(
-          capacitaciones.map(cap =>
-              cap.id === editId
-                  ? { ...cap, nombre: nombreActual, descripcion: descripcionActual }
-                  : cap
-          )
-      );
-    }
+    try {
+      if (modalMode === 'agregar') {
+        await crearCapacitacion({
+          variables: {
+            nombre: nombreActual,
+            descripcion: descripcionActual
+          }
+        });
+      } else {
+        await editarCapacitacion({
+          variables: {
+            id: editId,
+            nombre: nombreActual,
+            descripcion: descripcionActual
+          }
+        });
+      }
 
-    setShowModal(false);
-    setNombreActual('');
-    setDescripcionActual('');
-    setEditId(null);
+      await refetch();
+      setShowModal(false);
+      setNombreActual('');
+      setDescripcionActual('');
+      setEditId(null);
+    } catch (error) {
+      console.error('Error al guardar capacitación:', error);
+    }
   };
 
-  const eliminarCapacitacion = () => {
-    setCapacitaciones(capacitaciones.filter(cap => cap.id !== deleteId));
-    setShowDeleteModal(false);
-    setDeleteId(null);
+  const confirmarEliminarCapacitacion = async () => {
+    try {
+      await eliminarCapacitacion({ variables: { id: deleteId } });
+      await refetch();
+      setShowDeleteModal(false);
+      setDeleteId(null);
+    } catch (error) {
+      console.error('Error al eliminar capacitación:', error);
+    }
   };
 
   const abrirDetalle = (capacitacion) => {
     setDetalleCapacitacion(capacitacion);
     setShowDetailModal(true);
   };
+
+  if (loading) return(
+      <div className="dashboard-container">
+        <Sidebar/>
+        <main className="dashboard-main">
+          <div className="login-logo">
+            <PiFireSimpleFill className="icono-logo" />
+            <span className="texto-logo">GEVOPI</span>
+          </div>
+        </main>
+      </div>
+  );
+  if (error) return <p>Error al cargar capacitaciones.</p>;
 
   return (
       <div className="capacitaciones-container">
@@ -97,7 +131,7 @@ const CrudCapacitaciones = () => {
               </tr>
               </thead>
               <tbody>
-              {capacitaciones.map((cap, index) => (
+              {data.obtenerCapacitaciones.map((cap, index) => (
                   <tr key={cap.id}>
                     <td>{index + 1}</td>
                     <td>
@@ -179,7 +213,7 @@ const CrudCapacitaciones = () => {
             <Modal.Body>¿Estás seguro de que deseas eliminar esta capacitación?</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>Cancelar</Button>
-              <Button variant="danger" onClick={eliminarCapacitacion}>Eliminar</Button>
+              <Button variant="danger" onClick={confirmarEliminarCapacitacion}>Eliminar</Button>
             </Modal.Footer>
           </Modal>
 
@@ -193,7 +227,6 @@ const CrudCapacitaciones = () => {
                   <>
                     <h5>{detalleCapacitacion.nombre}</h5>
                     <p><strong>Descripción:</strong> {detalleCapacitacion.descripcion}</p>
-                    <p><strong>Voluntarios inscritos:</strong> {detalleCapacitacion.voluntarios}</p>
                   </>
               )}
             </Modal.Body>

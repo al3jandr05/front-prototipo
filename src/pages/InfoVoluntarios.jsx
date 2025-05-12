@@ -26,6 +26,7 @@ import '../styles/infoVoluntarios.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalReporte from "../components/ModalReporte";
 import CardReporte from "../components/CardReporte";
+import LoadingCircle from "../components/LoadingCircle";
 
 const InfoVoluntarios = () => {
     const { id } = useParams();
@@ -123,15 +124,15 @@ const InfoVoluntarios = () => {
         }
     }, [vistaActual, tieneHistorial]);
     if (loading) return(
-        <div className="dashboard-container">
-            <Sidebar/>
-            <main className="dashboard-main">
-                <div className="login-logo">
-                    <PiFireSimpleFill className="icono-logo" />
-                    <span className="texto-logo">GEVOPI</span>
-                </div>
+        <div className="infovoluntarios-container">
+            <Sidebar />
+            <main className="infovoluntarios-content">
+                <LoadingCircle/>
             </main>
+
+
         </div>
+
     );
 
     return (

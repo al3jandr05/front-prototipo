@@ -4,11 +4,11 @@ import '../styles/splash.css';
 const SplashScreen = ({ onFinish }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
-            onFinish();
-        }, 2500); // duración del splash
-
+            onFinish(); // llama navigate justo después del fadeOut
+        }, 2800); // coincide con fadeOut
         return () => clearTimeout(timer);
     }, [onFinish]);
+
 
     return (
         <div className="splash-overlay">

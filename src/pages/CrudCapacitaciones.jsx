@@ -14,6 +14,7 @@ import {
   OBTENER_CAPACITACIONES
 } from '../api/graphql/SQL/querys/capacitaciones';
 import {PiFireSimpleFill} from "react-icons/pi";
+import LoadingCircle from "../components/LoadingCircle";
 
 const CrudCapacitaciones = () => {
   const { data, loading, error, refetch } = useQuery(OBTENER_CAPACITACIONES);
@@ -100,15 +101,15 @@ const CrudCapacitaciones = () => {
   };
 
   if (loading) return(
-      <div className="dashboard-container">
-        <Sidebar/>
-        <main className="dashboard-main">
-          <div className="login-logo">
-            <PiFireSimpleFill className="icono-logo" />
-            <span className="texto-logo">GEVOPI</span>
-          </div>
+      <div className="capacitaciones-container">
+        <Sidebar />
+        <main className="capacitaciones-content">
+          <LoadingCircle/>
         </main>
+
+
       </div>
+
   );
   if (error) return <p>Error al cargar capacitaciones.</p>;
 

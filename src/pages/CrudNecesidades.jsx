@@ -14,6 +14,7 @@ import {
     ELIMINAR_NECESIDAD
 } from '../api/graphql/SQL/mutations/mutNec';
 import {PiFireSimpleFill} from "react-icons/pi";
+import LoadingCircle from "../components/LoadingCircle";
 
 
 
@@ -105,15 +106,15 @@ const CrudNecesidades = () => {
     };
 
     if (loading) return(
-        <div className="dashboard-container">
-            <Sidebar/>
-            <main className="dashboard-main">
-                <div className="login-logo">
-                    <PiFireSimpleFill className="icono-logo" />
-                    <span className="texto-logo">GEVOPI</span>
-                </div>
+        <div className="necesidades-container">
+            <Sidebar />
+            <main className="necesidades-content">
+                <LoadingCircle/>
             </main>
+
+
         </div>
+
     );
     if (error) return <p>Error al cargar las necesidades.</p>;
 

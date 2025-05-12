@@ -37,7 +37,7 @@ const ListaVoluntarios = () => {
     const filtrados = voluntarios.filter((v) =>
         v.nombre.toLowerCase().includes(nombre.toLowerCase()) &&
         v.ci.includes(ciFiltro) &&
-        (tipoSangreFiltro === '' || v.tipoSangre.toLowerCase() === tipoSangreFiltro.toLowerCase()) &&
+        (tipoSangreFiltro === '' || v.tipo_sangre.toLowerCase() === tipoSangreFiltro.toLowerCase()) &&
         (estadoFiltro === '' || v.estado.toLowerCase() === estadoFiltro.toLowerCase())
     );
 

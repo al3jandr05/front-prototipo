@@ -15,9 +15,14 @@ import { useQuery } from '@apollo/client';
 import { OBTENER_DASHBOARD } from '../api/graphql/SQL/querys/dashboard';
 import {obtenerVoluntarios} from "../api/rest/voluntarioService";
 import {PiFireSimpleFill} from "react-icons/pi";
+import LoadingCircle from "../components/LoadingCircle";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+function Loadingircle() {
+    return null;
+}
 
 const Dashboard = () => {
 
@@ -63,14 +68,14 @@ const Dashboard = () => {
 
     if (loading) return(
         <div className="dashboard-container">
-            <Sidebar/>
-            <main className="dashboard-main">
-                <div className="login-logo">
-                    <PiFireSimpleFill className="icono-logo" />
-                    <span className="texto-logo">GEVOPI</span>
-                </div>
+            <Sidebar />
+            <main className="dashboard-content">
+                <LoadingCircle/>
             </main>
+
+
         </div>
+
     );
     if (error) return <p>Error al cargar datos del dashboard: {error.message}</p>;
 

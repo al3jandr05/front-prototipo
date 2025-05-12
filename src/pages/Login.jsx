@@ -34,7 +34,9 @@ const Login = () => {
     };
 
     const handleSplashFinish = () => {
-        navigate('/Dashboard');
+        requestAnimationFrame(() => {
+            navigate('/Dashboard');
+        });
     };
     return (
         <>

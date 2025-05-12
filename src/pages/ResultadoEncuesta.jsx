@@ -6,6 +6,7 @@ import '../styles/resultadoEncuesta.css';
 import { useQuery } from '@apollo/client';
 import { OBTENER_EVALUACION_POR_ID } from '../api/graphql/SQL/querys/evaluacionId';
 import HumanBodyViewer from '../components/HumanBodyViewer';
+import LoadingCircle from "../components/LoadingCircle";
 
 const ResultadoEncuesta = () => {
     const { id } = useParams();
@@ -15,10 +16,21 @@ const ResultadoEncuesta = () => {
         variables: { id: encuestaId },
     });
 
-    if (loading) return <p>Cargando resultados...</p>;
+    if (loading) return(
+        <div className="resultado-container">
+            <Sidebar />
+            <main className="resultado-content">
+                <LoadingCircle/>
+            </main>
+
+
+        </div>
+
+    );
     if (error) return <p>Error al obtener los datos: {error.message}</p>;
 
     const encuesta = data?.obtenerEvaluacionPorId;
+
 
     if (!encuesta) {
         return (

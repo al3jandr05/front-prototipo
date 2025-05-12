@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/client';
 import apolloClientNOSQL from '../api/apolloClientNOSQL';
 import { OBTENER_TODAS_SOLICITUDES } from '../api/graphql/NoSQL/querys/solicitudesAyuda';
 import { obtenerVoluntario } from '../api/rest/voluntarioService';
+import LoadingCircle from "../components/LoadingCircle";
 
 const AyudasSolicitadas = () => {
     const [nombreFiltro, setNombreFiltro] = useState('');
@@ -105,8 +106,17 @@ const AyudasSolicitadas = () => {
         aplicarFiltros();
     }, [nombreFiltro, prioridadFiltro, estadoFiltro]);
 
-    if (loading) return <div className="loading">Cargando solicitudes...</div>;
-    if (error) return <div className="error">Error: {error.message}</div>;
+    if (loading) return(
+        <div className="ayudas-container">
+            <Sidebar />
+            <main className="ayudas-content">
+                <LoadingCircle/>
+            </main>
+
+
+        </div>
+
+    );    if (error) return <div className="error">Error: {error.message}</div>;
 
     return (
         <div className="ayudas-container">

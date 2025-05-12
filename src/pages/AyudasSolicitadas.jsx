@@ -7,7 +7,7 @@ import { FaTimes } from 'react-icons/fa';
 import { Modal, Button } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import apolloClientNOSQL from '../api/apolloClientNOSQL';
-import { OBTENER_TODAS_SOLICITUDES } from '../api/graphql/querys/solicitudesAyuda';
+import { OBTENER_TODAS_SOLICITUDES } from '../api/graphql/NoSQL/querys/solicitudesAyuda';
 import { obtenerVoluntario } from '../api/rest/voluntarioService';
 
 const AyudasSolicitadas = () => {

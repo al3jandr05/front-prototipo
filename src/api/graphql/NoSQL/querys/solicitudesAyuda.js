@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import apolloClientNOSQL from "../../apolloClientNOSQL";
+import apolloClientNOSQL from "../../../apolloClientNOSQL";
 
 export const OBTENER_TODAS_SOLICITUDES = gql`
     query ObtenerTodasSolicitudes {

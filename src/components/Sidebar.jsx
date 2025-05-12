@@ -24,7 +24,7 @@ const Sidebar = () => {
         { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
         { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
-        { icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
+        //{ icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
 
         // { icon: <MdPersonAddAlt1 />, label: 'Voluntarios', path: '/Voluntarios' },
 

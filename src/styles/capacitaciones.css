@@ -136,13 +136,13 @@
 
 .nombre-capacitacion {
     cursor: pointer;
-    color: var(--color-blue);
+    color: var(--color-texto-principal);
     transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 .nombre-capacitacion:hover {
     text-decoration: underline;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
 }
 
 .modal-body p {

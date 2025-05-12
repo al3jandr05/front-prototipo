@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardAyuda from '../components/CardAyuda';
-import ayudasSolicitadas from '../data/ayudas_solicitadas';
 import Mapa from '../components/Mapa';
 import '../styles/ayudasSolicitadas.css';
 import { FaTimes } from 'react-icons/fa';
 import { Modal, Button } from 'react-bootstrap';
+import { useQuery } from '@apollo/client';
+import apolloClientNOSQL from '../api/apolloClientNOSQL';
+import { OBTENER_TODAS_SOLICITUDES } from '../api/graphql/querys/solicitudesAyuda';
+import { obtenerVoluntario } from '../api/rest/voluntarioService';
 
 const AyudasSolicitadas = () => {
     const [nombreFiltro, setNombreFiltro] = useState('');
@@ -14,30 +17,96 @@ const AyudasSolicitadas = () => {
     const [ayudaSeleccionada, setAyudaSeleccionada] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
+    const { loading, error, data } = useQuery(OBTENER_TODAS_SOLICITUDES, {
+        client: apolloClientNOSQL
+    });
+
+    const [solicitudes, setSolicitudes] = useState([]);
+    const [filtradas, setFiltradas] = useState([]);
+
+    useEffect(() => {
+        const fetchNombresVoluntarios = async (solicitudes) => {
+            try {
+                const solicitudesConNombres = await Promise.all(
+                    solicitudes.map(async (s) => {
+                        try {
+                            const voluntario = await obtenerVoluntario(s.voluntarioId);
+                            console.log(voluntario);
+                            const nombreCompleto = `${voluntario.nombre || ''} ${voluntario.apellido || ''}`.trim();
+                            return {
+                                ...s,
+                                voluntario: nombreCompleto || `Voluntario ${s.voluntarioId}`
+                            };
+                        } catch (error) {
+                            console.error(`Error obteniendo voluntario ${s.voluntarioId}:`, error);
+                            return {
+                                ...s,
+                                voluntario: `Voluntario ${s.voluntarioId}`
+                            };
+                        }
+                    })
+                );
+
+                setSolicitudes(solicitudesConNombres);
+                setFiltradas(solicitudesConNombres);
+            } catch (error) {
+                console.error('Error cargando nombres de voluntarios:', error);
+            }
+        };
+
+        if (data?.obtenerTodasSolicitudes) {
+            const solicitudesBase = data.obtenerTodasSolicitudes.map(s => ({
+                id: s.id,
+                voluntarioId: s.voluntarioId,
+                voluntario: `Cargando...`,
+                prioridad: s.nivelEmergencia,
+                estado: s.estado,
+                direccion: "Dirección generada",
+                coordenadas: [parseFloat(s.latitud), parseFloat(s.longitud)],
+                detalle: s.descripcion,
+                fecha: new Date(s.fecha).toLocaleDateString()
+            }));
+
+            fetchNombresVoluntarios(solicitudesBase);
+        }
+    }, [data]);
+
     const abrirModal = (ayuda) => {
         setAyudaSeleccionada(ayuda);
         setShowModal(true);
     };
 
     const resolverAyuda = (id) => {
-        const index = ayudasSolicitadas.findIndex(a => a.id === id);
-        if (index !== -1) {
-            ayudasSolicitadas[index].estado = 'Resuelto';
-            setAyudaSeleccionada({ ...ayudasSolicitadas[index] });
-        }
+        const updated = solicitudes.map(a =>
+            a.id === id ? { ...a, estado: 'Resuelto' } : a
+        );
+        setSolicitudes(updated);
+        setFiltradas(updated);
+        setAyudaSeleccionada(null);
     };
 
     const resetFiltros = () => {
         setNombreFiltro('');
         setPrioridadFiltro('');
         setEstadoFiltro('');
+        setFiltradas(solicitudes);
     };
 
-    const filtradas = ayudasSolicitadas.filter((a) =>
-        a.voluntario.toLowerCase().includes(nombreFiltro.toLowerCase()) &&
-        (prioridadFiltro === '' || a.prioridad.toLowerCase() === prioridadFiltro.toLowerCase()) &&
-        (estadoFiltro === '' || a.estado.toLowerCase() === estadoFiltro.toLowerCase())
-    );
+    const aplicarFiltros = () => {
+        const filtered = solicitudes.filter((a) =>
+            a.voluntario.toLowerCase().includes(nombreFiltro.toLowerCase()) &&
+            (prioridadFiltro === '' || a.prioridad.toLowerCase() === prioridadFiltro.toLowerCase()) &&
+            (estadoFiltro === '' || a.estado.toLowerCase() === estadoFiltro.toLowerCase())
+        );
+        setFiltradas(filtered);
+    };
+
+    useEffect(() => {
+        aplicarFiltros();
+    }, [nombreFiltro, prioridadFiltro, estadoFiltro]);
+
+    if (loading) return <div className="loading">Cargando solicitudes...</div>;
+    if (error) return <div className="error">Error: {error.message}</div>;
 
     return (
         <div className="ayudas-container">
@@ -62,7 +131,10 @@ const AyudasSolicitadas = () => {
                         <div className="filtros-grid">
                             <div>
                                 <label>Prioridad</label>
-                                <select value={prioridadFiltro} onChange={(e) => setPrioridadFiltro(e.target.value)}>
+                                <select
+                                    value={prioridadFiltro}
+                                    onChange={(e) => setPrioridadFiltro(e.target.value)}
+                                >
                                     <option value="">Todas</option>
                                     <option value="Alta">Alta</option>
                                     <option value="Media">Media</option>
@@ -72,7 +144,10 @@ const AyudasSolicitadas = () => {
 
                             <div>
                                 <label>Estado</label>
-                                <select value={estadoFiltro} onChange={(e) => setEstadoFiltro(e.target.value)}>
+                                <select
+                                    value={estadoFiltro}
+                                    onChange={(e) => setEstadoFiltro(e.target.value)}
+                                >
                                     <option value="">Todos</option>
                                     <option value="Pendiente">Pendiente</option>
                                     <option value="Resuelto">Resuelto</option>
@@ -91,7 +166,15 @@ const AyudasSolicitadas = () => {
                         <div className="lista">
                             {filtradas.length > 0 ? (
                                 filtradas.map((a) => (
-                                    <CardAyuda key={a.id} ayuda={a} onClick={() => abrirModal(a)} />
+                                    <CardAyuda
+                                        key={a.id}
+                                        ayuda={{
+                                            ...a,
+                                            voluntario: a.voluntario || `Cargando voluntario...`
+                                        }}
+                                        onClick={() => abrirModal(a)}
+                                        estado={a.estado}
+                                    />
                                 ))
                             ) : (
                                 <p className="mensaje-vacio">No se encontraron resultados.</p>
@@ -113,15 +196,22 @@ const AyudasSolicitadas = () => {
                                 <p><strong>Prioridad:</strong> {ayudaSeleccionada.prioridad}</p>
                                 <p><strong>Detalle:</strong> {ayudaSeleccionada.detalle}</p>
                                 <p><strong>Solicitado por:</strong> {ayudaSeleccionada.voluntario}</p>
+                                <p><strong>Fecha:</strong> {ayudaSeleccionada.fecha}</p>
                                 <div className="mapa-container">
-                                    <Mapa coordenadas={ayudaSeleccionada.coordenadas} direccion={ayudaSeleccionada.direccion} />
+                                    <Mapa
+                                        coordenadas={ayudaSeleccionada.coordenadas}
+                                        direccion={ayudaSeleccionada.direccion}
+                                    />
                                 </div>
                             </>
                         )}
                     </Modal.Body>
                     <Modal.Footer>
                         {ayudaSeleccionada?.estado !== 'Resuelto' && (
-                            <Button variant="success" onClick={() => resolverAyuda(ayudaSeleccionada.id)}>
+                            <Button
+                                variant="success"
+                                onClick={() => resolverAyuda(ayudaSeleccionada.id)}
+                            >
                                 Marcar como Resuelta
                             </Button>
                         )}

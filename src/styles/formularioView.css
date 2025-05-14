@@ -161,6 +161,10 @@ input[type="radio"] {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.icono-enviado{
+    color: var(--color-verde-principal);
+    font-size: 80px;
+}
 .btn-enviar:hover {
     background-color: var(--color-verde-suave);
     transform: translateY(-2px);

@@ -35,6 +35,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalReporte from "../components/ModalReporte";
 import CardReporte from "../components/CardReporte";
 import LoadingCircle from "../components/LoadingCircle";
+import {Button, Modal} from "react-bootstrap";
 
 const InfoVoluntarios = () => {
     const { id } = useParams();
@@ -57,6 +58,10 @@ const InfoVoluntarios = () => {
     const [reporteSeleccionado, setReporteSeleccionado] = useState(null);
     const [showModalReporte, setShowModalReporte] = useState(false);
 
+
+    const [showModalConfirmacion, setShowModalConfirmacion] = useState(false);
+    const [mensajeConfirmacion, setMensajeConfirmacion] = useState('');
+
     const [crearEvaluacion] = useMutation(CREAR_EVALUACION);
 
     const handleEnviarFormulario = async () => {
@@ -64,15 +69,18 @@ const InfoVoluntarios = () => {
             const { data } = await crearEvaluacion({ variables: { id: historialIdString } });
 
             if (data?.crearEvaluacion === true) {
-                alert("Formulario enviado correctamente ✔️");
+                setMensajeConfirmacion("✅ Formulario enviado correctamente.");
             } else {
-                alert("Ya existe un formulario en espera ⏳. No se puede enviar otro hasta que se complete.");
+                setMensajeConfirmacion("⏳ Ya existe un formulario en espera. No se puede enviar otro hasta que se complete.");
             }
         } catch (error) {
             console.error("Error al enviar formulario:", error);
-            alert("Hubo un error al enviar el formulario ❌");
+            setMensajeConfirmacion("❌ Hubo un error al enviar el formulario.");
+        } finally {
+            setShowModalConfirmacion(true);
         }
     };
+
 
 
     useEffect(() => {
@@ -183,6 +191,7 @@ const InfoVoluntarios = () => {
 
     return (
 
+
         <div className="infovoluntarios-container">
             <Sidebar />
             {showModalCap && (
@@ -200,6 +209,8 @@ const InfoVoluntarios = () => {
                     onClose={() => setShowModalNecesidad(false)}
                 />
             )}
+
+
 
             <main className="infovoluntarios-content">
                 <header className="infovoluntarios-header">
@@ -523,7 +534,29 @@ const InfoVoluntarios = () => {
                 </section>
 
             </main>
+
+
+            <Modal
+                show={showModalConfirmacion}
+                onHide={() => setShowModalConfirmacion(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Resultado del Envío</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <p style={{ fontSize: "1.1rem" }}>{mensajeConfirmacion}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => setShowModalConfirmacion(false)}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
         </div>
+
 
     );
 

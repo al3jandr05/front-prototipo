@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 import HumanBody from '../components/HumanBody';
 import { GrCircleInformation } from "react-icons/gr";
-
+import { FaCheck } from "react-icons/fa";
 import { useQuery, useMutation } from '@apollo/client';
 import { PREGUNTAS_POR_TEST } from '../api/graphql/SQL/querys/preguntas'
 import { ENVIAR_RESPUESTAS } from '../api/graphql/SQL/mutations/respuestas'
@@ -290,7 +290,7 @@ const FormularioVoluntarioView = () => {
                     <Modal.Title>¡Enviado con éxito!</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <h1 style={{ fontSize: "80px", color: "#00b4d8" }}>✔️</h1>
+                    <FaCheck className="icono-enviado"/>
                     <p>Su respuesta ha sido enviada exitosamente.</p>
                 </Modal.Body>
                 <Modal.Footer>

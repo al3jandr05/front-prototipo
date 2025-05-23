@@ -230,7 +230,7 @@ const Formulario = () => {
     return (
         <div className="formulario-container" >
             <Sidebar />
-            <div className="formulario-content" ref={topRef}>
+                <div className="formulario-content" ref={topRef}>
                 <div className="formulario-header">
                     <h1 className="titulo-formulario">Formulario de Evaluación Post-Incendio</h1>
                 </div>

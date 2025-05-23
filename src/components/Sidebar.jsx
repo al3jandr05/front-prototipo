@@ -11,6 +11,7 @@ import { IoList, IoPerson } from "react-icons/io5";
 import { MdReport } from "react-icons/md";
 import { FaHandHoldingMedical } from "react-icons/fa";
 import { MdContactSupport } from "react-icons/md";
+import { IoMdPersonAdd } from "react-icons/io";
 
 
 const Sidebar = () => {
@@ -25,7 +26,7 @@ const Sidebar = () => {
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
         { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
         //{ icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
-
+        { icon: <IoMdPersonAdd  />, label: 'Agregar Administrador', path: '/AgregarAdministrador' },
         // { icon: <MdPersonAddAlt1 />, label: 'Voluntarios', path: '/Voluntarios' },
 
 

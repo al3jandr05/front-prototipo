@@ -1,0 +1,157 @@
+.administrador-container {
+    margin-left: 13%;
+    margin-top: 20px;
+    width: calc(100% - 13%);
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 100vh;
+    position: absolute;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+.administrador-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.administrador-tabla-wrapper {
+    margin-top: 20px;
+}
+
+.titulo-administrador {
+    color: var(--color-verde-oscuro);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.boton-agregar-capacitacion-wrapper {
+    margin-bottom: 25px;
+}
+
+.agregar-capacitacion {
+    background-color: var(--color-verde-oscuro);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.agregar-capacitacion:hover {
+    background-color: var(--color-verde-hover);
+}
+
+.tabla-administrador {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.tabla-administrador thead {
+    background-color: var(--color-verde-oscuro);
+}
+
+.tabla-administrador th {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-verde-suave);
+    color: white;
+    font-size: 18px;
+}
+
+
+.tabla-administrador td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-verde-suave);
+    font-size: 18px;
+}
+
+.tabla-administrador tr:last-child td {
+    border-bottom: none;
+}
+
+.btn-acciones {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.btn-accion-capacitacion {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-accion-capacitacion.editar {
+    background-color: var(--color-verde-suave);
+}
+
+.btn-accion-capacitacion.editar:hover {
+    background-color: var(--color-verde-hover);
+}
+
+.btn-accion-capacitacion.eliminar {
+    background-color: red;
+}
+
+.btn-accion-capacitacion.eliminar:hover {
+    background-color: darkred;
+}
+
+@media (max-width: 768px) {
+    .titulo-administrador {
+        font-size: 2rem;
+    }
+
+    .agregar-capacitacion {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .tabla-administrador th, .tabla-administrador td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .btn-accion-capacitacion {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+}
+
+.nombre-capacitacion {
+    cursor: pointer;
+    color: var(--color-texto-principal);
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.nombre-capacitacion:hover {
+    text-decoration: underline;
+    color: var(--color-verde-oscuro);
+}
+
+.modal-body p {
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.error-texto {
+    color: red;
+    font-size: 13px;
+    margin-top: 5px;
+    font-weight: bold;
+}

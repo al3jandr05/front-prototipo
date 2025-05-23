@@ -127,7 +127,7 @@
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 18px;
-    color: white;
+    color: var(--color-verde-oscuro);
 }
 
 button[type="submit"] {

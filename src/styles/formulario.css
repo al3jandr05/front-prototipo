@@ -1,6 +1,4 @@
 .formulario-container {
-    margin-left: 10%;
-    width: calc(100% - 10%);
     margin-top: 20px;
     padding: 15px;
     box-sizing: border-box;
@@ -14,7 +12,8 @@
     padding: 2rem 3rem;
     position: absolute;
     align-content: center;
-
+    margin-left: 0.8%;
+    width: calc(100% - 12%);
 
 }
 

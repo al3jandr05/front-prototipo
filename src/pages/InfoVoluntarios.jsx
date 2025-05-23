@@ -219,12 +219,12 @@ const InfoVoluntarios = () => {
                         <h1 className="nombre-voluntario">{voluntario?.nombre  || 'Voluntario'} {voluntario?.apellido || 'Voluntario'}</h1>
                         <p className="email-voluntario">{`${nombreEmail}`}</p>
                         <div className="header-status-group">
-                            <div className={`estado-badge ${voluntario?.estado?.toLowerCase()}`}>
+                            <div className={`estado-info ${voluntario?.estado?.toLowerCase()}`}>
                                 <span className="dot"></span>
                                 {voluntario?.estado}
                             </div>
 
-                            <button className="btn-formulario-voluntario" onClick={handleEnviarFormulario}>
+                            <button className="btn-formulario-enviar" onClick={handleEnviarFormulario}>
                                 Enviar Formulario
                             </button>
                         </div>

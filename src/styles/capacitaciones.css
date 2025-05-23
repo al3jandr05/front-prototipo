@@ -10,7 +10,7 @@
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 .capacitaciones-header {
-    display: flex;
+    display: grid;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
@@ -139,6 +139,7 @@
     color: var(--color-texto-principal);
     transition: color 0.2s ease, text-decoration 0.2s ease;
 }
+
 
 .nombre-capacitacion:hover {
     text-decoration: underline;

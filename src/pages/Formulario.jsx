@@ -190,10 +190,10 @@ const Formulario = () => {
     const renderPreguntas = (seccion) => (
         <div className="seccion-preguntas">
             <h2>{seccion === 'fisico' ? 'Evaluación Física' : 'Evaluación Psicológica'}</h2>
-            <div className="formulario-grid">
+            <div className="form-grid">
 
                 {preguntas[seccion].map((pregunta, idx) => (
-                    <div className="formulario-item" key={idx}>
+                    <div className="form-item" key={idx}>
                         <label>{pregunta.texto}</label>
                         <div className="radio-group">
                             {opciones.map((opcion) => (
@@ -228,13 +228,13 @@ const Formulario = () => {
     );
 
     return (
-        <div className="formulario-container" >
+        <div className="form-container" >
             <Sidebar />
-                <div className="formulario-content" ref={topRef}>
-                <div className="formulario-header">
-                    <h1 className="titulo-formulario">Formulario de Evaluación Post-Incendio</h1>
+                <div className="form-content" ref={topRef}>
+                <div className="form-header">
+                    <h1 className="form-titulo">Formulario de Evaluación Post-Incendio</h1>
                 </div>
-                <div className="botones">
+                <div className="btns">
                     <button className="btn-agregar-pregunta" onClick={abrirAgregar}>+ Agregar Pregunta</button>
                     {/*<button className="btn-agregar-pregunta" onClick={handleIrVistaVoluntario}>Formulario Voluntario</button>*/}
                 </div>

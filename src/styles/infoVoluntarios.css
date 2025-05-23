@@ -46,11 +46,13 @@
     color: #555;
 }
 
-.estado-badge {
+.estado-info {
     margin-top: 8px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     font-size: 15px;
     font-weight: 600;
     padding: 6px 14px;
@@ -59,26 +61,26 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.estado-badge .dot {
+.estado-info .dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     display: inline-block;
 }
 
-.estado-badge.activo {
+.estado-info.activo {
     background-color: #e0f7e9;
     color: #2e7d32;
 }
-.estado-badge.activo .dot {
+.estado-info.activo .dot {
     background-color: #2e7d32;
 }
 
-.estado-badge.inactivo {
+.estado-info.inactivo {
     background-color: #fdecea;
     color: #c62828;
 }
-.estado-badge.inactivo .dot {
+.estado-info.inactivo .dot {
     background-color: #c62828;
 }
 
@@ -496,15 +498,16 @@
     display: inline-block;
     align-items: center;
     margin-top: 3px;
+    justify-content: space-between;
+
+
 }
 
-.btn-formulario-voluntario {
-    padding: 6px 14px;
+.btn-formulario-enviar {
+    padding: 6px 20px;
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
-    margin-left: 10px;
-
     background-color: var(--color-verde-principal);
     color: white;
     border: none;
@@ -513,7 +516,7 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.btn-formulario-voluntario:hover {
+.btn-formulario-enviar:hover {
     background-color: var(--color-verde-hover);
 }
 

@@ -53,7 +53,7 @@ const AgregarAdministrador = () => {
             <main className="administrador-content">
                 <header className="administrador-header">
                     <h1 className="titulo-administrador">Administradores</h1>
-                    <button className="agregar-capacitacion" onClick={abrirModal}>+ Agregar Administrador</button>
+                    <button className="agregar-administrador" onClick={abrirModal}>+ Agregar Administrador</button>
                 </header>
 
                 <section className="administrador-tabla-wrapper">

@@ -10,7 +10,7 @@
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 .administrador-header {
-    display: flex;
+    display: grid;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
@@ -18,6 +18,7 @@
 
 .administrador-tabla-wrapper {
     margin-top: 20px;
+
 }
 
 .titulo-administrador {
@@ -26,11 +27,11 @@
     margin-bottom: 15px;
 }
 
-.boton-agregar-capacitacion-wrapper {
+.boton-agregar-administrador-wrapper {
     margin-bottom: 25px;
 }
 
-.agregar-capacitacion {
+.agregar-administrador {
     background-color: var(--color-verde-oscuro);
     color: white;
     padding: 10px 20px;
@@ -40,7 +41,7 @@
     transition: background-color 0.3s ease;
 }
 
-.agregar-capacitacion:hover {
+.agregar-administrador:hover {
     background-color: var(--color-verde-hover);
 }
 
@@ -84,7 +85,7 @@
     flex-wrap: wrap;
 }
 
-.btn-accion-capacitacion {
+.btn-accion-administrador {
     padding: 6px 12px;
     border-radius: 6px;
     border: none;
@@ -97,19 +98,19 @@
     transition: background-color 0.3s ease;
 }
 
-.btn-accion-capacitacion.editar {
+.btn-accion-administrador.editar {
     background-color: var(--color-verde-suave);
 }
 
-.btn-accion-capacitacion.editar:hover {
+.btn-accion-administrador.editar:hover {
     background-color: var(--color-verde-hover);
 }
 
-.btn-accion-capacitacion.eliminar {
+.btn-accion-administrador.eliminar {
     background-color: red;
 }
 
-.btn-accion-capacitacion.eliminar:hover {
+.btn-accion-administrador.eliminar:hover {
     background-color: darkred;
 }
 
@@ -118,7 +119,7 @@
         font-size: 2rem;
     }
 
-    .agregar-capacitacion {
+    .agregar-administrador {
         padding: 8px 16px;
         font-size: 14px;
     }
@@ -128,19 +129,19 @@
         font-size: 13px;
     }
 
-    .btn-accion-capacitacion {
+    .btn-accion-administrador {
         padding: 5px 8px;
         font-size: 12px;
     }
 }
 
-.nombre-capacitacion {
+.nombre-administrador {
     cursor: pointer;
     color: var(--color-texto-principal);
     transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
-.nombre-capacitacion:hover {
+.nombre-administrador:hover {
     text-decoration: underline;
     color: var(--color-verde-oscuro);
 }

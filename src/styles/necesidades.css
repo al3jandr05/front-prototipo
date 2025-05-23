@@ -11,7 +11,7 @@
 }
 
 .necesidades-header {
-    display: flex;
+    display: grid;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
@@ -108,13 +108,13 @@
 
 .nombre-necesidad {
     cursor: pointer;
-    color: var(--color-blue);
+    color: var(--color-texto-principal);
     transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 .nombre-necesidad:hover {
     text-decoration: underline;
-    color: var(--color-dark-blue);
+    color: var(--color-verde-oscuro);
 }
 
 .modal-body p {
@@ -149,3 +149,4 @@
         font-size: 12px;
     }
 }
+

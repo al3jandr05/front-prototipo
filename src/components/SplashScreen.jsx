@@ -4,8 +4,8 @@ import '../styles/splash.css';
 const SplashScreen = ({ onFinish }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
-            onFinish(); // llama navigate justo después del fadeOut
-        }, 2800); // coincide con fadeOut
+            onFinish(); // gllama navigate justo después del fadeOut
+        }, );
         return () => clearTimeout(timer);
     }, [onFinish]);
 

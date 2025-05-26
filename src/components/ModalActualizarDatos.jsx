@@ -92,6 +92,9 @@ const ModalActualizarDatos = ({ show, handleClose, handleUpdate , userId}) => {
             localStorage.setItem('token', token);
             localStorage.setItem('bearer', 'Bearer');
             handleClose();
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
 
         } catch (error) {
             console.error("Error al actualizar la contraseña:", error);

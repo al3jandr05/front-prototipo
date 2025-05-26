@@ -5,6 +5,9 @@ import Sidebar from '../components/Sidebar';
 import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
 import '../styles/agregarAdmin.css';
 
+import { useMutation } from '@apollo/client';
+import { REGISTRO_USUARIO } from '../api/graphql/SQL/mutations/registrarAdmin';
+
 const AgregarAdministrador = () => {
     const navigate = useNavigate();
     const [mostrarPassword, setMostrarPassword] = useState(false);
@@ -18,7 +21,7 @@ const AgregarAdministrador = () => {
         estado: '',
         password: ''
     });
-
+    const [registrarUsuario] = useMutation(REGISTRO_USUARIO);
     const [errores, setErrores] = useState({});
 
     const handleInputChange = (e) => {
@@ -48,9 +51,12 @@ const AgregarAdministrador = () => {
         if (!formData.apellido.trim()) nuevosErrores.apellido = 'El apellido es requerido';
         if (!formData.correo.trim()) nuevosErrores.correo = 'El correo es requerido';
         if (!formData.ci.trim()) nuevosErrores.ci = 'El CI es requerido';
-        if (!formData.rol) nuevosErrores.rol = 'El rol es requerido';
-        if (!formData.estado) nuevosErrores.estado = 'El estado es requerido';
-        if (!formData.password.trim()) nuevosErrores.password = 'La contraseña es requerida';
+        if (!formData.telefono || formData.telefono.toString().length < 7) {
+            nuevosErrores.telefono = 'Número inválido';
+        }
+        //if (!formData.rol) nuevosErrores.rol = 'El rol es requerido';
+        //if (!formData.estado) nuevosErrores.estado = 'El estado es requerido';
+        //if (!formData.password.trim()) nuevosErrores.password = 'La contraseña es requerida';
 
         // Validar formato de email
         if (formData.correo.trim() && !/\S+@\S+\.\S+/.test(formData.correo)) {
@@ -61,15 +67,30 @@ const AgregarAdministrador = () => {
         return Object.keys(nuevosErrores).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (validarFormulario()) {
-            // Aquí irá la llamada a la API
-            console.log('Datos a enviar:', formData);
+        if (!validarFormulario()) return;
 
-            // Mostrar modal de éxito
-            setShowModal(true);
+        try {
+            const { data } = await registrarUsuario({
+                variables: {
+                    nombre: formData.nombre,
+                    apellido: formData.apellido,
+                    email: formData.correo,
+                    ci: formData.ci,
+                    telefono: String(formData.telefono)
+                }
+            });
+
+            if (data?.registroUsuario?.activo) {
+                setShowModal(true); // Mostrar modal de éxito
+            } else {
+                alert("No se pudo registrar el administrador. Verifica los datos.");
+            }
+        } catch (error) {
+            console.error("Error al registrar administrador:", error);
+            alert("Ocurrió un error al registrar el administrador.");
         }
     };
 
@@ -82,9 +103,10 @@ const AgregarAdministrador = () => {
             apellido: '',
             correo: '',
             ci: '',
-            rol: '',
-            estado: '',
-            password: ''
+            telefono: ''
+            //rol: '',
+            //estado: '',
+            //password: ''
         });
 
         // Navegar de vuelta a la lista
@@ -186,23 +208,22 @@ const AgregarAdministrador = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="rol">Rol</label>
-                                    <select
-                                        id="rol"
-                                        name="rol"
-                                        value={formData.rol}
+                                    <label htmlFor="telefono">Teléfono</label>
+                                    <input
+                                        type="number"
+                                        id="telefono"
+                                        name="telefono"
+                                        value={formData.telefono}
                                         onChange={handleInputChange}
-                                        className={errores.rol ? 'input-error' : ''}
-                                    >
-                                        <option value="">Seleccione un rol</option>
-                                        <option value="Super Admin">Super Admin</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Usuario">Usuario</option>
-                                    </select>
-                                    {errores.rol && <span className="error-message">{errores.rol}</span>}
+                                        className={errores.telefono ? 'input-error' : ''}
+                                        placeholder="Ingrese el número"
+                                        maxLength={30}
+                                    />
+                                    <div className="character-count">{String(formData.telefono).length}/30</div>
+                                    {errores.telefono && <span className="error-message">{errores.telefono}</span>}
                                 </div>
 
-                                <div className="form-group">
+{/*                                <div className="form-group">
                                     <label htmlFor="estado">Estado</label>
                                     <select
                                         id="estado"
@@ -216,9 +237,9 @@ const AgregarAdministrador = () => {
                                         <option value="Inactivo">Inactivo</option>
                                     </select>
                                     {errores.estado && <span className="error-message">{errores.estado}</span>}
-                                </div>
+                                </div>*/}
 
-                                <div className="form-group password-group">
+{/*                                <div className="form-group password-group">
                                     <label htmlFor="password">Contraseña</label>
                                     <div className="password-input-container">
                                         <input
@@ -243,7 +264,7 @@ const AgregarAdministrador = () => {
                                         {formData.password.length}/30
                                     </div>
                                     {errores.password && <span className="error-message">{errores.password}</span>}
-                                </div>
+                                </div>*/}
                             </div>
 
                             <div className="form-actions">

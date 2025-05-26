@@ -6,6 +6,9 @@ import { FaTimes } from 'react-icons/fa';
 import '../styles/listaAdmin.css';
 import adminsData from '../data/admins';
 
+import { useQuery } from '@apollo/client';
+import { OBTENER_USUARIOS } from '../api/graphql/SQL/querys/usuarios';
+
 const ListaAdmins = () => {
     const navigate = useNavigate();
     const [admins, setAdmins] = useState([]);
@@ -15,10 +18,19 @@ const ListaAdmins = () => {
     const [rolFiltro, setRolFiltro] = useState('');
     const [estadoFiltro, setEstadoFiltro] = useState('');
 
+
+    const { data, loading, error } = useQuery(OBTENER_USUARIOS);
     useEffect(() => {
-        // Cargar los datos de administradores
-        setAdmins(adminsData);
-    }, []);
+        if (data?.usuariosLista) {
+            // Adaptar los datos si hace falta simular los campos como 'rol' y 'estado'
+            const adminsAdaptados = data.usuariosLista.map((u) => ({
+                ...u,
+                rol: 'Admin', // 🔧 Si tu backend aún no tiene el campo "rol"
+                estado: u.activo ? 'Activo' : 'Inactivo',
+            }));
+            setAdmins(adminsAdaptados);
+        }
+    }, [data]);
 
     const resetFiltros = () => {
         setNombre('');
@@ -31,7 +43,10 @@ const ListaAdmins = () => {
         setAdmins(prevAdmins =>
             prevAdmins.map(admin =>
                 admin.id === adminId
-                    ? { ...admin, estado: admin.estado === 'Activo' ? 'Inactivo' : 'Activo' }
+                    ? {
+                        ...admin,
+                        activo: !admin.activo // invierte el booleano real
+                    }
                     : admin
             )
         );

@@ -4,6 +4,9 @@ import { FaEye, FaEyeSlash, FaCheck, FaTimes } from 'react-icons/fa';
 import { useTransition, animated } from '@react-spring/web';
 import '../styles/modalDatos.css';
 
+import { useMutation } from '@apollo/client';
+import { ACTUALIZAR_PASSWORD } from '../api/graphql/SQL/mutations/resetPassword';
+
 const PasswordRequirement = ({ isValid, text }) => {
     return (
         <div className={`check-item ${isValid ? 'valid' : 'invalid'}`}>
@@ -13,14 +16,15 @@ const PasswordRequirement = ({ isValid, text }) => {
     );
 };
 
-const ModalActualizarDatos = ({ show, handleClose, handleUpdate }) => {
-    const [email, setEmail] = useState('');
+const ModalActualizarDatos = ({ show, handleClose, handleUpdate , userId}) => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
     const [errors, setErrors] = useState({
-        email: false,
         password: false
     });
+
+    const [actualizarPassword] = useMutation(ACTUALIZAR_PASSWORD);
     const [passwordChecks, setPasswordChecks] = useState({
         length: false,
         uppercase: false,
@@ -61,7 +65,6 @@ const ModalActualizarDatos = ({ show, handleClose, handleUpdate }) => {
 
     const validateForm = () => {
         const newErrors = {
-            email: email.length > 30 || !/\S+@\S+\.\S+/.test(email),
             password: password.length > 30 ||
                 password.length < 8 ||
                 !passwordChecks.uppercase ||
@@ -70,14 +73,29 @@ const ModalActualizarDatos = ({ show, handleClose, handleUpdate }) => {
         };
 
         setErrors(newErrors);
-        return !newErrors.email && !newErrors.password;
+        return !newErrors.password;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            handleUpdate({ email, password });
-            handleClose(); // Solo se cierra aquí después de actualizar
+        if (!validateForm()) return;
+
+        try {
+            const { data } = await actualizarPassword({
+                variables: {
+                    id: String(userId),
+                    password: password
+                }
+            });
+
+            const token = data?.actualizarPassword;
+            localStorage.setItem('token', token);
+            localStorage.setItem('bearer', 'Bearer');
+            handleClose();
+
+        } catch (error) {
+            console.error("Error al actualizar la contraseña:", error);
+            alert("Hubo un error al actualizar la contraseña.");
         }
     };
 
@@ -104,23 +122,6 @@ const ModalActualizarDatos = ({ show, handleClose, handleUpdate }) => {
                 <p className="text-warning mb-4">Su contraseña no ha sido renovada, actualice sus datos</p>
 
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Correo electrónico</Form.Label>
-                        <Form.Control
-                            type="email"
-                            placeholder="Ingrese su nuevo correo"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            isInvalid={errors.email}
-                            className={errors.email ? 'error-input' : ''}
-                        />
-                        {email.length > 30 && (
-                            <div className="error-texto">Has superado el límite de 30 caracteres</div>
-                        )}
-                        {errors.email && email.length <= 30 && (
-                            <div className="error-texto">El correo no es válido</div>
-                        )}
-                    </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Contraseña</Form.Label>
@@ -160,7 +161,7 @@ const ModalActualizarDatos = ({ show, handleClose, handleUpdate }) => {
                 <Button
                     variant="primary"
                     onClick={handleSubmit}
-                    disabled={!email || !password || errors.email || errors.password}
+                    disabled={ !password || errors.password}
                 >
                     Actualizar datos
                 </Button>

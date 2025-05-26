@@ -4,7 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { PiFireSimpleFill } from "react-icons/pi";
 import React, { useState, useEffect } from 'react';
+
+import { useMutation } from '@apollo/client';
+import { LOGIN_MUTATION } from '../api/graphql/SQL/mutations/login';
+
 import { login } from '../api/rest/authService';
+
+
 import SplashScreen from "../components/SplashScreen";
 
 import fondo1 from '../resources/bosque1.jpg';
@@ -13,15 +19,18 @@ import fondo3 from '../resources/bosque3.jpg';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [correo, setCorreo] = useState('');
+    const [ci, setCi] = useState('');
     const [contrasena, setContrasena] = useState('');
     const [error, setError] = useState('');
     const [showSplash, setShowSplash] = useState(false);
     const [currentBgIndex, setCurrentBgIndex] = useState(0);
     const [zoomLevel, setZoomLevel] = useState(100);
+    const [resultLogin, setResultLogin] = useState(null);
 
     const backgrounds = [fondo1, fondo2, fondo3];
     const navigate = useNavigate();
+
+    const [loginMutation] = useMutation(LOGIN_MUTATION);
 
     useEffect(() => {
         const zoomInterval = setInterval(() => {
@@ -46,18 +55,33 @@ const Login = () => {
         setError('');
 
         try {
-            const { access_token } = await login(correo, contrasena);
-            localStorage.setItem('token', access_token);
-            localStorage.setItem('bearer', 'Bearer');
-            setShowSplash(true);
+            const { data } = await loginMutation({
+                variables: {
+                    ci: ci,
+                    password: contrasena,
+                },
+            });
+
+            const result = data.login;
+
+            if (result.acceso) {
+                setResultLogin(result);
+
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('bearer', 'Bearer');
+                setShowSplash(true);
+            } else {
+                setError('Credenciales incorrectas');
+            }
         } catch (err) {
-            setError('Credenciales incorrectas');
+            console.error(err);
+            setError('Error al conectar con el servidor');
         }
     };
 
     const handleSplashFinish = () => {
         requestAnimationFrame(() => {
-            navigate('/Dashboard');
+            navigate('/Dashboard', { state: { userId: resultLogin?.id } });
         });
     };
 
@@ -94,12 +118,12 @@ const Login = () => {
                         {error && <p className="error-message">{error}</p>}
 
                         <div className="input-box">
-                            <p>Correo</p>
+                            <p>Carnet Identidad</p>
                             <input
                                 type="text"
-                                placeholder="Ingrese su Correo Electrónico"
-                                value={correo}
-                                onChange={(e) => setCorreo(e.target.value)}
+                                placeholder="Ingrese su Carnet de Identidad"
+                                value={ci}
+                                onChange={(e) => setCi(e.target.value)}
                                 required
                             />
                         </div>

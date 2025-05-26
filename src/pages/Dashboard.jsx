@@ -17,7 +17,8 @@ import {obtenerVoluntarios} from "../api/rest/voluntarioService";
 import {PiFireSimpleFill} from "react-icons/pi";
 import LoadingCircle from "../components/LoadingCircle";
 import ModalActualizarDatos from "../components/ModalActualizarDatos";
-
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -26,13 +27,34 @@ function Loadingircle() {
 }
 
 const Dashboard = () => {
-    const [showModal, setShowModal] = useState(true);
+
+    const { state } = useLocation();
+    const userId = state?.userId;
+    console.log(userId);
+    const [showModal, setShowModal] = useState(false);
 
     const [voluntarios, setVoluntarios] = useState([]);
     const [reportesRecientes, setReportesRecientes] = useState([]);
 
     // Ejecutar la consulta GraphQL con useQuery
     const { loading, error, data } = useQuery(OBTENER_DASHBOARD);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token || token.trim() === '';
+        const isUserIdInvalid = !userId;
+
+        if (isTokenInvalid && isUserIdInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, [userId]);
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token || token.trim() === '') {
+            setShowModal(true); // Mostrar modal si token es vacío o no existe
+        }
+    }, []);
 
     useEffect(() => {
         const fetchVoluntarios = async () => {
@@ -88,11 +110,11 @@ const Dashboard = () => {
             <div className="dashboard-container">
                 <Sidebar/>
 
-                {/*El modal para confirmar*/}
-                {/*<ModalActualizarDatos
+                <ModalActualizarDatos
                     show={showModal}
                     handleClose={() => setShowModal(false)}
-                />*/}
+                    userId={userId}
+                />
                 <main className="dashboard-content">
                     <header className="dashboard-header">
                         <h1 className="titulo-dashboard">Estadísticas</h1>

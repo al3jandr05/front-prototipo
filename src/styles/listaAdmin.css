@@ -1,0 +1,330 @@
+.admin-container {
+    margin-left: 13%;
+    margin-top: 20px;
+    width: calc(100% - 13%);
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 100vh;
+    position: absolute;
+}
+
+.admin-content {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-header {
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.titulo-admin {
+    color: var(--color-verde-oscuro);
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.btn-agregar-admin {
+    background-color: var(--color-verde-oscuro);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-agregar-admin:hover {
+    background-color: var(--color-verde-hover);
+}
+
+.admin-paneles {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+
+
+.barra-busqueda-admin {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input-busqueda-admin {
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: 1px solid var(--color-verde-principal);
+    width: 100%;
+    max-width: 85%;
+    transition: border-color 0.3s ease;
+}
+
+.input-busqueda-admin:focus {
+    outline: none;
+    border-color: var(--color-verde-hover);
+}
+
+/* Filtros */
+.filtros-grid-admin {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.filtros-grid-admin label {
+    font-weight: 600;
+    color: var(--color-verde-principal);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.filtros-grid-admin input,
+.filtros-grid-admin select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Botón limpiar */
+.filtro-limpiar-admin {
+    display: flex;
+    align-items: flex-end;
+}
+
+.filtro-limpiar-admin button {
+    padding: 10px 16px;
+    border: none;
+    background-color: #c62828;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filtro-limpiar-admin button:hover {
+    background-color: #a00000;
+}
+
+/* Panel lista */
+.panel-listado-admin {
+    background: transparent;
+}
+
+.lista-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mensaje-vacio-admin {
+    color: var(--color-verde-principal);
+    font-style: italic;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Card Administrador */
+.card-admin {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    background-color: var(--color-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-left: 6px solid var(--color-verde-principal);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-admin:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+    background-color: var(--color-verde-hover-card);
+}
+
+.avatar-admin {
+    width: 48px;
+    height: 48px;
+    background-color: var(--color-verde-principal);
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info-admin {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.nombre-rol-admin {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.nombre-rol-admin h4 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-verde-principal);
+}
+
+.rol-admin {
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.rol-admin.super-admin {
+    background-color: rgba(156, 39, 176, 0.15);
+    color: #7b1fa2;
+}
+
+.rol-admin.admin {
+    background-color: rgba(33, 150, 243, 0.15);
+    color: #1976d2;
+}
+
+.rol-admin.usuario {
+    background-color: rgba(158, 158, 158, 0.15);
+    color: #616161;
+}
+
+.detalles-admin {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.correo-admin {
+    margin: 2px;
+    font-size: 14px;
+    color: var(--color-texto-principal);
+    font-weight: bold;
+}
+
+.estado-container-admin {
+    display: flex;
+    align-items: center;
+}
+
+.estado-admin {
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.estado-admin.activo {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #2e7d32;
+}
+
+.estado-admin.inactivo {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: #c62828;
+}
+
+
+.acciones-admin {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.btn-toggle-estado-admin {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 90px;
+}
+
+.btn-toggle-estado-admin.activar {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #2e7d32;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.btn-toggle-estado-admin.activar:hover {
+    background-color: rgba(76, 175, 80, 0.25);
+    transform: scale(1.05);
+}
+
+.btn-toggle-estado-admin.desactivar {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: #c62828;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.btn-toggle-estado-admin.desactivar:hover {
+    background-color: rgba(244, 67, 54, 0.25);
+    transform: scale(1.05);
+}
+@media (max-width: 768px) {
+    .admin-container {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .titulo-admin {
+        font-size: 2rem;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .btn-agregar-admin {
+        justify-content: center;
+    }
+
+    .filtros-grid-admin {
+        grid-template-columns: 1fr;
+    }
+
+    .card-admin {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .nombre-rol-admin {
+        justify-content: space-between;
+    }
+
+    .detalles-admin {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .acciones-admin {
+        justify-content: center;
+    }
+}

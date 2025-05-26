@@ -2,7 +2,7 @@
     margin-left: 13%;
     margin-top: 20px;
     width: calc(100% - 13%);
-    padding: 15px;
+    padding: 20px;
     box-sizing: border-box;
     min-height: 100vh;
     position: absolute;
@@ -66,12 +66,10 @@
 }
 
 .badge-prioridad {
-    padding: 4px 12px;
-    border-radius: 20px;
     font-size: 13px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
 }
 
 .prioridad-alta {
@@ -170,18 +168,7 @@
     color: white;
 }
 
-.prioridad-alta {
-    background-color: #d00000;
-}
 
-.prioridad-media {
-    background-color: #ffcd00;
-    color: #333;
-}
-
-.prioridad-baja {
-    background-color: #1b9e3a;
-}
 
 .detalle-ayuda {
     margin: 8px 0 4px;
@@ -199,23 +186,5 @@
     margin: 2px 0 4px;
     font-size: 14px;
     color: var(--color-texto-principal);
-}
-
-.card-ayuda.card-pendiente {
-    background-color: #fff8e1;
-    border-left-color: #ff9800;
-}
-
-.card-ayuda.card-resuelto {
-    background-color: #e0f2f1;
-    border-left-color: #00796b;
-}
-
-.estado-ayuda.estado-pendiente {
-    color: #e65100;
-}
-
-.estado-ayuda.estado-resuelto {
-    color: #00695c;
 }
 

@@ -12,6 +12,7 @@ import FormularioVoluntarioView from "./pages/FormularioVoluntarioView";
 import CrudNecesidades from "./pages/CrudNecesidades";
 import CrudVoluntarios from "./pages/CrudVoluntarios";
 import AyudasSolicitadas from "./pages/AyudasSolicitadas";
+import ListaAdmins from "./pages/ListaAdmins";
 import AgregarAdministrador from "./pages/AgregarAdministrador";
 
 function App() {
@@ -26,9 +27,10 @@ function App() {
                 <Route path="/Formulario" element={<Formulario />} />
                 <Route path="/FormularioVoluntario/:reporteId/:evaluacionFisicaId/:evaluacionEmocionalId" element={<FormularioVoluntarioView />} />
                 <Route path="/Capacitaciones" element={<CrudCapacitaciones />} />
+                <Route path="/AgregarAdministrador" element={<AgregarAdministrador />} />
                 <Route path="/Necesidades" element={<CrudNecesidades />} />
                 <Route path="/Voluntarios" element={<CrudVoluntarios />} />
-                <Route path="/AgregarAdministrador" element={<AgregarAdministrador />} />
+                <Route path="/ListaAdmins" element={<ListaAdmins />} />
                 <Route path="/ResultadoEncuesta/:id" element={<ResultadoEncuesta />} />
                 <Route path="/AyudasSolicitadas" element={<AyudasSolicitadas />} />
             </Routes>

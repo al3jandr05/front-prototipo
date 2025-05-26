@@ -21,12 +21,12 @@ const Sidebar = () => {
 
     const menuItems = [
         { icon: <MdSpaceDashboard />, label: 'Estadísticas', path: '/Dashboard' },
-        { icon: <IoList />, label: 'Lista Voluntarios', path: '/ListaVoluntarios' },
+        { icon: <IoList />, label: 'Voluntarios', path: '/ListaVoluntarios' },
         { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
         { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
-        //{ icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
-        { icon: <IoMdPersonAdd  />, label: 'Agregar Administrador', path: '/AgregarAdministrador' },
+        { icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
+        { icon: <IoMdPersonAdd  />, label: 'Administradores', path: '/ListaAdmins' },
         // { icon: <MdPersonAddAlt1 />, label: 'Voluntarios', path: '/Voluntarios' },
 
 

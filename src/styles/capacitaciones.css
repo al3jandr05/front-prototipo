@@ -10,7 +10,6 @@
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 .capacitaciones-header {
-    display: grid;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;

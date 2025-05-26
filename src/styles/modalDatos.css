@@ -1,0 +1,147 @@
+.modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: var(--color-verde-oscuro);
+    color: white;
+    padding: 16px 24px;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 24px;
+    background-color: #f9f9f9;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    background-color: #f1f1f1;
+}
+
+.btn-primary{
+    background-color: var(--color-verde-oscuro) !important;
+    border-color: var(--color-verde-oscuro) !important;
+}
+
+.btn-primary:hover{
+    background-color: var(--color-verde-hover) !important;
+}
+
+
+/* Estilos generales del modal */
+.modal-header {
+    background-color: var(--color-verde-oscuro);
+    color: white;
+}
+
+.modal-header .close {
+    color: white;
+}
+
+.text-warning {
+    color: black !important;
+    font-weight: bold;
+}
+
+.error-input {
+    border-color: #dc3545 !important;
+}
+
+.error-texto {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.text-muted {
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.password-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 36px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: transparent;
+}
+
+.password-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-height: 120px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+
+
+.check-item.invalid {
+    color: #dc3545;
+}
+
+.fade-enter {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.fade-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+}
+.fade-exit {
+    opacity: 1;
+}
+.fade-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.btn-primary {
+    background-color: var(--color-verde-oscuro);
+    border-color: var(--color-verde-oscuro);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-verde-hover);
+    border-color: var(--color-verde-hover);
+}
+
+.toggle-password-text {
+    color: var(--color-verde-oscuro) !important;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline-block;
+}
+
+.toggle-password-text:hover {
+    color: var(--color-verde-hover);
+    text-decoration: none;
+}
+
+.password-checks {
+    margin-top: 1rem;
+}

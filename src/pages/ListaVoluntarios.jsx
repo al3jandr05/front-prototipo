@@ -46,7 +46,7 @@ const ListaVoluntarios = () => {
             <Sidebar />
             <main className="listado-content">
                 <header className="listado-header">
-                    <h1 className="titulo-listado">Lista de Voluntarios</h1>
+                    <h1 className="titulo-listado">Voluntarios</h1>
                 </header>
 
                 <section className="listado-paneles">

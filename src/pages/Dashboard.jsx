@@ -16,6 +16,7 @@ import { OBTENER_DASHBOARD } from '../api/graphql/SQL/querys/dashboard';
 import {obtenerVoluntarios} from "../api/rest/voluntarioService";
 import {PiFireSimpleFill} from "react-icons/pi";
 import LoadingCircle from "../components/LoadingCircle";
+import ModalActualizarDatos from "../components/ModalActualizarDatos";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -25,6 +26,7 @@ function Loadingircle() {
 }
 
 const Dashboard = () => {
+    const [showModal, setShowModal] = useState(true);
 
     const [voluntarios, setVoluntarios] = useState([]);
     const [reportesRecientes, setReportesRecientes] = useState([]);
@@ -85,6 +87,12 @@ const Dashboard = () => {
     return (
             <div className="dashboard-container">
                 <Sidebar/>
+
+                {/*El modal para confirmar*/}
+                {/*<ModalActualizarDatos
+                    show={showModal}
+                    handleClose={() => setShowModal(false)}
+                />*/}
                 <main className="dashboard-content">
                     <header className="dashboard-header">
                         <h1 className="titulo-dashboard">Estadísticas</h1>

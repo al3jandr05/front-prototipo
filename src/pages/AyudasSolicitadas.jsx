@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../components/Sidebar';
 import CardAyuda from '../components/CardAyuda';
 import Mapa from '../components/Mapa';
@@ -17,9 +17,15 @@ const AyudasSolicitadas = () => {
     const [estadoFiltro, setEstadoFiltro] = useState('');
     const [ayudaSeleccionada, setAyudaSeleccionada] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [mapaCentro, setMapaCentro] = useState([-17.806776, -63.15749]);
+    const mapaRef = useRef(null);
+    const mapaDivRef = useRef(null);
 
     const { loading, error, data } = useQuery(OBTENER_TODAS_SOLICITUDES, {
-        client: apolloClientNOSQL
+        client: apolloClientNOSQL,
+        onCompleted: () => setIsLoading(false),
+        onError: () => setIsLoading(false)
     });
 
     const [solicitudes, setSolicitudes] = useState([]);
@@ -32,7 +38,6 @@ const AyudasSolicitadas = () => {
                     solicitudes.map(async (s) => {
                         try {
                             const voluntario = await obtenerVoluntario(s.voluntarioId);
-                            console.log(voluntario);
                             const nombreCompleto = `${voluntario.nombre || ''} ${voluntario.apellido || ''}`.trim();
                             return {
                                 ...s,
@@ -51,11 +56,14 @@ const AyudasSolicitadas = () => {
                 setSolicitudes(solicitudesConNombres);
                 setFiltradas(solicitudesConNombres);
             } catch (error) {
-                console.error('Error cargando nombres de voluntarios:', error);
+                console.error('Error cargando nombres:', error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         if (data?.obtenerTodasSolicitudes) {
+            setIsLoading(true);
             const solicitudesBase = data.obtenerTodasSolicitudes.map(s => ({
                 id: s.id,
                 voluntarioId: s.voluntarioId,
@@ -77,6 +85,22 @@ const AyudasSolicitadas = () => {
         setShowModal(true);
     };
 
+    const handleCardClick = (ayuda) => {
+        setAyudaSeleccionada(ayuda);
+        setMapaCentro(ayuda.coordenadas);
+
+        if (mapaDivRef.current) {
+            mapaDivRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+
+        if (mapaRef.current) {
+            mapaRef.current.flyToMarker(ayuda.coordenadas);
+        }
+    };
+
     const resolverAyuda = (id) => {
         const updated = solicitudes.map(a =>
             a.id === id ? { ...a, estado: 'Resuelto' } : a
@@ -94,11 +118,15 @@ const AyudasSolicitadas = () => {
     };
 
     const aplicarFiltros = () => {
-        const filtered = solicitudes.filter((a) =>
-            a.voluntario.toLowerCase().includes(nombreFiltro.toLowerCase()) &&
-            (prioridadFiltro === '' || a.prioridad.toLowerCase() === prioridadFiltro.toLowerCase()) &&
-            (estadoFiltro === '' || a.estado.toLowerCase() === estadoFiltro.toLowerCase())
-        );
+        const filtered = solicitudes.filter((a) => {
+            const prioridadCoincide = prioridadFiltro === '' ||
+                a.prioridad?.toLowerCase() === prioridadFiltro.toLowerCase();
+
+            const estadoCoincide = estadoFiltro === '' ||
+                a.estado?.toLowerCase() === estadoFiltro.toLowerCase();
+
+            return prioridadCoincide && estadoCoincide;
+        });
         setFiltradas(filtered);
     };
 
@@ -106,17 +134,26 @@ const AyudasSolicitadas = () => {
         aplicarFiltros();
     }, [nombreFiltro, prioridadFiltro, estadoFiltro]);
 
-    if (loading) return(
+    if (loading || isLoading) return (
         <div className="ayudas-container">
             <Sidebar />
             <main className="ayudas-content">
-                <LoadingCircle/>
+                <LoadingCircle />
+                <p>Cargando datos...</p>
             </main>
-
-
         </div>
+    );
 
-    );    if (error) return <div className="error">Error: {error.message}</div>;
+    if (error) return (
+        <div className="ayudas-container">
+            <Sidebar />
+            <main className="ayudas-content">
+                <div className="error-alert">
+                    Error al cargar los datos
+                </div>
+            </main>
+        </div>
+    );
 
     return (
         <div className="ayudas-container">
@@ -146,9 +183,9 @@ const AyudasSolicitadas = () => {
                                     onChange={(e) => setPrioridadFiltro(e.target.value)}
                                 >
                                     <option value="">Todas</option>
-                                    <option value="Alta">Alta</option>
-                                    <option value="Media">Media</option>
-                                    <option value="Baja">Baja</option>
+                                    <option value="alto">Alto</option>
+                                    <option value="medio">Medio</option>
+                                    <option value="bajo">Bajo</option>
                                 </select>
                             </div>
 
@@ -159,8 +196,9 @@ const AyudasSolicitadas = () => {
                                     onChange={(e) => setEstadoFiltro(e.target.value)}
                                 >
                                     <option value="">Todos</option>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Resuelto">Resuelto</option>
+                                    <option value="sin responder">Sin responder</option>
+                                    <option value="en progreso">En progreso</option>
+                                    <option value="respondido">Respondido</option>
                                 </select>
                             </div>
 
@@ -170,6 +208,28 @@ const AyudasSolicitadas = () => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+
+                    <div className="mapa-principal" ref={mapaDivRef} style={{
+                        marginBottom: "20px",
+                        borderRadius: "12px",
+                        overflow: "hidden",
+                    }}>
+                        <Mapa
+                            ref={mapaRef}
+                            coordenadas={mapaCentro}
+                            markers={filtradas.map(a => ({
+                                position: a.coordenadas,
+                                direccion: a.direccion,
+                                prioridad: a.prioridad,
+                                detalle: a.detalle,
+                                voluntario: a.voluntario,
+                                fecha: a.fecha,
+                                estado: a.estado,
+                                onResolver: () => resolverAyuda(a.id)
+                            }))}
+                            onPopupAction={(id) => resolverAyuda(id)}
+                        />
                     </div>
 
                     <div className="panel-listadovol">
@@ -182,7 +242,7 @@ const AyudasSolicitadas = () => {
                                             ...a,
                                             voluntario: a.voluntario || `Cargando voluntario...`
                                         }}
-                                        onClick={() => abrirModal(a)}
+                                        onClick={() => handleCardClick(a)}
                                         estado={a.estado}
                                     />
                                 ))

@@ -1,144 +1,278 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 import Sidebar from '../components/Sidebar';
+import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
 import '../styles/agregarAdmin.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Modal, Button, Form } from 'react-bootstrap';
-import adminsData from '../data/admins';
 
 const AgregarAdministrador = () => {
-    const [admins, setAdmins] = useState(adminsData);
+    const navigate = useNavigate();
+    const [mostrarPassword, setMostrarPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
-
-    const [nombre, setNombre] = useState('');
-    const [apellido, setApellido] = useState('');
-    const [correo, setCorreo] = useState('');
-    const [ci, setCi] = useState('');
-    const [contrasena, setContrasena] = useState('');
+    const [formData, setFormData] = useState({
+        nombre: '',
+        apellido: '',
+        correo: '',
+        ci: '',
+        rol: '',
+        estado: '',
+        password: ''
+    });
 
     const [errores, setErrores] = useState({});
 
-    const abrirModal = () => {
-        setNombre('');
-        setApellido('');
-        setCorreo('');
-        setCi('');
-        setContrasena('');
-        setErrores({});
-        setShowModal(true);
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+
+        // Limitar a 30 caracteres
+        if (value.length <= 30) {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+
+            // Limpiar error del campo si está siendo editado
+            if (errores[name]) {
+                setErrores(prev => ({
+                    ...prev,
+                    [name]: ''
+                }));
+            }
+        }
     };
 
-    const validarCampos = () => {
-        const errs = {};
-        if (nombre.length > 20) errs.nombre = 'Máximo 20 caracteres';
-        if (apellido.length > 20) errs.apellido = 'Máximo 20 caracteres';
-        if (correo.length > 40) errs.correo = 'Máximo 40 caracteres';
-        if (ci.length > 20) errs.ci = 'Máximo 20 caracteres';
-        if (contrasena.length < 8) errs.contrasena = 'Mínimo 8 caracteres';
-        return errs;
+    const validarFormulario = () => {
+        const nuevosErrores = {};
+
+        if (!formData.nombre.trim()) nuevosErrores.nombre = 'El nombre es requerido';
+        if (!formData.apellido.trim()) nuevosErrores.apellido = 'El apellido es requerido';
+        if (!formData.correo.trim()) nuevosErrores.correo = 'El correo es requerido';
+        if (!formData.ci.trim()) nuevosErrores.ci = 'El CI es requerido';
+        if (!formData.rol) nuevosErrores.rol = 'El rol es requerido';
+        if (!formData.estado) nuevosErrores.estado = 'El estado es requerido';
+        if (!formData.password.trim()) nuevosErrores.password = 'La contraseña es requerida';
+
+        // Validar formato de email
+        if (formData.correo.trim() && !/\S+@\S+\.\S+/.test(formData.correo)) {
+            nuevosErrores.correo = 'El formato del correo no es válido';
+        }
+
+        setErrores(nuevosErrores);
+        return Object.keys(nuevosErrores).length === 0;
     };
 
-    const agregarAdmin = () => {
-        const validaciones = validarCampos();
-        setErrores(validaciones);
-        if (Object.keys(validaciones).length > 0) return;
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-        const nuevoAdmin = { nombre, apellido, correo, ci, contrasena };
-        setAdmins([...admins, nuevoAdmin]);
+        if (validarFormulario()) {
+            // Aquí irá la llamada a la API
+            console.log('Datos a enviar:', formData);
+
+            // Mostrar modal de éxito
+            setShowModal(true);
+        }
+    };
+
+    const handleCloseModal = () => {
         setShowModal(false);
+
+        // Limpiar formulario
+        setFormData({
+            nombre: '',
+            apellido: '',
+            correo: '',
+            ci: '',
+            rol: '',
+            estado: '',
+            password: ''
+        });
+
+        // Navegar de vuelta a la lista
+        navigate('/ListaAdmins');
+    };
+
+    const handleVolver = () => {
+        navigate('/ListaAdmins');
+    };
+
+    const togglePasswordVisibility = () => {
+        setMostrarPassword(!mostrarPassword);
     };
 
     return (
-        <div className="administrador-container">
+        <div className="agregar-admin-container">
             <Sidebar />
-            <main className="administrador-content">
-                <header className="administrador-header">
-                    <h1 className="titulo-administrador">Administradores</h1>
-                    <button className="agregar-administrador" onClick={abrirModal}>+ Agregar Administrador</button>
+            <main className="agregar-admin-content">
+                <header className="agregar-admin-header">
+                    <div className="header-top">
+                        <h1 className="titulo-agregar-admin">Agregar Administrador</h1>
+                    </div>
                 </header>
 
-                <section className="administrador-tabla-wrapper">
-                    <table className="tabla-administrador">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre Completo</th>
-                            <th>Correo</th>
-                            <th>CI</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {admins.map((admin, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{admin.nombre} {admin.apellido} </td>
-                                <td>{admin.correo}</td>
-                                <td>{admin.ci}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                <section className="formulario-section">
+                    <div className="formulario-container">
+                        <form onSubmit={handleSubmit} className="formulario-agregar-admin">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label htmlFor="nombre">Nombre</label>
+                                    <input
+                                        type="text"
+                                        id="nombre"
+                                        name="nombre"
+                                        value={formData.nombre}
+                                        onChange={handleInputChange}
+                                        className={errores.nombre ? 'input-error' : ''}
+                                        placeholder="Ingrese el nombre"
+                                        maxLength={30}
+                                    />
+                                    <div className="character-count">
+                                        {formData.nombre.length}/30
+                                    </div>
+                                    {errores.nombre && <span className="error-message">{errores.nombre}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="apellido">Apellido</label>
+                                    <input
+                                        type="text"
+                                        id="apellido"
+                                        name="apellido"
+                                        value={formData.apellido}
+                                        onChange={handleInputChange}
+                                        className={errores.apellido ? 'input-error' : ''}
+                                        placeholder="Ingrese el apellido"
+                                        maxLength={30}
+                                    />
+                                    <div className="character-count">
+                                        {formData.apellido.length}/30
+                                    </div>
+                                    {errores.apellido && <span className="error-message">{errores.apellido}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="correo">Correo Electrónico</label>
+                                    <input
+                                        type="email"
+                                        id="correo"
+                                        name="correo"
+                                        value={formData.correo}
+                                        onChange={handleInputChange}
+                                        className={errores.correo ? 'input-error' : ''}
+                                        placeholder="ejemplo@correo.com"
+                                        maxLength={30}
+                                    />
+                                    <div className="character-count">
+                                        {formData.correo.length}/30
+                                    </div>
+                                    {errores.correo && <span className="error-message">{errores.correo}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="ci">Cédula de Identidad</label>
+                                    <input
+                                        type="text"
+                                        id="ci"
+                                        name="ci"
+                                        value={formData.ci}
+                                        onChange={handleInputChange}
+                                        className={errores.ci ? 'input-error' : ''}
+                                        placeholder="Ingrese el CI"
+                                        maxLength={30}
+                                    />
+                                    <div className="character-count">
+                                        {formData.ci.length}/30
+                                    </div>
+                                    {errores.ci && <span className="error-message">{errores.ci}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="rol">Rol</label>
+                                    <select
+                                        id="rol"
+                                        name="rol"
+                                        value={formData.rol}
+                                        onChange={handleInputChange}
+                                        className={errores.rol ? 'input-error' : ''}
+                                    >
+                                        <option value="">Seleccione un rol</option>
+                                        <option value="Super Admin">Super Admin</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Usuario">Usuario</option>
+                                    </select>
+                                    {errores.rol && <span className="error-message">{errores.rol}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="estado">Estado</label>
+                                    <select
+                                        id="estado"
+                                        name="estado"
+                                        value={formData.estado}
+                                        onChange={handleInputChange}
+                                        className={errores.estado ? 'input-error' : ''}
+                                    >
+                                        <option value="">Seleccione un estado</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                    </select>
+                                    {errores.estado && <span className="error-message">{errores.estado}</span>}
+                                </div>
+
+                                <div className="form-group password-group">
+                                    <label htmlFor="password">Contraseña</label>
+                                    <div className="password-input-container">
+                                        <input
+                                            type={mostrarPassword ? "text" : "password"}
+                                            id="password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleInputChange}
+                                            className={errores.password ? 'input-error' : ''}
+                                            placeholder="Ingrese la contraseña"
+                                            maxLength={30}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={togglePasswordVisibility}
+                                        >
+                                            {mostrarPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </button>
+                                    </div>
+                                    <div className="character-count">
+                                        {formData.password.length}/30
+                                    </div>
+                                    {errores.password && <span className="error-message">{errores.password}</span>}
+                                </div>
+                            </div>
+
+                            <div className="form-actions">
+                                <button type="button" className="btn-cancelar" onClick={handleVolver}>
+                                    Cancelar
+                                </button>
+                                <button type="submit" className="btn-agregar">
+                                    Agregar Administrador
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </section>
 
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal show={showModal} onHide={handleCloseModal} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>Agregar Administrador</Modal.Title>
+                        <Modal.Title className="text-success">
+                            ¡Éxito!
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form>
-                            <Form.Group>
-                                <Form.Label>Nombre</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={nombre}
-                                    onChange={(e) => setNombre(e.target.value)}
-                                />
-                                {errores.nombre && <div className="error-texto">{errores.nombre}</div>}
-                            </Form.Group>
-
-                            <Form.Group>
-                                <Form.Label>Apellido</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={apellido}
-                                    onChange={(e) => setApellido(e.target.value)}
-                                />
-                                {errores.apellido && <div className="error-texto">{errores.apellido}</div>}
-                            </Form.Group>
-
-                            <Form.Group>
-                                <Form.Label>Correo</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    value={correo}
-                                    onChange={(e) => setCorreo(e.target.value)}
-                                />
-                                {errores.correo && <div className="error-texto">{errores.correo}</div>}
-                            </Form.Group>
-
-                            <Form.Group>
-                                <Form.Label>CI</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={ci}
-                                    onChange={(e) => setCi(e.target.value)}
-                                />
-                                {errores.ci && <div className="error-texto">{errores.ci}</div>}
-                            </Form.Group>
-
-                            <Form.Group>
-                                <Form.Label>Contraseña</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    value={contrasena}
-                                    onChange={(e) => setContrasena(e.target.value)}
-                                />
-                                {errores.contrasena && <div className="error-texto">{errores.contrasena}</div>}
-                            </Form.Group>
-                        </Form>
+                        <p className="mb-0">
+                            El administrador <strong>{formData.nombre} {formData.apellido}</strong> ha sido agregado exitosamente al sistema.
+                        </p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-                        <Button variant="primary" onClick={agregarAdmin}>Agregar</Button>
+                        <Button variant="success" onClick={handleCloseModal}>
+                            Aceptar
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </main>

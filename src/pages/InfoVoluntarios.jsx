@@ -164,17 +164,39 @@ const InfoVoluntarios = () => {
         { icono: <FaIdCard />, texto: voluntario?.ci || 'N/D' }
     ];
 
-    const evaluacionesfisic = reporteMasReciente ? [
-        { icono: <FaFileAlt />, texto: 'Última evaluación: ' + new Date(reporteMasReciente.fechaGenerado).toLocaleDateString() },
-        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + new Date(new Date(reporteMasReciente.fechaGenerado).setDate(new Date(reporteMasReciente.fechaGenerado).getDate() + 7)).toLocaleDateString() },
-        { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
-    ] : [];
+    const parseFecha = (fechaStr) => {
+        if (!fechaStr) return null;
 
-    const evaluacionesPsico = reporteMasReciente ? [
-        { icono: <FaFileAlt />, texto: 'Última evaluación: ' + new Date(reporteMasReciente.fechaGenerado).toLocaleDateString() },
-        { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + new Date(new Date(reporteMasReciente.fechaGenerado).setDate(new Date(reporteMasReciente.fechaGenerado).getDate() + 7)).toLocaleDateString() },
-        { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
-    ] : [];
+        const partes = fechaStr.split('/');
+        if (partes.length !== 3) return null;
+
+        const [dia, mes, anio] = partes;
+        const date = new Date(anio, mes - 1, dia); // mes en JavaScript es 0-based
+
+        return isNaN(date) ? null : date;
+    };
+
+    const evaluacionesfisic = reporteMasReciente ? (() => {
+        const fechaBase = parseFecha(reporteMasReciente.fechaGenerado);
+        const fechaProxima = fechaBase ? new Date(fechaBase.getTime() + 7 * 24 * 60 * 60 * 1000) : null;
+
+        return [
+            { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
+            { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
+            { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
+        ];
+    })() : [];
+
+    const evaluacionesPsico = reporteMasReciente ? (() => {
+        const fechaBase = parseFecha(reporteMasReciente.fechaGenerado);
+        const fechaProxima = fechaBase ? new Date(fechaBase.getTime() + 7 * 24 * 60 * 60 * 1000) : null;
+
+        return [
+            { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
+            { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
+            { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
+        ];
+    })() : [];
 
     useEffect(() => {
         if (vistaActual === 'historial' && !tieneHistorial) {

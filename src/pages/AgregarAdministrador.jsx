@@ -12,6 +12,8 @@ const AgregarAdministrador = () => {
     const navigate = useNavigate();
     const [mostrarPassword, setMostrarPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [mensaje, setMensaje] = useState('');
+    const [tipoMensaje, setTipoMensaje] = useState(''); // 'success' o 'error'
     const [formData, setFormData] = useState({
         nombre: '',
         apellido: '',
@@ -42,6 +44,12 @@ const AgregarAdministrador = () => {
                 }));
             }
         }
+
+        // Limpiar mensaje cuando el usuario modifica el formulario
+        if (mensaje) {
+            setMensaje('');
+            setTipoMensaje('');
+        }
     };
 
     const validarFormulario = () => {
@@ -70,6 +78,10 @@ const AgregarAdministrador = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Limpiar mensajes previos
+        setMensaje('');
+        setTipoMensaje('');
+
         if (!validarFormulario()) return;
 
         try {
@@ -86,11 +98,13 @@ const AgregarAdministrador = () => {
             if (data?.registroUsuario?.activo) {
                 setShowModal(true); // Mostrar modal de éxito
             } else {
-                alert("No se pudo registrar el administrador. Verifica los datos.");
+                setMensaje("No se pudo registrar el administrador. Verifica los datos.");
+                setTipoMensaje('error');
             }
         } catch (error) {
             console.error("Error al registrar administrador:", error);
-            alert("Ocurrió un error al registrar el administrador.");
+            setMensaje("Ocurrió un error al registrar el administrador.");
+            setTipoMensaje('error');
         }
     };
 
@@ -108,6 +122,10 @@ const AgregarAdministrador = () => {
             //estado: '',
             //password: ''
         });
+
+        // Limpiar mensajes
+        setMensaje('');
+        setTipoMensaje('');
 
         // Navegar de vuelta a la lista
         navigate('/ListaAdmins');
@@ -223,7 +241,7 @@ const AgregarAdministrador = () => {
                                     {errores.telefono && <span className="error-message">{errores.telefono}</span>}
                                 </div>
 
-{/*                                <div className="form-group">
+                                {/*                                <div className="form-group">
                                     <label htmlFor="estado">Estado</label>
                                     <select
                                         id="estado"
@@ -239,7 +257,7 @@ const AgregarAdministrador = () => {
                                     {errores.estado && <span className="error-message">{errores.estado}</span>}
                                 </div>*/}
 
-{/*                                <div className="form-group password-group">
+                                {/*                                <div className="form-group password-group">
                                     <label htmlFor="password">Contraseña</label>
                                     <div className="password-input-container">
                                         <input
@@ -274,6 +292,11 @@ const AgregarAdministrador = () => {
                                 <button type="submit" className="btn-agregar">
                                     Agregar Administrador
                                 </button>
+                                {mensaje && (
+                                    <span className={`mensaje-inline ${tipoMensaje === 'error' ? 'mensaje-error' : 'mensaje-exito'}`}>
+                                        {mensaje}
+                                    </span>
+                                )}
                             </div>
                         </form>
                     </div>

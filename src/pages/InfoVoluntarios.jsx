@@ -58,9 +58,9 @@ const InfoVoluntarios = () => {
     const [reporteSeleccionado, setReporteSeleccionado] = useState(null);
     const [showModalReporte, setShowModalReporte] = useState(false);
 
-
-    const [showModalConfirmacion, setShowModalConfirmacion] = useState(false);
-    const [mensajeConfirmacion, setMensajeConfirmacion] = useState('');
+    // Estado para el mensaje del formulario
+    const [mensajeFormulario, setMensajeFormulario] = useState('');
+    const [tipoMensaje, setTipoMensaje] = useState(''); // 'success', 'error', 'warning'
 
     const [crearEvaluacion] = useMutation(CREAR_EVALUACION);
 
@@ -69,19 +69,24 @@ const InfoVoluntarios = () => {
             const { data } = await crearEvaluacion({ variables: { id: historialIdString } });
 
             if (data?.crearEvaluacion === true) {
-                setMensajeConfirmacion("✅ Formulario enviado correctamente.");
+                setMensajeFormulario("✅ Formulario enviado correctamente.");
+                setTipoMensaje('success');
             } else {
-                setMensajeConfirmacion("⏳ Ya existe un formulario en espera. No se puede enviar otro hasta que se complete.");
+                setMensajeFormulario("⏳ Ya existe un formulario en espera. No se puede enviar otro hasta que se complete.");
+                setTipoMensaje('warning');
             }
         } catch (error) {
             console.error("Error al enviar formulario:", error);
-            setMensajeConfirmacion("❌ Hubo un error al enviar el formulario.");
-        } finally {
-            setShowModalConfirmacion(true);
+            setMensajeFormulario("❌ Hubo un error al enviar el formulario.");
+            setTipoMensaje('error');
         }
+
+        // Limpiar el mensaje después de 5 segundos
+        setTimeout(() => {
+            setMensajeFormulario('');
+            setTipoMensaje('');
+        }, 5000);
     };
-
-
 
     useEffect(() => {
         const fetchVoluntario = async () => {
@@ -224,9 +229,16 @@ const InfoVoluntarios = () => {
                                 {voluntario?.estado}
                             </div>
 
-                            <button className="btn-formulario-enviar" onClick={handleEnviarFormulario}>
-                                Enviar Formulario
-                            </button>
+                            <div className="formulario-section">
+                                <button className="btn-formulario-enviar" onClick={handleEnviarFormulario}>
+                                    Enviar Formulario
+                                </button>
+                                {mensajeFormulario && (
+                                    <span className={`mensaje-formulario ${tipoMensaje}`}>
+                                        {mensajeFormulario}
+                                    </span>
+                                )}
+                            </div>
                         </div>
 
                     </div>
@@ -234,80 +246,66 @@ const InfoVoluntarios = () => {
 
 
                 <section className="infovoluntarios-paneles">
-                    {/* Card de Datos Personales */}
-                    <div className="panel-infovol panel-personal">
-                        <div className="panel-header">
-                            <TbListDetails className="panel-icon" />
-                            <h4>Datos Personales</h4>
-                        </div>
-                        <div className="panel-content">
-                            {datosPersonales.map((d, i) => (
-                                <div key={i} className="panel-item">
-                                    <span className="panel-item-icon">{d.icono}</span>
-                                    <span className="panel-item-text">{d.texto}</span>
-                                </div>
-                            ))}
-                        </div>
+
+                    <div className="panel panel-hover">
+                        <h4>Datos Personales</h4>
+                        {datosPersonales.map((d, i) => (
+                            <p key={i}>{d.icono} {d.texto}</p>
+                        ))}
                     </div>
 
-                    {/* Card de Evaluaciones Físicas */}
-                    <div className="panel-infovol panel-fisico">
-                        <div className="panel-header">
-                            <FaChartLine className="panel-icon" />
-                            <h4>Evaluaciones Físicas</h4>
-                        </div>
-                        <div className="panel-content">
-                            {evaluacionesfisic.length === 0 ? (
-                                <div className="no-evaluacion">
-                                    <FaFileAlt className="icono-vacio" />
-                                    <p>No hay evaluaciones físicas registradas</p>
-                                </div>
-                            ) : (
-                                evaluacionesfisic.map((d, i) => (
-                                    <div key={i} className="panel-item">
-                                        <span className="panel-item-icon">{d.icono}</span>
-                                        <span className="panel-item-text">{d.texto}</span>
+                    <div className="panel panel-hover">
+                        <h4>Evaluaciones Físicas</h4>
+                        {evaluacionesfisic.length === 0 ? (
+                            <div className="no-evaluacion diseño-vacio">
+                                <FaFileAlt className="icono-vacio" />
+                                <p>No hay evaluaciones físicas registradas para este voluntario.</p>
+                            </div>
+                        ) : (
+                            <div className="evaluacion-contenido">
+                                {evaluacionesfisic.map((d, i) => (
+                                    <div key={i} className="item-evaluacion">
+                                        {d.icono}
+                                        <span>{d.texto}</span>
                                     </div>
-                                ))
-                            )}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
-                    {/* Card de Evaluaciones Psicológicas */}
-                    <div className="panel-infovol panel-psicologico">
-                        <div className="panel-header">
-                            <MdPsychology className="panel-icon" />
-                            <h4>Evaluaciones Psicológicas</h4>
-                        </div>
-                        <div className="panel-content">
-                            {evaluacionesPsico.length === 0 ? (
-                                <div className="no-evaluacion">
-                                    <MdPsychology className="icono-vacio" />
-                                    <p>No hay evaluaciones psicológicas registradas</p>
-                                </div>
-                            ) : (
-                                evaluacionesPsico.map((d, i) => (
-                                    <div key={i} className="panel-item">
-                                        <span className="panel-item-icon">{d.icono}</span>
-                                        <span className="panel-item-text">{d.texto}</span>
+
+                    <div className="panel panel-hover">
+                        <h4>Evaluaciones Psicológicas</h4>
+                        {evaluacionesPsico.length === 0 ? (
+                            <div className="no-evaluacion diseño-vacio">
+                                <MdPsychology className="icono-vacio" />
+                                <p>No hay evaluaciones psicológicas registradas para este voluntario.</p>
+                            </div>
+                        ) : (
+                            <div className="evaluacion-contenido">
+                                {evaluacionesPsico.map((d, i) => (
+                                    <div key={i} className="item-evaluacion">
+                                        {d.icono}
+                                        <span>{d.texto}</span>
                                     </div>
-                                ))
-                            )}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
+
                 </section>
 
 
                 <section className="alternar-vista">
                     <div className="opciones-boton">
                         <button className="btn-opcion" onClick={() => {
-                                if (tieneHistorial) {
-                                    setVistaActual('historial');
-                                } else {
-                                    setVistaActual(null);
-                                    setShowModalNuloCap(true);
-                                }
-                            }}
+                            if (tieneHistorial) {
+                                setVistaActual('historial');
+                            } else {
+                                setVistaActual(null);
+                                setShowModalNuloCap(true);
+                            }
+                        }}
                         >
                             <FaHistory /> Historial
                         </button>
@@ -548,25 +546,6 @@ const InfoVoluntarios = () => {
                 </section>
 
             </main>
-
-
-            <Modal
-                show={showModalConfirmacion}
-                onHide={() => setShowModalConfirmacion(false)}
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Resultado del Envío</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <p style={{ fontSize: "1.1rem" }}>{mensajeConfirmacion}</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={() => setShowModalConfirmacion(false)}>
-                        Cerrar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
 
 
         </div>

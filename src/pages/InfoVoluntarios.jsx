@@ -182,7 +182,7 @@ const InfoVoluntarios = () => {
 
         return [
             { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
-            { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
+            //{ icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
             { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
         ];
     })() : [];
@@ -193,7 +193,7 @@ const InfoVoluntarios = () => {
 
         return [
             { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
-            { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
+            //  { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
             { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
         ];
     })() : [];

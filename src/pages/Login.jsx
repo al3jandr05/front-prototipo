@@ -118,7 +118,7 @@ const Login = () => {
                         {error && <p className="error-message">{error}</p>}
 
                         <div className="input-box">
-                            <p>Carnet Identidad</p>
+                            <p>Carnet de Identidad</p>
                             <input
                                 type="text"
                                 placeholder="Ingrese su Carnet de Identidad"

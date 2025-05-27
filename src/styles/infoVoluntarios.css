@@ -90,19 +90,27 @@
 }
 
 .infovoluntarios-paneles {
-    display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
     margin-bottom: 30px;
 }
 
-.panel {
+
+.panel-infovol {
+    background-color: var(--color-card);
     flex: 1;
     border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-    min-width: 280px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    min-width: 300px;
 }
+
+.panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
 
 .panel h4 {
     margin-bottom: 15px;
@@ -160,7 +168,6 @@
 }
 
 .vista-card {
-    background-color: var(--color-verde-hover-card);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.3);
@@ -187,22 +194,101 @@
     font-size: 14px;
     color: #333;
 }
-.panel-hover {
-    background-color: var(--color-card);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.panel-header h4 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-verde-oscuro);
+}
+.panel-icon {
+    font-size: 22px;
+    color: var(--color-verde-principal);
+}
+.panel-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
 }
 
+.panel-item-icon {
+    color: var(--color-verde-principal);
+    font-size: 16px;
+    min-width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel-item-text {
+    font-size: 14px;
+    color: var(--color-texto-principal);
+    line-height: 1.4;
+}
 .panel-hover:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
     background-color: var(--color-verde-hover-card);
 }
-
+.panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 .panel-hover p {
     transition: color 0.2s ease;
 }
+.panel-personal {
+    border-top: 4px solid var(--color-verde-principal);
+}
 
+.panel-fisico {
+    border-top: 4px solid #4CAF50;
+}
+
+.panel-psicologico {
+    border-top: 4px solid #9C27B0;
+}
+
+/* Estilos para cuando no hay datos */
+.no-evaluacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    gap: 10px;
+}
+
+.no-evaluacion .icono-vacio {
+    font-size: 28px;
+    color: var(--color-verde-oscuro);
+    opacity: 0.5;
+}
+
+.no-evaluacion p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .infovoluntarios-paneles {
+        grid-template-columns: 1fr;
+    }
+}
 .panel-hover:hover p {
     color: var(--color-texto-principal);
 }

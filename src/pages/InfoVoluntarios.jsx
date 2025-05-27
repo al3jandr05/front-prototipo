@@ -234,53 +234,67 @@ const InfoVoluntarios = () => {
 
 
                 <section className="infovoluntarios-paneles">
-
-                    <div className="panel panel-hover">
-                        <h4>Datos Personales</h4>
-                        {datosPersonales.map((d, i) => (
-                            <p key={i}>{d.icono} {d.texto}</p>
-                        ))}
+                    {/* Card de Datos Personales */}
+                    <div className="panel-infovol panel-personal">
+                        <div className="panel-header">
+                            <TbListDetails className="panel-icon" />
+                            <h4>Datos Personales</h4>
+                        </div>
+                        <div className="panel-content">
+                            {datosPersonales.map((d, i) => (
+                                <div key={i} className="panel-item">
+                                    <span className="panel-item-icon">{d.icono}</span>
+                                    <span className="panel-item-text">{d.texto}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className="panel panel-hover">
-                        <h4>Evaluaciones Físicas</h4>
-                        {evaluacionesfisic.length === 0 ? (
-                            <div className="no-evaluacion diseño-vacio">
-                                <FaFileAlt className="icono-vacio" />
-                                <p>No hay evaluaciones físicas registradas para este voluntario.</p>
-                            </div>
-                        ) : (
-                            <div className="evaluacion-contenido">
-                                {evaluacionesfisic.map((d, i) => (
-                                    <div key={i} className="item-evaluacion">
-                                        {d.icono}
-                                        <span>{d.texto}</span>
+                    {/* Card de Evaluaciones Físicas */}
+                    <div className="panel-infovol panel-fisico">
+                        <div className="panel-header">
+                            <FaChartLine className="panel-icon" />
+                            <h4>Evaluaciones Físicas</h4>
+                        </div>
+                        <div className="panel-content">
+                            {evaluacionesfisic.length === 0 ? (
+                                <div className="no-evaluacion">
+                                    <FaFileAlt className="icono-vacio" />
+                                    <p>No hay evaluaciones físicas registradas</p>
+                                </div>
+                            ) : (
+                                evaluacionesfisic.map((d, i) => (
+                                    <div key={i} className="panel-item">
+                                        <span className="panel-item-icon">{d.icono}</span>
+                                        <span className="panel-item-text">{d.texto}</span>
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                ))
+                            )}
+                        </div>
                     </div>
 
-
-                    <div className="panel panel-hover">
-                        <h4>Evaluaciones Psicológicas</h4>
-                        {evaluacionesPsico.length === 0 ? (
-                            <div className="no-evaluacion diseño-vacio">
-                                <MdPsychology className="icono-vacio" />
-                                <p>No hay evaluaciones psicológicas registradas para este voluntario.</p>
-                            </div>
-                        ) : (
-                            <div className="evaluacion-contenido">
-                                {evaluacionesPsico.map((d, i) => (
-                                    <div key={i} className="item-evaluacion">
-                                        {d.icono}
-                                        <span>{d.texto}</span>
+                    {/* Card de Evaluaciones Psicológicas */}
+                    <div className="panel-infovol panel-psicologico">
+                        <div className="panel-header">
+                            <MdPsychology className="panel-icon" />
+                            <h4>Evaluaciones Psicológicas</h4>
+                        </div>
+                        <div className="panel-content">
+                            {evaluacionesPsico.length === 0 ? (
+                                <div className="no-evaluacion">
+                                    <MdPsychology className="icono-vacio" />
+                                    <p>No hay evaluaciones psicológicas registradas</p>
+                                </div>
+                            ) : (
+                                evaluacionesPsico.map((d, i) => (
+                                    <div key={i} className="panel-item">
+                                        <span className="panel-item-icon">{d.icono}</span>
+                                        <span className="panel-item-text">{d.texto}</span>
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                ))
+                            )}
+                        </div>
                     </div>
-
                 </section>
 
 

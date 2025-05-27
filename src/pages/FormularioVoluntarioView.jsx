@@ -242,7 +242,7 @@ const FormularioVoluntarioView = () => {
                     )}
                 </div>
                 <div className="formulario-header text-center">
-                    <h1 className="titulo-formulario">Formulario de Evaluación Post-Incendio</h1>
+                    <h1 className="titulo-formulario">Evaluación Post-Incendio</h1>
                 </div>
 
 

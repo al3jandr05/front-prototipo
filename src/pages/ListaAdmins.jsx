@@ -79,14 +79,14 @@ const ListaAdmins = () => {
                         <div className="barra-busqueda-admin">
                             <input
                                 type="text"
-                                className="input-busqueda-admin"
+                                className="input-busqueda"
                                 placeholder="Buscar por nombre"
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
                         </div>
 
-                        <div className="filtros-grid-admin">
+                        <div className="filtros-grid">
                             <div>
                                 <label>CI</label>
                                 <input
@@ -113,7 +113,7 @@ const ListaAdmins = () => {
                                     <option value="Inactivo">Inactivo</option>
                                 </select>
                             </div>
-                            <div className="filtro-limpiar-admin">
+                            <div className="filtro-limpiar">
                                 <button onClick={resetFiltros} title="Limpiar filtros">
                                     <FaTimes /> Limpiar filtros
                                 </button>

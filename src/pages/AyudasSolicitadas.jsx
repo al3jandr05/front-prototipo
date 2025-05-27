@@ -163,92 +163,114 @@ const AyudasSolicitadas = () => {
                     <h1 className="titulo-ayudas">Ayudas Solicitadas</h1>
                 </div>
 
-                <section className="listado-paneles">
-                    <div className="panel-barrabusqueda">
-                        <div className="barra-busqueda">
-                            <input
-                                type="text"
-                                className="input-busqueda"
-                                placeholder="Buscar por nombre"
-                                value={nombreFiltro}
-                                onChange={(e) => setNombreFiltro(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="filtros-grid">
-                            <div>
-                                <label>Prioridad</label>
-                                <select
-                                    value={prioridadFiltro}
-                                    onChange={(e) => setPrioridadFiltro(e.target.value)}
-                                >
-                                    <option value="">Todas</option>
-                                    <option value="alto">Alto</option>
-                                    <option value="medio">Medio</option>
-                                    <option value="bajo">Bajo</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label>Estado</label>
-                                <select
-                                    value={estadoFiltro}
-                                    onChange={(e) => setEstadoFiltro(e.target.value)}
-                                >
-                                    <option value="">Todos</option>
-                                    <option value="sin responder">Sin responder</option>
-                                    <option value="en progreso">En progreso</option>
-                                    <option value="respondido">Respondido</option>
-                                </select>
-                            </div>
-
-                            <div className="filtro-limpiar">
-                                <button onClick={resetFiltros} title="Limpiar filtros">
-                                    <FaTimes /> Limpiar filtros
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mapa-principal" ref={mapaDivRef} style={{
-                        marginBottom: "20px",
-                        borderRadius: "12px",
-                        overflow: "hidden",
-                    }}>
-                        <Mapa
-                            ref={mapaRef}
-                            coordenadas={mapaCentro}
-                            markers={filtradas.map(a => ({
-                                position: a.coordenadas,
-                                direccion: a.direccion,
-                                prioridad: a.prioridad,
-                                detalle: a.detalle,
-                                voluntario: a.voluntario,
-                                fecha: a.fecha,
-                                estado: a.estado,
-                                onResolver: () => resolverAyuda(a.id)
-                            }))}
-                            onPopupAction={(id) => resolverAyuda(id)}
+                <div className="panel-barrabusqueda">
+                    <div className="barra-busqueda">
+                        <input
+                            type="text"
+                            className="input-busqueda"
+                            placeholder="Buscar por nombre"
+                            value={nombreFiltro}
+                            onChange={(e) => setNombreFiltro(e.target.value)}
                         />
                     </div>
 
-                    <div className="panel-listadovol">
-                        <div className="lista">
-                            {filtradas.length > 0 ? (
-                                filtradas.map((a) => (
-                                    <CardAyuda
-                                        key={a.id}
-                                        ayuda={{
-                                            ...a,
-                                            voluntario: a.voluntario || `Cargando voluntario...`
-                                        }}
-                                        onClick={() => handleCardClick(a)}
-                                        estado={a.estado}
-                                    />
-                                ))
-                            ) : (
-                                <p className="mensaje-vacio">No se encontraron resultados.</p>
-                            )}
+                    <div className="filtros-grid">
+                        <div>
+                            <label>Prioridad</label>
+                            <select
+                                value={prioridadFiltro}
+                                onChange={(e) => setPrioridadFiltro(e.target.value)}
+                            >
+                                <option value="">Todas</option>
+                                <option value="alto">Alto</option>
+                                <option value="medio">Medio</option>
+                                <option value="bajo">Bajo</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Estado</label>
+                            <select
+                                value={estadoFiltro}
+                                onChange={(e) => setEstadoFiltro(e.target.value)}
+                            >
+                                <option value="">Todos</option>
+                                <option value="sin responder">Sin responder</option>
+                                <option value="en progreso">En progreso</option>
+                                <option value="respondido">Respondido</option>
+                            </select>
+                        </div>
+
+                        <div className="filtro-limpiar">
+                            <button onClick={resetFiltros} title="Limpiar filtros">
+                                <FaTimes /> Limpiar filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <section className="contenido-principal">
+                    {/* Columna Izquierda - Listado */}
+                    <div className="columna-listado">
+                        <div className="panel-listadovol">
+                            <div className="lista">
+                                {filtradas.length > 0 ? (
+                                    filtradas.map((a) => (
+                                        <CardAyuda
+                                            key={a.id}
+                                            ayuda={{
+                                                ...a,
+                                                voluntario: a.voluntario || `Cargando voluntario...`
+                                            }}
+                                            onClick={() => handleCardClick(a)}
+                                            estado={a.estado}
+                                        />
+                                    ))
+                                ) : (
+                                    <p className="mensaje-vacio">No se encontraron resultados.</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Columna Derecha - Mapa */}
+                    <div className="columna-mapa">
+                        {/* Mapa con Leyenda Flotante */}
+                        <div className="mapa-principal" ref={mapaDivRef}>
+                            {/* Leyenda Flotante */}
+                            <div className="leyenda-flotante">
+                                <h5 className="leyenda-titulo">Leyenda</h5>
+                                <div className="leyenda-items">
+                                    <div className="leyenda-item">
+                                        <span className="badge-prioridad prioridad-alta"></span>
+                                        <span>Alta</span>
+                                    </div>
+                                    <div className="leyenda-item">
+                                        <span className="badge-prioridad prioridad-media"></span>
+                                        <span>Media</span>
+                                    </div>
+                                    <div className="leyenda-item">
+                                        <span className="badge-prioridad prioridad-baja"></span>
+                                        <span>Baja</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Mapa
+                                ref={mapaRef}
+                                coordenadas={mapaCentro}
+                                markers={filtradas.map(a => ({
+                                    position: a.coordenadas,
+                                    direccion: a.direccion,
+                                    prioridad: a.prioridad,
+                                    detalle: a.detalle,
+                                    voluntario: a.voluntario,
+                                    fecha: a.fecha,
+                                    estado: a.estado,
+                                    onResolver: () => resolverAyuda(a.id)
+                                }))}
+                                onPopupAction={(id) => resolverAyuda(id)}
+                            />
                         </div>
                     </div>
                 </section>

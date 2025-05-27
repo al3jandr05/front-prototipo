@@ -22,7 +22,7 @@ const Sidebar = () => {
     const menuItems = [
         { icon: <MdSpaceDashboard />, label: 'Estadísticas', path: '/Dashboard' },
         { icon: <IoList />, label: 'Voluntarios', path: '/ListaVoluntarios' },
-        { icon: <FaWpforms />, label: 'Formulario', path: '/Formulario' },
+        { icon: <FaWpforms />, label: 'Evaluación', path: '/Formulario' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
         { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
         { icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },

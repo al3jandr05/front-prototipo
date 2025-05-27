@@ -190,7 +190,7 @@ const Formulario = () => {
     const renderPreguntas = (seccion) => (
         <div className="seccion-preguntas">
             <h2>{seccion === 'fisico' ? 'Evaluación Física' : 'Evaluación Psicológica'}</h2>
-            <div className="form-grid">
+            <div className="formulario-grid">
 
                 {preguntas[seccion].map((pregunta, idx) => (
                     <div className="form-item" key={idx}>
@@ -232,7 +232,7 @@ const Formulario = () => {
             <Sidebar />
                 <div className="form-content" ref={topRef}>
                 <div className="form-header">
-                    <h1 className="form-titulo">Formulario de Evaluación Post-Incendio</h1>
+                    <h1 className="form-titulo">Evaluación Post-Incendio</h1>
                 </div>
                 <div className="btns">
                     <button className="btn-agregar-pregunta" onClick={abrirAgregar}>+ Agregar Pregunta</button>

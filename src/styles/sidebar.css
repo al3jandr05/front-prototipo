@@ -27,24 +27,31 @@
 .sidebar-collapse-btn {
     position: absolute;
     top: 20px;
-    right: -12px;
-    width: 24px;
-    height: 24px;
+    right: -15px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background-color: var(--color-verde-principal);
     color: white;
-    border: none;
+    border: 2px solid white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 1001;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar-collapse-btn:hover {
     background-color: var(--color-verde-suave);
     transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-collapse-btn svg {
+    font-size: 16px;
+    transition: transform 0.3s ease;
 }
 
 .sidebar-header {
@@ -107,6 +114,11 @@
 }
 
 .sidebar-item[data-tooltip]:hover::after {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-item[data-tooltip]:hover::after {
+    display: block;
     content: attr(data-tooltip);
     position: absolute;
     left: calc(100% + 10px);
@@ -119,6 +131,7 @@
     font-size: 14px;
     white-space: nowrap;
     z-index: 1002;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar-footer {

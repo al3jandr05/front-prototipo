@@ -1,7 +1,5 @@
 .agregar-admin-container {
-    margin-left: 13%;
     margin-top: 20px;
-    width: calc(100% - 13%);
     padding: 20px;
     box-sizing: border-box;
     overflow: hidden;

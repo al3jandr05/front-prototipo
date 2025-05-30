@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import '../styles/sidebar.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-    FaWpforms, FaInfoCircle, FaSignOutAlt, FaBars, FaTimes,
-
+    FaWpforms, FaInfoCircle, FaSignOutAlt, FaBars, FaTimes, FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 import { MdSpaceDashboard, MdPersonAddAlt1  } from "react-icons/md";
 import { PiFireSimpleFill } from "react-icons/pi";
@@ -12,12 +11,13 @@ import { MdReport } from "react-icons/md";
 import { FaHandHoldingMedical } from "react-icons/fa";
 import { MdContactSupport } from "react-icons/md";
 import { IoMdPersonAdd } from "react-icons/io";
-
+import { useSidebar } from './Layout';
 
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
+    const { isCollapsed, setIsCollapsed } = useSidebar();
 
     const menuItems = [
         { icon: <MdSpaceDashboard />, label: 'Estadísticas', path: '/Dashboard' },
@@ -37,6 +37,9 @@ const Sidebar = () => {
         setIsOpen(false);
     };
 
+    const toggleCollapse = () => {
+        setIsCollapsed(!isCollapsed);
+    };
 
     return (
         <>
@@ -46,7 +49,7 @@ const Sidebar = () => {
 
             {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
 
-            <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+            <div className={`sidebar ${isOpen ? 'open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
                 {isOpen && (
                     <div className="sidebar-close" onClick={() => setIsOpen(false)}>
                         <FaTimes />
@@ -58,15 +61,20 @@ const Sidebar = () => {
                     <span className="sidebar-logo-text">GEVOPI</span>
                 </div>
 
+                <button className="sidebar-collapse-btn" onClick={toggleCollapse}>
+                    {isCollapsed ? <FaChevronRight /> : <FaChevronLeft />}
+                </button>
+
                 <div className="sidebar-menu">
                     {menuItems.map((item, index) => {
                         const isActive = location.pathname.startsWith(item.path);
 
                         return (
-                            <div key={index}>
+                            <div key={index} className="sidebar-item-wrapper">
                                 <div
                                     className={`sidebar-item ${isActive ? 'active' : ''}`}
                                     onClick={() => handleNavigate(item.path)}
+                                    data-tooltip={isCollapsed ? item.label : ''}
                                 >
                                     <span className="sidebar-icon">{item.icon}</span>
                                     <span className="sidebar-label">{item.label}</span>

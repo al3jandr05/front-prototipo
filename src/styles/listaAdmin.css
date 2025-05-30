@@ -1,12 +1,8 @@
 .admin-container {
-    margin-left: 13%;
-    margin-top: 20px;
-    width: calc(100% - 13%);
     padding: 20px;
+    width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
     min-height: 100vh;
-    position: absolute;
 }
 
 .admin-content {
@@ -44,8 +40,6 @@
     flex-direction: column;
     gap: 30px;
 }
-
-
 
 .barra-busqueda-admin {
     width: 100%;
@@ -244,7 +238,6 @@
     color: #c62828;
 }
 
-
 .acciones-admin {
     display: flex;
     align-items: center;
@@ -283,10 +276,9 @@
     background-color: rgba(244, 67, 54, 0.25);
     transform: scale(1.05);
 }
+
 @media (max-width: 768px) {
     .admin-container {
-        margin-left: 0;
-        width: 100%;
         padding: 15px;
     }
 

@@ -1,21 +1,13 @@
-
-
 .dashboard-container {
-    margin-left: 13%;
-    margin-top: 20px;
-    width: calc(100% - 13%);
     padding: 20px;
     box-sizing: border-box;
-    overflow: hidden;
     min-height: 100vh;
-    position: absolute;
-    transition: margin-left 0.3s ease, width 0.3s ease;
+    width: 100%;
 }
 
 .dashboard-content {
     width: 100%;
     box-sizing: border-box;
-    transition: margin-left 0.3s ease;
 }
 
 .titulo-dashboard {
@@ -31,8 +23,6 @@
     position: relative;
 }
 
-
-
 .tarjetas-resumen {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -40,7 +30,7 @@
     margin: 40px 0;
 }
 
-.tarjeta{
+.tarjeta {
     background: var(--color-card);
     padding: 20px;
     border-radius: 12px;
@@ -51,8 +41,9 @@
     border-bottom: 4px solid var(--color-verde-principal);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
+
 .voluntario-tarjeta,
-.reporte-tarjeta{
+.reporte-tarjeta {
     background: var(--color-card);
     padding: 20px;
     border-radius: 12px;
@@ -63,6 +54,7 @@
     border-left: 6px solid var(--color-verde-principal);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
+
 .chart-card {
     background: var(--color-card);
     padding: 20px;
@@ -100,12 +92,11 @@
     color: var(--color-verde-principal);
 }
 
-/* 📊 Paneles */
+/* Paneles */
 .dashboard-paneles {
     display: flex;
     gap: 30px;
     flex-wrap: wrap;
-
 }
 
 .panel {
@@ -133,7 +124,7 @@
     color: #333;
 }
 
-/* 👥 Listas */
+/* Listas */
 .voluntarios-lista,
 .reportes-lista {
     display: flex;
@@ -174,14 +165,13 @@
     color: red;
 }
 
-/* 📈 Gráficas */
+/* Gráficas */
 .charts-container {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
     margin-top: 40px;
     justify-content: space-between;
-
 }
 
 .chart-card {

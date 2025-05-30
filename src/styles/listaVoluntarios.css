@@ -1,12 +1,8 @@
 .listado-container {
-    margin-left: 13%;
-    margin-top: 20px;
-    width: calc(100% - 13%);
     padding: 20px;
+    width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
     min-height: 100vh;
-    position: absolute;
 }
 
 .listado-content {
@@ -200,4 +196,28 @@
     margin: 6px 0 0;
     font-size: 14px;
     color: var(--color-texto-principal);
+}
+
+@media (max-width: 768px) {
+    .listado-container {
+        padding: 10px;
+    }
+
+    .titulo-listado {
+        font-size: 2rem;
+    }
+
+    .listado-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .filtros-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .input-busqueda {
+        max-width: 100%;
+    }
 }

@@ -14,25 +14,25 @@ import CrudVoluntarios from "./pages/CrudVoluntarios";
 import AyudasSolicitadas from "./pages/AyudasSolicitadas";
 import ListaAdmins from "./pages/ListaAdmins";
 import AgregarAdministrador from "./pages/AgregarAdministrador";
+import Layout from './components/Layout';
 
 function App() {
-
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/Dashboard" element={<Dashboard />} />
-                <Route path="/ListaVoluntarios" element={<ListaVoluntarios />} />
-                <Route path="/Voluntario/:id" element={<InfoVoluntarios />} />
-                <Route path="/Formulario" element={<Formulario />} />
-                <Route path="/FormularioVoluntario/:reporteId/:evaluacionFisicaId/:evaluacionEmocionalId" element={<FormularioVoluntarioView />} />
-                <Route path="/Capacitaciones" element={<CrudCapacitaciones />} />
-                <Route path="/AgregarAdministrador" element={<AgregarAdministrador />} />
-                <Route path="/Necesidades" element={<CrudNecesidades />} />
-                <Route path="/Voluntarios" element={<CrudVoluntarios />} />
-                <Route path="/ListaAdmins" element={<ListaAdmins />} />
-                <Route path="/ResultadoEncuesta/:id" element={<ResultadoEncuesta />} />
-                <Route path="/AyudasSolicitadas" element={<AyudasSolicitadas />} />
+                <Route path="/Dashboard" element={<Layout><Dashboard /></Layout>} />
+                <Route path="/ListaVoluntarios" element={<Layout><ListaVoluntarios /></Layout>} />
+                <Route path="/Voluntario/:id" element={<Layout><InfoVoluntarios /></Layout>} />
+                <Route path="/Formulario" element={<Layout><Formulario /></Layout>} />
+                <Route path="/FormularioVoluntario/:reporteId/:evaluacionFisicaId/:evaluacionEmocionalId" element={<Layout><FormularioVoluntarioView /></Layout>} />
+                <Route path="/Capacitaciones" element={<Layout><CrudCapacitaciones /></Layout>} />
+                <Route path="/AgregarAdministrador" element={<Layout><AgregarAdministrador /></Layout>} />
+                <Route path="/Necesidades" element={<Layout><CrudNecesidades /></Layout>} />
+                <Route path="/Voluntarios" element={<Layout><CrudVoluntarios /></Layout>} />
+                <Route path="/ListaAdmins" element={<Layout><ListaAdmins /></Layout>} />
+                <Route path="/ResultadoEncuesta/:id" element={<Layout><ResultadoEncuesta /></Layout>} />
+                <Route path="/AyudasSolicitadas" element={<Layout><AyudasSolicitadas /></Layout>} />
             </Routes>
         </Router>
     );

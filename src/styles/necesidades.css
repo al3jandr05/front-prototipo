@@ -1,13 +1,8 @@
 .necesidades-container {
-    margin-left: 13%;
-    margin-top: 20px;
-    width: calc(100% - 13%);
     padding: 15px;
+    width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
     min-height: 100vh;
-    position: absolute;
-    transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
 .necesidades-header {

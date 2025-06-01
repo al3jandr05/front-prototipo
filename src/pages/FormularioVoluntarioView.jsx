@@ -51,10 +51,10 @@ const FormularioVoluntarioView = () => {
     const preguntasCuerpo = dataFisico?.preguntasPorTest.filter(p => preguntasExcluidas.includes(p.id)) || []
 
     const mapeoCuerpo = {
-        "Brazo Izquierdo": preguntasCuerpo.find(p => p.id === '10'),
-        "Brazo Derecho": preguntasCuerpo.find(p => p.id === '9'),
-        "Pierna Izquierda": preguntasCuerpo.find(p => p.id === '12'),
-        "Pierna Derecha": preguntasCuerpo.find(p => p.id === '11'),
+        "Brazo Izquierdo": preguntasCuerpo.find(p => p.id === '9'),
+        "Brazo Derecho": preguntasCuerpo.find(p => p.id === '10'),
+        "Pierna Izquierda": preguntasCuerpo.find(p => p.id === '11'),
+        "Pierna Derecha": preguntasCuerpo.find(p => p.id === '12'),
         "Torso": preguntasCuerpo.find(p => p.id === '13'),
         "Cabeza": preguntasCuerpo.find(p => p.id === '14'),
     };
@@ -109,7 +109,7 @@ const FormularioVoluntarioView = () => {
             erroresTemp.psicologico = true;
         }
 
-        const totalPartes = ["Cabeza", "Pecho", "Brazo Izquierdo", "Brazo Derecho", "Pierna Izquierda", "Pierna Derecha"];
+        const totalPartes = ["Cabeza", "Torso", "Brazo Izquierdo", "Brazo Derecho", "Pierna Izquierda", "Pierna Derecha"];
         const partesCompletas = totalPartes.every(p => partesSeleccionadas[p]);
         if (!partesCompletas) {
             erroresTemp.cuerpo = true;
@@ -167,7 +167,7 @@ const FormularioVoluntarioView = () => {
             }
             return acc;
         }, []);
-        //console.log(respuestasCuerpo);
+        console.log(respuestasCuerpo);
         const input = {
             reporteId: parseInt(reporteId),
             estado: isReady ? "Disponible" : "No disponible",
@@ -185,7 +185,7 @@ const FormularioVoluntarioView = () => {
         //console.log("🔍 ENVIANDO INPUT:", JSON.stringify(input, null, 2));
         try {
 
-            await enviarRespuestasMutation({ variables: { input } });
+            //await enviarRespuestasMutation({ variables: { input } });
             setShowConfirmModal(false);
             setShowSuccessModal(true);
         } catch (err) {

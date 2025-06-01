@@ -5,6 +5,11 @@ export const OBTENER_EVALUACION_POR_ID = gql`
         obtenerEvaluacionPorId(id: $id) {
             id
             fecha
+            universidad {
+                direccion
+                nombre
+                telefono
+            }
             respuestas {
                 id
                 pregunta {

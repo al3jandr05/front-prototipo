@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { universidades } from '../data/universidades';
 
+import { useQuery } from '@apollo/client';
+import { OBTENER_UNIVERSIDADES } from '../api/graphql/SQL/querys/universidades';
+
 const ModalUniversidad = ({ show, onHide, onSelect }) => {
     const [selectedUniversidad, setSelectedUniversidad] = useState(null);
+
+    const { loading, error, data } = useQuery(OBTENER_UNIVERSIDADES, {
+        skip: !show, // solo consulta si el modal está visible
+    });
+
+    useEffect(() => {
+        if (!show) {
+            setSelectedUniversidad(null); // resetear selección al cerrar
+        }
+    }, [show]);
 
     const handleSelect = (universidad) => {
         setSelectedUniversidad(universidad);
@@ -22,17 +35,22 @@ const ModalUniversidad = ({ show, onHide, onSelect }) => {
             </Modal.Header>
             <Modal.Body>
                 <div className="universidades-lista">
-                    {universidades.map((universidad) => (
-                        <div
-                            key={universidad.id}
-                            className={`universidad-item ${selectedUniversidad?.id === universidad.id ? 'selected' : ''}`}
-                            onClick={() => handleSelect(universidad)}
-                        >
-                            <h4>{universidad.nombre}</h4>
-                            <p>{universidad.direccion}</p>
-                            <p>{universidad.telefono}</p>
-                        </div>
-                    ))}
+                    {data?.obtnenerUniversidades && data.obtnenerUniversidades.length > 0 ? (
+                        data.obtnenerUniversidades.map((universidad) => (
+                            <div
+                                key={universidad.id}
+                                className={`universidad-item ${selectedUniversidad?.id === universidad.id ? 'selected' : ''}`}
+                                onClick={() => handleSelect(universidad)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <h4>{universidad.nombre}</h4>
+                                <p>{universidad.direccion}</p>
+                                <p>{universidad.telefono}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No hay universidades disponibles.</p>
+                    )}
                 </div>
             </Modal.Body>
             <Modal.Footer>

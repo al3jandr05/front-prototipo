@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/resultadoEncuesta.css';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { OBTENER_EVALUACION_POR_ID } from '../api/graphql/SQL/querys/evaluacionId';
 import HumanBodyViewer from '../components/HumanBodyViewer';
 import LoadingCircle from "../components/LoadingCircle";
 import ModalUniversidad from '../components/ModalUniversidad';
 import { Modal, Button } from 'react-bootstrap';
 import { FaUniversity, FaTimes, FaArrowLeft } from 'react-icons/fa';
+import {
+    AGREGAR_UNIVERSIDAD_EVALUACION,
+    QUITAR_EVALUACION_UNIVERSIDAD
+} from '../api/graphql/SQL/mutations/evaluacionUniversidad';
+
 
 const ResultadoEncuesta = () => {
     const { id } = useParams();
@@ -17,27 +22,57 @@ const ResultadoEncuesta = () => {
     const [showModalUniversidad, setShowModalUniversidad] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [universidadAsignada, setUniversidadAsignada] = useState(null);
+    const [eliminarUniversidadEvaluacion] = useMutation(QUITAR_EVALUACION_UNIVERSIDAD);
+    const [agregarUniversidadEvaluacion] = useMutation(AGREGAR_UNIVERSIDAD_EVALUACION);
 
     const { loading, error, data } = useQuery(OBTENER_EVALUACION_POR_ID, {
         variables: { id: encuestaId },
     });
 
-    // Función para formatear la fecha en formato "dd/mm/yyyy"
     const formatFecha = (fecha) => {
         const date = new Date(fecha);
         return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
     };
+    useEffect(() => {
+        if (data && data.obtenerEvaluacionPorId && data.obtenerEvaluacionPorId.universidad) {
+            setUniversidadAsignada(data.obtenerEvaluacionPorId.universidad);
+        }
+    }, [data]);
+    const handleAsignarUniversidad = async (universidad) => {
+        try {
+            await agregarUniversidadEvaluacion({
+                variables: {
+                    idUniversidad: universidad.id,
+                    idEvaluacion: encuesta.id,
+                }
+            });
 
-    const handleAsignarUniversidad = (universidad) => {
-        setUniversidadAsignada(universidad);
-        setShowModalUniversidad(false);
-        // Aquí iría la lógica para guardar en la base de datos
+            setUniversidadAsignada(universidad);
+            setShowModalUniversidad(false);
+        } catch (error) {
+            console.error("Error asignando universidad:", error);
+        }
     };
 
-    const handleConfirmDelete = () => {
-        setUniversidadAsignada(null);
-        setShowConfirmDelete(false);
-        // Aquí iría la lógica para eliminar de la base de datos
+
+    const handleConfirmDelete = async () => {
+        try {
+            if (!encuesta) {
+                console.error("No hay evaluación para eliminar universidad");
+                return;
+            }
+
+            await eliminarUniversidadEvaluacion({
+                variables: { id: encuesta.id }
+            });
+
+            setUniversidadAsignada(null);
+            setShowConfirmDelete(false);
+
+            // Opcional: actualizar cache o refetch si usas algo más
+        } catch (error) {
+            console.error("Error eliminando universidad de la evaluación:", error);
+        }
     };
 
     const handleVolver = () => {

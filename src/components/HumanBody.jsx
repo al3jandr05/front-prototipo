@@ -3,8 +3,8 @@ import '../styles/humanBody.css';
 
 const bodyGroups = {
     'head': 'Cabeza',
-    'chest': 'Pecho',
-    'stomach': 'Pecho',
+    'chest': 'Torso',
+    'stomach': 'Torso',
     'left-arm': 'Brazo Derecho',
     'left-hand': 'Brazo Derecho',
     'right-arm': 'Brazo Izquierdo',

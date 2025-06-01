@@ -111,6 +111,7 @@ const FormularioVoluntarioView = () => {
 
         const totalPartes = ["Cabeza", "Torso", "Brazo Izquierdo", "Brazo Derecho", "Pierna Izquierda", "Pierna Derecha"];
         const partesCompletas = totalPartes.every(p => partesSeleccionadas[p]);
+        console.log(partesCompletas);
         if (!partesCompletas) {
             erroresTemp.cuerpo = true;
         }
@@ -185,7 +186,7 @@ const FormularioVoluntarioView = () => {
         //console.log("🔍 ENVIANDO INPUT:", JSON.stringify(input, null, 2));
         try {
 
-            //await enviarRespuestasMutation({ variables: { input } });
+            await enviarRespuestasMutation({ variables: { input } });
             setShowConfirmModal(false);
             setShowSuccessModal(true);
         } catch (err) {

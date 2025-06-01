@@ -14,6 +14,7 @@ import CrudVoluntarios from "./pages/CrudVoluntarios";
 import AyudasSolicitadas from "./pages/AyudasSolicitadas";
 import ListaAdmins from "./pages/ListaAdmins";
 import AgregarAdministrador from "./pages/AgregarAdministrador";
+import CrudUniversidades from "./pages/CrudUniversidades";
 import Layout from './components/Layout';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/ListaAdmins" element={<Layout><ListaAdmins /></Layout>} />
                 <Route path="/ResultadoEncuesta/:id" element={<Layout><ResultadoEncuesta /></Layout>} />
                 <Route path="/AyudasSolicitadas" element={<Layout><AyudasSolicitadas /></Layout>} />
+                <Route path="/Universidades" element={<Layout><CrudUniversidades /></Layout>} />
             </Routes>
         </Router>
     );

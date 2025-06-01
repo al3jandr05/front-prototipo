@@ -1,8 +1,9 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import {
     FaCalendarAlt, FaVenusMars, FaPhone, FaTint,
-    FaMapMarkerAlt, FaIdCard, FaFileAlt, FaChartLine, FaHistory
+    FaMapMarkerAlt, FaIdCard, FaFileAlt, FaChartLine, FaHistory, FaHeartbeat, FaBrain,
+    FaArrowLeft
 } from 'react-icons/fa';
 import { FaFileWaveform } from "react-icons/fa6";
 import { MdReport } from "react-icons/md";
@@ -10,10 +11,10 @@ import { TbListDetails } from 'react-icons/tb';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdPsychology } from 'react-icons/md';
 import { useParams, useNavigate } from 'react-router-dom';
-import {PiCertificate, PiFireSimpleFill} from "react-icons/pi";
+import { PiCertificate, PiFireSimpleFill } from "react-icons/pi";
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-import { useQuery, useMutation  } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { obtenerVoluntario } from '../api/rest/voluntarioService';
 import { OBTENER_REPORTES_VOLUNTARIOS } from '../api/graphql/SQL/querys/reportes';
 
@@ -35,7 +36,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalReporte from "../components/ModalReporte";
 import CardReporte from "../components/CardReporte";
 import LoadingCircle from "../components/LoadingCircle";
-import {Button, Modal} from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 const InfoVoluntarios = () => {
     const { id } = useParams();
@@ -183,7 +184,7 @@ const InfoVoluntarios = () => {
         return [
             { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
             //{ icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
-            { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
+            {  texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
         ];
     })() : [];
 
@@ -194,7 +195,7 @@ const InfoVoluntarios = () => {
         return [
             { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
             //  { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
-            { icono: <MdPsychology />, texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
+            { texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
         ];
     })() : [];
 
@@ -204,11 +205,11 @@ const InfoVoluntarios = () => {
             setShowModalNuloCap(true);
         }
     }, [vistaActual, tieneHistorial]);
-    if (loading) return(
+    if (loading) return (
         <div className="infovoluntarios-container">
             <Sidebar />
             <main className="infovoluntarios-content">
-                <LoadingCircle/>
+                <LoadingCircle />
             </main>
 
 
@@ -240,10 +241,11 @@ const InfoVoluntarios = () => {
 
 
             <main className="infovoluntarios-content">
+           
                 <header className="infovoluntarios-header">
                     <div className="info-avatar"><span>{inicial}</span></div>
                     <div>
-                        <h1 className="nombre-voluntario">{voluntario?.nombre  || 'Voluntario'} {voluntario?.apellido || 'Voluntario'}</h1>
+                        <h1 className="nombre-voluntario">{voluntario?.nombre || 'Voluntario'} {voluntario?.apellido || 'Voluntario'}</h1>
                         <p className="email-voluntario">{`${nombreEmail}`}</p>
                         <div className="header-status-group">
                             <div className={`estado-info ${voluntario?.estado?.toLowerCase()}`}>
@@ -261,25 +263,32 @@ const InfoVoluntarios = () => {
                                     </span>
                                 )}
                             </div>
+
                         </div>
 
                     </div>
+
                 </header>
 
 
                 <section className="infovoluntarios-paneles">
-
-                    <div className="panel panel-hover">
-                        <h4>Datos Personales</h4>
+                    <div className="panel-hover panel-personal">
+                        <h4>
+                            <FaIdCard />
+                            Datos Personales
+                        </h4>
                         {datosPersonales.map((d, i) => (
                             <p key={i}>{d.icono} {d.texto}</p>
                         ))}
                     </div>
 
-                    <div className="panel panel-hover">
-                        <h4>Evaluaciones Físicas</h4>
+                    <div className="panel-hover panel-fisico">
+                        <h4>
+                            <FaHeartbeat />
+                            Evaluaciones Físicas
+                        </h4>
                         {evaluacionesfisic.length === 0 ? (
-                            <div className="no-evaluacion diseño-vacio">
+                            <div className="no-evaluacion">
                                 <FaFileAlt className="icono-vacio" />
                                 <p>No hay evaluaciones físicas registradas para este voluntario.</p>
                             </div>
@@ -295,12 +304,14 @@ const InfoVoluntarios = () => {
                         )}
                     </div>
 
-
-                    <div className="panel panel-hover">
-                        <h4>Evaluaciones Psicológicas</h4>
+                    <div className="panel-hover panel-psicologico">
+                        <h4>
+                            <FaBrain />
+                            Evaluaciones Psicológicas
+                        </h4>
                         {evaluacionesPsico.length === 0 ? (
-                            <div className="no-evaluacion diseño-vacio">
-                                <MdPsychology className="icono-vacio" />
+                            <div className="no-evaluacion">
+                                <FaFileAlt className="icono-vacio" />
                                 <p>No hay evaluaciones psicológicas registradas para este voluntario.</p>
                             </div>
                         ) : (
@@ -314,7 +325,6 @@ const InfoVoluntarios = () => {
                             </div>
                         )}
                     </div>
-
                 </section>
 
 

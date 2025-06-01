@@ -1,15 +1,22 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/resultadoEncuesta.css';
 import { useQuery } from '@apollo/client';
 import { OBTENER_EVALUACION_POR_ID } from '../api/graphql/SQL/querys/evaluacionId';
 import HumanBodyViewer from '../components/HumanBodyViewer';
 import LoadingCircle from "../components/LoadingCircle";
+import ModalUniversidad from '../components/ModalUniversidad';
+import { Modal, Button } from 'react-bootstrap';
+import { FaUniversity, FaTimes, FaArrowLeft } from 'react-icons/fa';
 
 const ResultadoEncuesta = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const encuestaId = parseInt(id);
+    const [showModalUniversidad, setShowModalUniversidad] = useState(false);
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+    const [universidadAsignada, setUniversidadAsignada] = useState(null);
 
     const { loading, error, data } = useQuery(OBTENER_EVALUACION_POR_ID, {
         variables: { id: encuestaId },
@@ -19,6 +26,22 @@ const ResultadoEncuesta = () => {
     const formatFecha = (fecha) => {
         const date = new Date(fecha);
         return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
+    };
+
+    const handleAsignarUniversidad = (universidad) => {
+        setUniversidadAsignada(universidad);
+        setShowModalUniversidad(false);
+        // Aquí iría la lógica para guardar en la base de datos
+    };
+
+    const handleConfirmDelete = () => {
+        setUniversidadAsignada(null);
+        setShowConfirmDelete(false);
+        // Aquí iría la lógica para eliminar de la base de datos
+    };
+
+    const handleVolver = () => {
+        navigate(-1); // Vuelve a la página anterior
     };
 
     if (loading) return (
@@ -85,13 +108,48 @@ const ResultadoEncuesta = () => {
         "5": "Siempre"
     };
 
+    const renderUniversidadSection = () => (
+        <div className="categoria">
+            <h2 className="categoria-titulo">Universidad Asignada</h2>
+            {universidadAsignada ? (
+                <div className="resultado-card universidad-asignada">
+                    <button
+                        className="btn-eliminar-universidad"
+                        onClick={() => setShowConfirmDelete(true)}
+                        title="Eliminar universidad"
+                    >
+                        <FaTimes />
+                    </button>
+                    <h4>{universidadAsignada.nombre}</h4>
+                    <p><strong>Dirección:</strong> {universidadAsignada.direccion}</p>
+                    <p><strong>Teléfono:</strong> {universidadAsignada.telefono}</p>
+                </div>
+            ) : (
+                <button
+                    className="btn-asignar-universidad"
+                    onClick={() => setShowModalUniversidad(true)}
+                >
+                    <FaUniversity /> Asignar Universidad
+                </button>
+            )}
+        </div>
+    );
+
     return (
         <div className="resultado-container">
             <Sidebar />
             <div className="resultado-content">
-                <h1 className="titulo-resultado">Resultado de Encuesta #{encuesta.id}</h1>
-                {/* Formateo de la fecha */}
-                <p className="subtitulo"><strong>Fecha realizada:</strong> {formatFecha(encuesta.fecha)}</p>
+                <div className="header-container">
+
+                    <div>
+                        <h1 className="titulo-resultado">Resultado de Encuesta #{encuesta.id}</h1>
+                        <p className="subtitulo"><strong>Fecha realizada:</strong> {formatFecha(encuesta.fecha)}</p>
+                        <button className="btn-volver" onClick={handleVolver}>
+                            <FaArrowLeft /> Volver
+                        </button>
+                    </div>
+
+                </div>
 
                 <div className="resultados">
                     {/* FÍSICO */}
@@ -113,25 +171,54 @@ const ResultadoEncuesta = () => {
                                 <h2 className="categoria-titulo">Condición del cuerpo</h2>
                                 <HumanBodyViewer partes={partesCondicion} />
                             </div>
+                            {renderUniversidadSection()}
                         </>
                     )}
 
                     {/* PSICOLÓGICO */}
                     {testId === 4 && (
-                        <div className="categoria">
-                            <h2 className="categoria-titulo">Psicológico</h2>
-                            <div className="resultado-grid">
-                                {encuesta.respuestas.map((item, index) => (
-                                    <div key={index} className="resultado-card">
-                                        <h4>{item.textoPregunta}</h4>
-                                        <p><strong>Resultado:</strong> {respuestaTextoMap[item.respuestaTexto] || item.respuestaTexto}</p>
-                                    </div>
-                                ))}
+                        <>
+                            <div className="categoria">
+                                <h2 className="categoria-titulo">Resultados de la Evaluación Emocional</h2>
+                                <div className="resultado-grid">
+                                    {encuesta.respuestas.map((item, index) => (
+                                        <div key={index} className="resultado-card">
+                                            <h4>{item.textoPregunta}</h4>
+                                            <p><strong>Resultado:</strong> {respuestaTextoMap[item.respuestaTexto] || item.respuestaTexto}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                            {renderUniversidadSection()}
+                        </>
                     )}
                 </div>
             </div>
+
+            {/* Modal de Selección de Universidad */}
+            <ModalUniversidad
+                show={showModalUniversidad}
+                onHide={() => setShowModalUniversidad(false)}
+                onSelect={handleAsignarUniversidad}
+            />
+
+            {/* Modal de Confirmación de Eliminación */}
+            <Modal show={showConfirmDelete} onHide={() => setShowConfirmDelete(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmar Eliminación</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    ¿Estás seguro de que deseas eliminar la asignación de {universidadAsignada?.nombre}?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmDelete(false)}>
+                        Cancelar
+                    </Button>
+                    <Button variant="danger" onClick={handleConfirmDelete}>
+                        Eliminar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

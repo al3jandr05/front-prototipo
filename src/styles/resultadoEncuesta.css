@@ -3,6 +3,34 @@
     width: 100%;
     box-sizing: border-box;
     min-height: 100vh;
+    position: relative;
+}
+
+.header-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-volver {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: var(--color-verde-principal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: fit-content;
+    margin-top: 10px;
+}
+
+.btn-volver:hover {
+    background-color: var(--color-verde-hover);
 }
 
 .titulo-resultado {
@@ -22,6 +50,8 @@
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 40px;
     margin-top: 30px;
+    position: relative;
+    z-index: 1;
 }
 
 .categoria {
@@ -48,6 +78,7 @@
     border-radius: 10px;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
     border-left: 6px solid var(--color-verde-principal);
+    position: relative;
 }
 
 .resultado-card h4 {
@@ -59,4 +90,85 @@
 .resultado-card p {
     margin: 3px 0;
     font-size: 0.95rem;
+}
+
+/* Estilos para la sección de universidad */
+.btn-asignar-universidad {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--color-verde-principal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-asignar-universidad:hover {
+    background-color: var(--color-verde-hover);
+}
+
+.universidad-asignada {
+    position: relative;
+    padding-right: 40px;
+}
+
+.btn-eliminar-universidad {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.btn-eliminar-universidad:hover {
+    color: #c82333;
+}
+
+/* Asegurarse que los modales estén siempre por encima */
+.modal {
+    z-index: 1050 !important;
+}
+
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+/* Asegurarse que el HumanBodyViewer no se sobreponga */
+.human-body-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .resultados {
+        grid-template-columns: 1fr;
+    }
+
+    .titulo-resultado {
+        font-size: 2rem;
+    }
+
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-volver {
+        width: 100%;
+        justify-content: center;
+    }
 }

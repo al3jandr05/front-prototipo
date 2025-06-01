@@ -5,13 +5,17 @@
     overflow: hidden;
     min-height: 100vh;
     position: absolute;
+    width: 80%;
+
 }
 
 .agregar-admin-content {
-    width: 100%;
     box-sizing: border-box;
+    
 }
-
+.formulario-admin-section{
+    margin-left: 20%;
+}
 .agregar-admin-header {
     margin-bottom: 30px;
 }
@@ -323,4 +327,43 @@
     color: #155724;
     background-color: #d4edda;
     border: 1px solid #c3e6cb;
+}
+
+.ci-container {
+    margin-bottom: 20px;
+}
+
+.ci-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.ci-inputs input[name="ci"] {
+    flex: 1;
+}
+
+.extension-input {
+    width: 60px;
+    padding: 8px;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.extension-input:focus {
+    outline: none;
+    border-color: var(--color-verde-principal);
+}
+
+/* Asegurarse que los inputs numéricos no muestren las flechas */
+input[type="text"]::-webkit-outer-spin-button,
+input[type="text"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="text"] {
+    -moz-appearance: textfield;
 }

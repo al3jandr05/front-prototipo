@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import '../styles/sidebar.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-    FaWpforms, FaInfoCircle, FaSignOutAlt, FaBars, FaTimes, FaChevronLeft, FaChevronRight
+    FaSignOutAlt, FaBars, FaTimes, FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 import { MdSpaceDashboard, MdPersonAddAlt1  } from "react-icons/md";
 import { PiFireSimpleFill } from "react-icons/pi";
-import { IoList, IoPerson } from "react-icons/io5";
+import { IoList } from "react-icons/io5";
 import { MdReport } from "react-icons/md";
 import { FaHandHoldingMedical } from "react-icons/fa";
 import { MdContactSupport } from "react-icons/md";
 import { IoMdPersonAdd } from "react-icons/io";
 import { useSidebar } from './Layout';
+import { BiSolidNotepad } from "react-icons/bi";
+import { HiAcademicCap } from "react-icons/hi2";
+
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -22,11 +25,13 @@ const Sidebar = () => {
     const menuItems = [
         { icon: <MdSpaceDashboard />, label: 'Estadísticas', path: '/Dashboard' },
         { icon: <IoList />, label: 'Voluntarios', path: '/ListaVoluntarios' },
-        { icon: <FaWpforms />, label: 'Evaluación', path: '/Formulario' },
+        { icon: <BiSolidNotepad  />, label: 'Evaluación', path: '/Formulario' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
         { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
         { icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
         { icon: <IoMdPersonAdd  />, label: 'Administradores', path: '/ListaAdmins' },
+        { icon: <HiAcademicCap   />, label: 'Universidades', path: '/Universidades' },
+
         // { icon: <MdPersonAddAlt1 />, label: 'Voluntarios', path: '/Voluntarios' },
 
 

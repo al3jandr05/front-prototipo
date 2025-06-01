@@ -1,0 +1,190 @@
+.universidades-container {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+.universidades-content {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.universidades-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.titulo-universidades {
+    color: var(--color-verde-oscuro);
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.agregar-universidad {
+    background-color: var(--color-verde-oscuro);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.agregar-universidad:hover {
+    background-color: var(--color-verde-hover);
+}
+
+.universidades-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 20px 0;
+}
+
+.universidad-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 6px solid var(--color-verde-principal);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.universidad-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.universidad-nombre {
+    color: var(--color-verde-oscuro);
+    font-size: 1.5rem;
+    margin: 0 0 16px 0;
+}
+
+.universidad-info {
+    margin-bottom: 20px;
+}
+
+.universidad-info p {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    color: #666;
+    font-size: 1rem;
+}
+
+.info-icon {
+    margin-right: 8px;
+    color: var(--color-verde-oscuro);
+}
+
+.universidad-acciones {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.btn-accion {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-accion.editar {
+    background-color: var(--color-verde-suave);
+    color: white;
+}
+
+.btn-accion.editar:hover {
+    background-color: var(--color-verde-hover);
+}
+
+.btn-accion.eliminar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-accion.eliminar:hover {
+    background-color: #c82333;
+}
+
+.error-texto {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 4px;
+}
+
+/* Estilos para el modal de selección de universidades */
+.universidades-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.universidad-item {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.universidad-item:hover {
+    border-color: var(--color-verde-principal);
+    transform: translateX(5px);
+}
+
+.universidad-item.selected {
+    border-color: var(--color-verde-principal);
+    border-width: 2px;
+    background-color: rgba(var(--color-verde-rgb), 0.05);
+}
+
+.universidad-item h4 {
+    color: var(--color-verde-oscuro);
+    margin: 0 0 8px 0;
+    font-size: 1.2rem;
+}
+
+.universidad-item p {
+    margin: 4px 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .universidades-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .universidades-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .universidades-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .titulo-universidades {
+        font-size: 2rem;
+    }
+} 

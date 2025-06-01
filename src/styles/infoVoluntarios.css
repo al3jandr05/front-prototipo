@@ -95,28 +95,114 @@
     margin-bottom: 30px;
 }
 
-.panel-infovol {
+.panel-hover {
     background-color: var(--color-card);
-    flex: 1;
-    border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-    min-width: 300px;
-}
-
-.panel:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.panel h4 {
-    margin-bottom: 15px;
-    color: var(--color-verde-oscuro);
-}
-
-.vistas{
-    flex: 1;
     border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    border-left: 6px solid var(--color-verde-principal);
+}
+
+.panel-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+    background-color: var(--color-verde-hover-card);
+}
+
+.panel-hover h4 {
+    color: var(--color-verde-oscuro);
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.panel-hover h4 svg {
+    font-size: 1.4rem;
+    color: var(--color-verde-principal);
+}
+
+.panel-hover p {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    margin: 0;
+    font-size: 15px;
+    color: var(--color-texto-principal);
+}
+
+.panel-hover p svg {
+    font-size: 1.1rem;
+    color: var(--color-verde-principal);
+    min-width: 20px;
+}
+
+.panel-hover .evaluacion-contenido {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.panel-hover .item-evaluacion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--color-texto-principal);
+}
+
+.panel-hover .item-evaluacion svg {
+    font-size: 1.1rem;
+    color: var(--color-verde-principal);
+    min-width: 20px;
+}
+
+.no-evaluacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 20px;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    gap: 15px;
+}
+
+.no-evaluacion .icono-vacio {
+    font-size: 2rem;
+    color: var(--color-verde-principal);
+    opacity: 0.7;
+}
+
+.no-evaluacion p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--color-texto-principal);
+    font-style: italic;
+}
+
+/* Estilos específicos para cada panel */
+.panel-personal {
+    border-left-color: var(--color-verde-principal);
+}
+
+.panel-fisico {
+    border-left-color: #4CAF50;
+}
+
+.panel-psicologico {
+    border-left-color: #9C27B0;
+}
+
+@media (max-width: 768px) {
+    .infovoluntarios-paneles {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Botones de opciones */
@@ -228,63 +314,6 @@
     font-size: 14px;
     color: var(--color-texto-principal);
     line-height: 1.4;
-}
-.panel-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    background-color: var(--color-verde-hover-card);
-}
-.panel-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.panel-hover p {
-    transition: color 0.2s ease;
-}
-.panel-personal {
-    border-top: 4px solid var(--color-verde-principal);
-}
-
-.panel-fisico {
-    border-top: 4px solid #4CAF50;
-}
-
-.panel-psicologico {
-    border-top: 4px solid #9C27B0;
-}
-
-/* Estilos para cuando no hay datos */
-.no-evaluacion {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    gap: 10px;
-}
-
-.no-evaluacion .icono-vacio {
-    font-size: 28px;
-    color: var(--color-verde-oscuro);
-    opacity: 0.5;
-}
-
-.no-evaluacion p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-    font-style: italic;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .infovoluntarios-paneles {
-        grid-template-columns: 1fr;
-    }
 }
 .panel-hover:hover p {
     color: var(--color-texto-principal);
@@ -639,4 +668,27 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.btn-volver {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: var(--color-verde-principal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.btn-volver:hover {
+    background-color: var(--color-verde-hover);
+}
+
+.btn-volver svg {
+    font-size: 1.1rem;
 }

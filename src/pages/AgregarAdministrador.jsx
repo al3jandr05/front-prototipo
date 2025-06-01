@@ -19,6 +19,8 @@ const AgregarAdministrador = () => {
         apellido: '',
         correo: '',
         ci: '',
+        extension: '',
+        telefono: '',
         rol: '',
         estado: '',
         password: ''
@@ -29,20 +31,51 @@ const AgregarAdministrador = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
 
-        // Limitar a 30 caracteres
-        if (value.length <= 30) {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
+        // Validaciones específicas por campo
+        switch (name) {
+            case 'ci':
+                // Solo permitir números y máximo 8 dígitos
+                if ((/^\d*$/.test(value) && value.length <= 8) || value === '') {
+                    setFormData(prev => ({
+                        ...prev,
+                        [name]: value
+                    }));
+                }
+                break;
+            case 'extension':
+                // Solo permitir 2 caracteres máximo
+                if (value.length <= 2) {
+                    setFormData(prev => ({
+                        ...prev,
+                        [name]: value
+                    }));
+                }
+                break;
+            case 'telefono':
+                // Solo permitir números y máximo 8 dígitos
+                if ((/^\d*$/.test(value) && value.length <= 8) || value === '') {
+                    setFormData(prev => ({
+                        ...prev,
+                        [name]: value
+                    }));
+                }
+                break;
+            default:
+                // Para otros campos, mantener la validación de 30 caracteres
+                if (value.length <= 30) {
+                    setFormData(prev => ({
+                        ...prev,
+                        [name]: value
+                    }));
+                }
+        }
 
-            // Limpiar error del campo si está siendo editado
-            if (errores[name]) {
-                setErrores(prev => ({
-                    ...prev,
-                    [name]: ''
-                }));
-            }
+        // Limpiar error del campo si está siendo editado
+        if (errores[name]) {
+            setErrores(prev => ({
+                ...prev,
+                [name]: ''
+            }));
         }
 
         // Limpiar mensaje cuando el usuario modifica el formulario
@@ -58,13 +91,18 @@ const AgregarAdministrador = () => {
         if (!formData.nombre.trim()) nuevosErrores.nombre = 'El nombre es requerido';
         if (!formData.apellido.trim()) nuevosErrores.apellido = 'El apellido es requerido';
         if (!formData.correo.trim()) nuevosErrores.correo = 'El correo es requerido';
-        if (!formData.ci.trim()) nuevosErrores.ci = 'El CI es requerido';
-        if (!formData.telefono || formData.telefono.toString().length < 7) {
-            nuevosErrores.telefono = 'Número inválido';
+        
+        // Validación de CI
+        if (!formData.ci.trim()) {
+            nuevosErrores.ci = 'El CI es requerido';
+        } else if (formData.ci.length < 7 || formData.ci.length > 8) {
+            nuevosErrores.ci = 'El CI debe tener entre 7 y 8 dígitos';
         }
-        //if (!formData.rol) nuevosErrores.rol = 'El rol es requerido';
-        //if (!formData.estado) nuevosErrores.estado = 'El estado es requerido';
-        //if (!formData.password.trim()) nuevosErrores.password = 'La contraseña es requerida';
+
+        // Validación de teléfono
+        if (formData.telefono && (formData.telefono.length < 7 || formData.telefono.length > 8)) {
+            nuevosErrores.telefono = 'El teléfono debe tener entre 7 y 8 dígitos';
+        }
 
         // Validar formato de email
         if (formData.correo.trim() && !/\S+@\S+\.\S+/.test(formData.correo)) {
@@ -117,10 +155,11 @@ const AgregarAdministrador = () => {
             apellido: '',
             correo: '',
             ci: '',
-            telefono: ''
-            //rol: '',
-            //estado: '',
-            //password: ''
+            extension: '',
+            telefono: '',
+            rol: '',
+            estado: '',
+            password: ''
         });
 
         // Limpiar mensajes
@@ -149,7 +188,7 @@ const AgregarAdministrador = () => {
                     </div>
                 </header>
 
-                <section className="formulario-section">
+                <section className="formulario-admin-section">
                     <div className="formulario-container">
                         <form onSubmit={handleSubmit} className="formulario-agregar-admin">
                             <div className="form-grid">
@@ -165,9 +204,7 @@ const AgregarAdministrador = () => {
                                         placeholder="Ingrese el nombre"
                                         maxLength={30}
                                     />
-                                    <div className="character-count">
-                                        {formData.nombre.length}/30
-                                    </div>
+                               
                                     {errores.nombre && <span className="error-message">{errores.nombre}</span>}
                                 </div>
 
@@ -183,9 +220,7 @@ const AgregarAdministrador = () => {
                                         placeholder="Ingrese el apellido"
                                         maxLength={30}
                                     />
-                                    <div className="character-count">
-                                        {formData.apellido.length}/30
-                                    </div>
+                              
                                     {errores.apellido && <span className="error-message">{errores.apellido}</span>}
                                 </div>
 
@@ -201,26 +236,31 @@ const AgregarAdministrador = () => {
                                         placeholder="ejemplo@correo.com"
                                         maxLength={30}
                                     />
-                                    <div className="character-count">
-                                        {formData.correo.length}/30
-                                    </div>
+                              
                                     {errores.correo && <span className="error-message">{errores.correo}</span>}
                                 </div>
 
-                                <div className="form-group">
+                                <div className="form-group ci-container">
                                     <label htmlFor="ci">Cédula de Identidad</label>
-                                    <input
-                                        type="text"
-                                        id="ci"
-                                        name="ci"
-                                        value={formData.ci}
-                                        onChange={handleInputChange}
-                                        className={errores.ci ? 'input-error' : ''}
-                                        placeholder="Ingrese el CI"
-                                        maxLength={30}
-                                    />
-                                    <div className="character-count">
-                                        {formData.ci.length}/30
+                                    <div className="ci-inputs">
+                                        <input
+                                            type="text"
+                                            id="ci"
+                                            name="ci"
+                                            value={formData.ci}
+                                            onChange={handleInputChange}
+                                            className={errores.ci ? 'input-error' : ''}
+                                            placeholder="Ingrese el CI"
+                                        />
+                                        <input
+                                            type="text"
+                                            id="extension"
+                                            name="extension"
+                                            value={formData.extension}
+                                            onChange={handleInputChange}
+                                            placeholder="Ext."
+                                            className="extension-input"
+                                        />
                                     </div>
                                     {errores.ci && <span className="error-message">{errores.ci}</span>}
                                 </div>
@@ -228,16 +268,14 @@ const AgregarAdministrador = () => {
                                 <div className="form-group">
                                     <label htmlFor="telefono">Teléfono</label>
                                     <input
-                                        type="number"
+                                        type="text"
                                         id="telefono"
                                         name="telefono"
                                         value={formData.telefono}
                                         onChange={handleInputChange}
                                         className={errores.telefono ? 'input-error' : ''}
                                         placeholder="Ingrese el número"
-                                        maxLength={30}
                                     />
-                                    <div className="character-count">{String(formData.telefono).length}/30</div>
                                     {errores.telefono && <span className="error-message">{errores.telefono}</span>}
                                 </div>
 

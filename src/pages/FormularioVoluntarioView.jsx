@@ -15,7 +15,7 @@ const FormularioVoluntarioView = () => {
 
     const { reporteId, evaluacionFisicaId, evaluacionEmocionalId } = useParams();
 
-    const preguntasExcluidas = [9, 10, 11, 12, 13, 14];
+    const preguntasExcluidas =  ['9', '10', '11', '12', '13', '14'];
 
     const [pagina, setPagina] = useState('fisico');
     const [respuestas, setRespuestas] = useState({
@@ -46,16 +46,17 @@ const FormularioVoluntarioView = () => {
     const [enviarRespuestasMutation] = useMutation(ENVIAR_RESPUESTAS);
 
     const preguntasFiltradasFisico = dataFisico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
+
     const preguntasFiltradasPsicologico = dataPsicologico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
     const preguntasCuerpo = dataFisico?.preguntasPorTest.filter(p => preguntasExcluidas.includes(p.id)) || []
 
     const mapeoCuerpo = {
-        "Brazo Izquierdo": preguntasCuerpo.find(p => p.id === 10),
-        "Brazo Derecho": preguntasCuerpo.find(p => p.id === 9),
-        "Pierna Izquierda": preguntasCuerpo.find(p => p.id === 12),
-        "Pierna Derecha": preguntasCuerpo.find(p => p.id === 11),
-        "Torso": preguntasCuerpo.find(p => p.id === 13),
-        "Cabeza": preguntasCuerpo.find(p => p.id === 14),
+        "Brazo Izquierdo": preguntasCuerpo.find(p => p.id === '10'),
+        "Brazo Derecho": preguntasCuerpo.find(p => p.id === '9'),
+        "Pierna Izquierda": preguntasCuerpo.find(p => p.id === '12'),
+        "Pierna Derecha": preguntasCuerpo.find(p => p.id === '11'),
+        "Torso": preguntasCuerpo.find(p => p.id === '13'),
+        "Cabeza": preguntasCuerpo.find(p => p.id === '14'),
     };
 
     const valorOpciones = {
@@ -108,7 +109,6 @@ const FormularioVoluntarioView = () => {
             erroresTemp.psicologico = true;
         }
 
-        // Validar HumanBody (todas las partes seleccionadas)
         const totalPartes = ["Cabeza", "Pecho", "Brazo Izquierdo", "Brazo Derecho", "Pierna Izquierda", "Pierna Derecha"];
         const partesCompletas = totalPartes.every(p => partesSeleccionadas[p]);
         if (!partesCompletas) {
@@ -153,6 +153,7 @@ const FormularioVoluntarioView = () => {
             respuestaTexto: (valorOpciones[texto] || 0).toString(),
         }));
 
+
         const respuestasCuerpo = Object.entries(partesSeleccionadas).reduce((acc, [parte, estado]) => {
             const pregunta = mapeoCuerpo[parte];
             const valor = valorEstadoCuerpo[estado] || 0;
@@ -166,7 +167,7 @@ const FormularioVoluntarioView = () => {
             }
             return acc;
         }, []);
-
+        //console.log(respuestasCuerpo);
         const input = {
             reporteId: parseInt(reporteId),
             estado: isReady ? "Disponible" : "No disponible",
@@ -181,8 +182,9 @@ const FormularioVoluntarioView = () => {
                 }
             ]
         };
-        console.log("🔍 ENVIANDO INPUT:", JSON.stringify(input, null, 2));
+        //console.log("🔍 ENVIANDO INPUT:", JSON.stringify(input, null, 2));
         try {
+
             await enviarRespuestasMutation({ variables: { input } });
             setShowConfirmModal(false);
             setShowSuccessModal(true);

@@ -42,12 +42,13 @@ const Formulario = () => {
     useEffect(() => scrollToTop(), [pagina]);
     useEffect(() => {
         if (dataFisico && dataPsico) {
-            const excluirIds = [9, 10, 11, 12, 13, 14];
+            const EXCLUIR_IDS = ['9', '10', '11', '12', '13', '14'];
 
-            const filtrar = (arr) => arr.filter(p => !excluirIds.includes(p.id));
+            const filtrarPreguntas = (preguntas) => preguntas.filter(p => !EXCLUIR_IDS.includes(p.id));
 
-            const preguntasFis = filtrar(dataFisico.preguntasPorTest);
-            const preguntasPsi = filtrar(dataPsico.preguntasPorTest);
+            const preguntasFis = filtrarPreguntas(dataFisico.preguntasPorTest);
+
+            const preguntasPsi = filtrarPreguntas(dataPsico.preguntasPorTest);
 
             setPreguntas({ fisico: preguntasFis, psicologico: preguntasPsi });
             setRespuestas({

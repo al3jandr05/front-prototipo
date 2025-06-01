@@ -22,9 +22,6 @@ import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function Loadingircle() {
-    return null;
-}
 
 const Dashboard = () => {
 
@@ -39,6 +36,10 @@ const Dashboard = () => {
     // Ejecutar la consulta GraphQL con useQuery
     const { loading, error, data } = useQuery(OBTENER_DASHBOARD);
     const navigate = useNavigate();
+
+    const [datosUniversidad, setDatosUniversidad] = useState(null);
+    const [datosNecesidades, setDatosNecesidades] = useState(null);
+    const [datosCapacitaciones, setDatosCapacitaciones] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -89,6 +90,49 @@ const Dashboard = () => {
             setReportesRecientes(reportesAsociados);
         }
     }, [data, voluntarios]);
+    useEffect(() => {
+        if (data && data.obtenerDashboard) {
+            // Universidad -> chart "niveles de estrés" reemplazado
+            const universidades = data.obtenerDashboard.universidad || [];
+            setDatosUniversidad({
+                labels: universidades.map(u => u.nombre),
+                datasets: [
+                    {
+                        data: universidades.map(u => u.cantidad),
+                        backgroundColor: ['#A5D6A7', '#388E3C', '#2e6a2f', '#4CAF50', '#81C784'],
+                        borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+                        borderWidth: 2,
+                    }
+                ]
+            });
+
+            const necesidades = data.obtenerDashboard.necesidad || [];
+            setDatosNecesidades({
+                labels: necesidades.map(n => n.nombre),
+                datasets: [
+                    {
+                        data: necesidades.map(n => n.cantidad),
+                        backgroundColor: ['#C8E6C9', '#2e6a2f', '#2D6A4F', '#1B4332'],
+                        borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+                        borderWidth: 2,
+                    }
+                ]
+            });
+
+            const capacitaciones = data.obtenerDashboard.capacitacion || [];
+            setDatosCapacitaciones({
+                labels: capacitaciones.map(c => c.nombre),
+                datasets: [
+                    {
+                        data: capacitaciones.map(c => c.cantidad),
+                        backgroundColor: ['#C8E6C9', '#388E3C', '#2D6A4F', '#1B4332'],
+                        borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+                        borderWidth: 2,
+                    }
+                ]
+            });
+        }
+    }, [data]);
 
     if (loading) return(
         <div className="dashboard-container">
@@ -171,16 +215,16 @@ const Dashboard = () => {
 
                     <section className="charts-container">
                         <div className="chart-card">
-                            <h4 className="chart-title">Niveles de Estrés</h4>
-                            <Pie data={datosEstres} options={{plugins: {legend: {position: 'bottom'}}}}/>
+                            <h4 className="chart-title">Universidades</h4>
+                            {datosUniversidad && <Pie data={datosUniversidad} options={{ plugins: { legend: { position: 'bottom' } } }} />}
                         </div>
                         <div className="chart-card">
                             <h4 className="chart-title">Necesidades</h4>
-                            <Pie data={datosNecesidades} options={{plugins: {legend: {position: 'bottom'}}}}/>
+                            {datosNecesidades && <Pie data={datosNecesidades} options={{ plugins: { legend: { position: 'bottom' } } }} />}
                         </div>
                         <div className="chart-card">
                             <h4 className="chart-title">Capacitaciones</h4>
-                            <Pie data={datosCapacitaciones} options={{plugins: {legend: {position: 'bottom'}}}}/>
+                            {datosCapacitaciones && <Pie data={datosCapacitaciones} options={{ plugins: { legend: { position: 'bottom' } } }} />}
                         </div>
                     </section>
                 </main>

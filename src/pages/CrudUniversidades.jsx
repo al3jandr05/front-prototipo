@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { universidades as universidadesData } from '../data/universidades';
+import { useQuery, useMutation } from '@apollo/client';
+import { OBTENER_UNIVERSIDADES } from '../api/graphql/SQL/querys/universidades';
+import {
+    ELIMINAR_UNIVERSIDAD,
+    AGREGAR_UNIVERSIDAD,
+    ACTUALIZAR_UNIVERSIDAD
+} from '../api/graphql/SQL/mutations/mutUni';
+
 import '../styles/universidades.css';
 
 const CrudUniversidades = () => {
-    const [universidades, setUniversidades] = useState(universidadesData);
+    const { loading, error, data, refetch } = useQuery(OBTENER_UNIVERSIDADES);
+    const [eliminarUniversidad] = useMutation(ELIMINAR_UNIVERSIDAD);
+    const [agregarUniversidad] = useMutation(AGREGAR_UNIVERSIDAD);
+    const [actualizarUniversidad] = useMutation(ACTUALIZAR_UNIVERSIDAD);
+    const [universidades, setUniversidades] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState('agregar');
     const [nombreActual, setNombreActual] = useState('');
@@ -19,6 +31,19 @@ const CrudUniversidades = () => {
     const [errorDireccion, setErrorDireccion] = useState(false);
     const [errorTelefono, setErrorTelefono] = useState(false);
 
+    useEffect(() => {
+        if (data && data.obtnenerUniversidades) {
+            // Nota: teléfono no viene en la query, dejamos '' o null para no romper UI
+            const universidadesConTelefono = data.obtnenerUniversidades.map(u => ({
+                ...u,
+                telefono: u.telefono || '' // o null si no existe teléfono
+            }));
+            setUniversidades(universidadesConTelefono);
+        }
+    }, [data]);
+
+    if (loading) return <p>Cargando universidades...</p>;
+    if (error) return <p>Error cargando universidades: {error.message}</p>;
     const abrirAgregar = () => {
         setModalMode('agregar');
         setNombreActual('');

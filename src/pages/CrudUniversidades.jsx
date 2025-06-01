@@ -33,7 +33,6 @@ const CrudUniversidades = () => {
 
     useEffect(() => {
         if (data && data.obtnenerUniversidades) {
-            // Nota: teléfono no viene en la query, dejamos '' o null para no romper UI
             const universidadesConTelefono = data.obtnenerUniversidades.map(u => ({
                 ...u,
                 telefono: u.telefono || '' // o null si no existe teléfono
@@ -67,37 +66,52 @@ const CrudUniversidades = () => {
         setShowModal(true);
     };
 
-    const guardarUniversidad = () => {
+    const guardarUniversidad = async () => {
         if (!nombreActual.trim() || !direccionActual.trim() || !telefonoActual.trim()) return;
 
-        if (modalMode === 'agregar') {
-            const nuevaUniversidad = {
-                id: universidades.length + 1,
-                nombre: nombreActual,
-                direccion: direccionActual,
-                telefono: telefonoActual
-            };
-            setUniversidades([...universidades, nuevaUniversidad]);
-        } else {
-            setUniversidades(universidades.map(u => 
-                u.id === editId 
-                    ? { ...u, nombre: nombreActual, direccion: direccionActual, telefono: telefonoActual }
-                    : u
-            ));
+        try {
+            if (modalMode === 'agregar') {
+                await agregarUniversidad({
+                    variables: {
+                        input: {
+                            nombre: nombreActual,
+                            direccion: direccionActual,
+                            telefono: telefonoActual
+                        }
+                    }
+                });
+            } else {
+                await actualizarUniversidad({
+                    variables: {
+                        input: {
+                            id: editId,
+                            nombre: nombreActual,
+                            direccion: direccionActual,
+                            telefono: telefonoActual
+                        }
+                    }
+                });
+            }
+            setShowModal(false);
+            await refetch();
+        } catch (e) {
+            console.error("Error guardando universidad:", e);
         }
-        
-        setShowModal(false);
-        setNombreActual('');
-        setDireccionActual('');
-        setTelefonoActual('');
-        setEditId(null);
     };
 
-    const confirmarEliminarUniversidad = () => {
-        setUniversidades(universidades.filter(u => u.id !== deleteId));
-        setShowDeleteModal(false);
-        setDeleteId(null);
+    const confirmarEliminarUniversidad = async () => {
+        try {
+            await eliminarUniversidad({
+                variables: { id: deleteId }
+            });
+            setShowDeleteModal(false);
+            setDeleteId(null);
+            await refetch();
+        } catch (e) {
+            console.error("Error eliminando universidad:", e);
+        }
     };
+
 
     return (
         <div className="universidades-container">
@@ -223,7 +237,6 @@ const CrudUniversidades = () => {
                     </Modal.Footer>
                 </Modal>
 
-                {/* Modal Eliminar */}
                 <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Confirmar Eliminación</Modal.Title>

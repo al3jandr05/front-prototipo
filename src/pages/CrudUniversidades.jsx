@@ -10,6 +10,7 @@ import {
     AGREGAR_UNIVERSIDAD,
     ACTUALIZAR_UNIVERSIDAD
 } from '../api/graphql/SQL/mutations/mutUni';
+import LoadingCircle from '../components/LoadingCircle';
 
 import '../styles/universidades.css';
 
@@ -41,8 +42,24 @@ const CrudUniversidades = () => {
         }
     }, [data]);
 
-    if (loading) return <p>Cargando universidades...</p>;
-    if (error) return <p>Error cargando universidades: {error.message}</p>;
+    if (loading) return (
+        <div className="universidades-container">
+            <Sidebar />
+            <main className="universidades-content">
+                <LoadingCircle />
+            </main>
+        </div>
+    );
+    
+    if (error) return (
+        <div className="universidades-container">
+            <Sidebar />
+            <main className="universidades-content">
+                <p className="error-message">Error cargando universidades: {error.message}</p>
+            </main>
+        </div>
+    );
+
     const abrirAgregar = () => {
         setModalMode('agregar');
         setNombreActual('');
@@ -202,13 +219,18 @@ const CrudUniversidades = () => {
                                 placeholder="Ingrese el teléfono"
                                 value={telefonoActual}
                                 onChange={(e) => {
-                                    setTelefonoActual(e.target.value);
-                                    setErrorTelefono(e.target.value.length > 20);
+                                    const value = e.target.value;
+                                    // Solo permitir números y máximo 8 dígitos
+                                    if ((/^\d*$/.test(value) && value.length <= 8) || value === '') {
+                                        setTelefonoActual(value);
+                                        setErrorTelefono(false);
+                                    }
                                 }}
+                                maxLength={8}
                             />
                             {errorTelefono && 
                                 <div className="error-texto">
-                                    Has superado el límite de 20 caracteres.
+                                    El teléfono debe tener máximo 8 dígitos y solo números.
                                 </div>
                             }
                         </Form.Group>

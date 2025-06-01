@@ -630,7 +630,8 @@
 .formulario-section {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .mensaje-formulario {
@@ -691,4 +692,27 @@
 
 .btn-volver svg {
     font-size: 1.1rem;
+}
+
+.btn-descargar-pdf {
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: var(--color-verde-principal);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-descargar-pdf:hover {
+    background-color: var(--color-verde-hover);
+    color: white;
+    text-decoration: none;
 }

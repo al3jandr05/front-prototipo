@@ -37,6 +37,8 @@ import ModalReporte from "../components/ModalReporte";
 import CardReporte from "../components/CardReporte";
 import LoadingCircle from "../components/LoadingCircle";
 import { Button, Modal } from "react-bootstrap";
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import HistorialClinicoPDF from '../components/HistorialClinicoPDF';
 
 const InfoVoluntarios = () => {
     const { id } = useParams();
@@ -183,8 +185,8 @@ const InfoVoluntarios = () => {
 
         return [
             { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
-            //{ icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
-            {  texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
+            { icono: <MdReport />, texto: 'Reporte #' + reporteMasReciente.id },
+            { texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
         ];
     })() : [];
 
@@ -194,7 +196,7 @@ const InfoVoluntarios = () => {
 
         return [
             { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
-            //  { icono: <FaCalendarAlt />, texto: 'Próxima evaluación: ' + (fechaProxima ? fechaProxima.toLocaleDateString() : 'Fecha no válida') },
+            { icono: <MdReport />, texto: 'Reporte #' + reporteMasReciente.id },
             { texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
         ];
     })() : [];
@@ -221,7 +223,6 @@ const InfoVoluntarios = () => {
 
 
         <div className="infovoluntarios-container">
-            <Sidebar />
             {showModalCap && (
                 <ModalCapacitaciones
                     reporteId={reporteMasReciente?.id}
@@ -257,6 +258,17 @@ const InfoVoluntarios = () => {
                                 <button className="btn-formulario-enviar" onClick={handleEnviarFormulario}>
                                     Enviar Formulario
                                 </button>
+                                {datosReportes.length > 0 && (
+                                    <PDFDownloadLink
+                                        document={<HistorialClinicoPDF voluntario={voluntario} datosReportes={datosReportes} />}
+                                        fileName={`historial-clinico-${voluntario?.nombre}-${voluntario?.apellido}.pdf`}
+                                        className="btn-descargar-pdf"
+                                    >
+                                        {({ blob, url, loading, error }) =>
+                                            loading ? 'Generando PDF...' : 'Descargar Historial Clínico'
+                                        }
+                                    </PDFDownloadLink>
+                                )}
                                 {mensajeFormulario && (
                                     <span className={`mensaje-formulario ${tipoMensaje}`}>
                                         {mensajeFormulario}

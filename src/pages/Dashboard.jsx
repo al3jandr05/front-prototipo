@@ -9,7 +9,6 @@ import {
     Tooltip,
     Legend
 } from 'chart.js';
-import {datosEstres, datosNecesidades, datosCapacitaciones} from '../data/chartData';
 
 import { useQuery } from '@apollo/client';
 import { OBTENER_DASHBOARD } from '../api/graphql/SQL/querys/dashboard';
@@ -214,17 +213,17 @@ const Dashboard = () => {
                     </section>
 
                     <section className="charts-container">
-                        <div className="chart-card">
+                        <div className="chart-card" style={{ height: 'auto' }}>
                             <h4 className="chart-title">Universidades</h4>
-                            {datosUniversidad && <Pie data={datosUniversidad} options={{ plugins: { legend: { position: 'bottom' } } }} />}
+                            {datosUniversidad && <Pie data={datosUniversidad} options={{ plugins: { legend: { position: 'bottom', align: 'start', labels: { boxWidth: 15, padding: 15, font: { size: 12 } } } } }} />}
                         </div>
-                        <div className="chart-card">
+                        <div className="chart-card" style={{ height: 'auto' }}>
                             <h4 className="chart-title">Necesidades</h4>
-                            {datosNecesidades && <Pie data={datosNecesidades} options={{ plugins: { legend: { position: 'bottom' } } }} />}
+                            {datosNecesidades && <Pie data={datosNecesidades} options={{ plugins: { legend: { position: 'bottom', align: 'start', labels: { boxWidth: 15, padding: 15, font: { size: 12 } } } } }} />}
                         </div>
-                        <div className="chart-card">
+                        <div className="chart-card" style={{ height: '100%' }}>
                             <h4 className="chart-title">Capacitaciones</h4>
-                            {datosCapacitaciones && <Pie data={datosCapacitaciones} options={{ plugins: { legend: { position: 'bottom' } } }} />}
+                            {datosCapacitaciones && <Pie data={datosCapacitaciones} options={{ plugins: { legend: { position: 'bottom', align: 'start', labels: { boxWidth: 15, padding: 15, font: { size: 12 } } } } }} />}
                         </div>
                     </section>
                 </main>

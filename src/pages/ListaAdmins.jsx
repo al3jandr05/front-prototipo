@@ -4,7 +4,6 @@ import Sidebar from '../components/Sidebar';
 import CardAdministrador from '../components/CardAdministrador';
 import { FaTimes } from 'react-icons/fa';
 import '../styles/listaAdmin.css';
-import adminsData from '../data/admins';
 
 import { useQuery } from '@apollo/client';
 import { OBTENER_USUARIOS } from '../api/graphql/SQL/querys/usuarios';
@@ -95,15 +94,6 @@ const ListaAdmins = () => {
                                     value={ciFiltro}
                                     onChange={(e) => setCiFiltro(e.target.value)}
                                 />
-                            </div>
-                            <div>
-                                <label>Rol</label>
-                                <select value={rolFiltro} onChange={(e) => setRolFiltro(e.target.value)}>
-                                    <option value="">Todos</option>
-                                    <option value="Super Admin">Super Admin</option>
-                                    <option value="Admin">Admin</option>
-                                    <option value="Usuario">Usuario</option>
-                                </select>
                             </div>
                             <div>
                                 <label>Estado</label>

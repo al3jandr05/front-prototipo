@@ -60,10 +60,7 @@
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-left: 6px solid var(--color-verde-principal);
-    border-top:6px solid var(--color-verde-principal) ;
-    border-bottom:6px solid var(--color-verde-principal) ;
-    border-right: 6px solid var(--color-verde-principal) ;
+    border: 6px solid var(--color-verde-principal);
 }
 
 

@@ -47,7 +47,7 @@ const CardAdministrador = ({ administrador, onToggleEstado }) => {
           </span>
                 </div>
                 <div className="detalles-admin">
-                    <p className="correo-admin">{administrador.email}</p>
+                    <p className="correo-admin">{administrador.email} &nbsp; | &nbsp; CI: {administrador.ci}</p>
                 </div>
             </div>
 

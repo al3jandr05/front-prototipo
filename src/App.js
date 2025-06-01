@@ -16,17 +16,19 @@ import ListaAdmins from "./pages/ListaAdmins";
 import AgregarAdministrador from "./pages/AgregarAdministrador";
 import CrudUniversidades from "./pages/CrudUniversidades";
 import Layout from './components/Layout';
+import PageTitle from './components/PageTitle';
 
 function App() {
     return (
         <Router>
+            <PageTitle />
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/Dashboard" element={<Layout><Dashboard /></Layout>} />
                 <Route path="/ListaVoluntarios" element={<Layout><ListaVoluntarios /></Layout>} />
                 <Route path="/Voluntario/:id" element={<Layout><InfoVoluntarios /></Layout>} />
                 <Route path="/Formulario" element={<Layout><Formulario /></Layout>} />
-                <Route path="/FormularioVoluntario/:reporteId/:evaluacionFisicaId/:evaluacionEmocionalId" element={<Layout><FormularioVoluntarioView /></Layout>} />
+                <Route path="/FormularioVoluntario/:reporteId/:evaluacionFisicaId/:evaluacionEmocionalId" element={<FormularioVoluntarioView />} />
                 <Route path="/Capacitaciones" element={<Layout><CrudCapacitaciones /></Layout>} />
                 <Route path="/AgregarAdministrador" element={<Layout><AgregarAdministrador /></Layout>} />
                 <Route path="/Necesidades" element={<Layout><CrudNecesidades /></Layout>} />

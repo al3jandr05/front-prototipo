@@ -230,7 +230,6 @@ const Formulario = () => {
 
     return (
         <div className="form-container" >
-            <Sidebar />
                 <div className="form-content" ref={topRef}>
                 <div className="form-header">
                     <h1 className="form-titulo">Evaluación Post-Incendio</h1>

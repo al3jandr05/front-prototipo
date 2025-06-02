@@ -9,7 +9,10 @@ import { GrCircleInformation } from "react-icons/gr";
 import { FaCheck, FaClipboardCheck } from "react-icons/fa";
 import { useQuery, useMutation } from '@apollo/client';
 import { PREGUNTAS_POR_TEST } from '../api/graphql/SQL/querys/preguntas'
+import { OBTENER_ESTADO_EVALUACION } from '../api/graphql/SQL/querys/validarEvaluacion'
 import { ENVIAR_RESPUESTAS } from '../api/graphql/SQL/mutations/respuestas'
+import Sidebar from "../components/Sidebar";
+import LoadingCircle from "../components/LoadingCircle";
 
 const SuccessView = () => {
     return (
@@ -30,15 +33,19 @@ const SuccessView = () => {
 const FormularioVoluntarioView = () => {
     const { reporteId, evaluacionFisicaId, evaluacionEmocionalId } = useParams();
     const [isSubmitted, setIsSubmitted] = useState(false);
-
+    const { data: estadoData, loading: loadingEstado, error: errorEstado } = useQuery(OBTENER_ESTADO_EVALUACION, {
+        variables: { id: parseInt(reporteId) },
+        fetchPolicy: 'network-only', // para que no cachee y siempre revise estado actualizado
+    });
     useEffect(() => {
-        // Verificar si ya se completó la evaluación para este reporte
-        const submissionKey = `formulario_submitted_${reporteId}`;
-        const hasSubmitted = localStorage.getItem(submissionKey);
-        if (hasSubmitted) {
-            setIsSubmitted(true);
+        if (!loadingEstado && !errorEstado && estadoData) {
+            if (estadoData.estadoEvaluacion === true) {
+                setIsSubmitted(false);
+            } else {
+                setIsSubmitted(true);
+            }
         }
-    }, [reporteId]);
+    }, [loadingEstado, errorEstado, estadoData]);
 
     const preguntasExcluidas = ['9', '10', '11', '12', '13', '14'];
 
@@ -202,11 +209,10 @@ const FormularioVoluntarioView = () => {
         };
 
         try {
-            await enviarRespuestasMutation({ variables: { input } });
             setShowConfirmModal(false);
-            // Guardar el estado de envío en localStorage
-            localStorage.setItem(`formulario_submitted_${reporteId}`, 'true');
             setIsSubmitted(true);
+            await enviarRespuestasMutation({ variables: { input } });
+
             scrollToTop();
         } catch (err) {
             console.error("❌ Error al enviar respuestas:", err);
@@ -252,6 +258,15 @@ const FormularioVoluntarioView = () => {
         );
     };
 
+    if (loadingEstado) return (
+        <div className="formulariovol-container">
+            <main className="infovoluntarios-content">
+                <LoadingCircle />
+            </main>
+        </div>
+
+    );
+    if (errorEstado) return <p>Error cargando estado: {errorEstado.message}</p>;
     if (isSubmitted) {
         return <SuccessView />;
     }

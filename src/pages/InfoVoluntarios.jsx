@@ -106,7 +106,9 @@ const InfoVoluntarios = () => {
     const { loading, error, data } = useQuery(OBTENER_REPORTES_VOLUNTARIOS, {
         variables: { historialId },
     });
-
+    // const loading = false;
+    // const error = null;
+    // const data = { reportesVoluntarios: [] };
 
     const nombreEmail = voluntario?.email || ' ';
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
@@ -117,6 +119,8 @@ const InfoVoluntarios = () => {
         return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
     };
 
+
+
     const datosReportes = data?.reportesVoluntarios
         ? data.reportesVoluntarios
             .filter(reporte => reporte.observaciones && reporte.observaciones.trim() !== '') // Filtra los reportes que tienen observaciones
@@ -126,6 +130,8 @@ const InfoVoluntarios = () => {
             }))
         : [];
 
+    const cantidadReportes = datosReportes?.length > 0 ;
+    const vacio = []
 
     const tieneCapacitaciones = datosReportes && datosReportes?.length > 0;
 
@@ -258,7 +264,7 @@ const InfoVoluntarios = () => {
                                 <button className="btn-formulario-enviar" onClick={handleEnviarFormulario}>
                                     Enviar Formulario
                                 </button>
-                                {datosReportes.length > 0 && (
+                                {cantidadReportes && (
                                     <PDFDownloadLink
                                         document={<HistorialClinicoPDF voluntario={voluntario} datosReportes={datosReportes} />}
                                         fileName={`historial-clinico-${voluntario?.nombre}-${voluntario?.apellido}.pdf`}

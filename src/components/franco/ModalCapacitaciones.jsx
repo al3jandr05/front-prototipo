@@ -32,6 +32,7 @@ const ModalCapacitaciones = ({ reporteId, onClose, capacitacionesYaAsignadas = [
                 }
             });
             onClose();
+            window.location.reload();
         } catch (error) {
             console.error("❌ Error al agregar capacitaciones:", error);
         }

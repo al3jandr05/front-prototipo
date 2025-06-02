@@ -31,6 +31,7 @@ const ModalNecesidades = ({ reporteId, onClose, necesidadesYaAsignadas = [] }) =
                 }
             });
             onClose();
+            window.location.reload();
         } catch (error) {
             console.error("❌ Error al agregar necesidades:", error);
         }

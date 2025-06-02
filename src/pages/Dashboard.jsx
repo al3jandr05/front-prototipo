@@ -214,15 +214,68 @@ const Dashboard = () => {
                     <section className="charts-container">
                         <div className="chart-card" style={{ height: 'auto' }}>
                             <h4 className="chart-title">Universidades</h4>
-                            {datosUniversidad && <Pie data={datosUniversidad} options={{ plugins: { legend: { position: 'bottom', align: 'start', labels: { boxWidth: 15, padding: 15, font: { size: 12 } } } } }} />}
+                            {datosUniversidad && (
+                                <Pie
+                                    data={datosUniversidad}
+                                    options={{
+                                        plugins: {
+                                            legend: { display: false },
+                                            tooltip: {
+                                                enabled: true,
+                                                bodyFont: { size: 16, weight: 'bold' },
+                                                titleFont: { size: 18, weight: 'bold' },
+                                                padding: 10,
+                                            },
+                                        },
+                                        maintainAspectRatio: false,
+                                        responsive: true,
+                                    }}
+                                />
+                            )}
                         </div>
+
                         <div className="chart-card" style={{ height: 'auto' }}>
                             <h4 className="chart-title">Necesidades</h4>
-                            {datosNecesidades && <Pie data={datosNecesidades} options={{ plugins: { legend: { position: 'bottom', align: 'start', labels: { boxWidth: 15, padding: 15, font: { size: 12 } } } } }} />}
+                            {datosNecesidades && (
+                                <Pie
+                                    data={datosNecesidades}
+                                    options={{
+                                        plugins: {
+                                            legend: { display: false },
+                                            tooltip: {
+                                                enabled: true,
+                                                bodyFont: { size: 16, weight: 'bold' },
+                                                titleFont: { size: 18, weight: 'bold' },
+                                                padding: 10,
+                                            },
+                                        },
+                                        maintainAspectRatio: false,
+                                        responsive: true,
+                                    }}
+                                />
+                            )}
                         </div>
+
                         <div className="chart-card" style={{ height: '100%' }}>
                             <h4 className="chart-title">Capacitaciones</h4>
-                            {datosCapacitaciones && <Pie data={datosCapacitaciones} options={{ plugins: { legend: { position: 'bottom', align: 'start', labels: { boxWidth: 15, padding: 15, font: { size: 12 } } } } }} />}
+                            {datosCapacitaciones && (
+                                <Pie
+                                    data={datosCapacitaciones}
+                                    options={{
+                                        plugins: {
+                                            legend: { display: false },
+                                            tooltip: {
+                                                enabled: true,
+                                                bodyFont: { size: 16, weight: 'bold' },
+                                                titleFont: { size: 18, weight: 'bold' },
+                                                padding: 10,
+                                            },
+                                        },
+                                        maintainAspectRatio: false,
+                                        responsive: true,
+                                    }}
+                                />
+                            )}
                         </div>
                     </section>
                 </main>

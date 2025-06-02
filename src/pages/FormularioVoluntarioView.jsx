@@ -6,16 +6,41 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 import HumanBody from '../components/HumanBody';
 import { GrCircleInformation } from "react-icons/gr";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaClipboardCheck } from "react-icons/fa";
 import { useQuery, useMutation } from '@apollo/client';
 import { PREGUNTAS_POR_TEST } from '../api/graphql/SQL/querys/preguntas'
 import { ENVIAR_RESPUESTAS } from '../api/graphql/SQL/mutations/respuestas'
 
+const SuccessView = () => {
+    return (
+        <div className="formulario-success-view">
+            <div className="success-content">
+                <FaClipboardCheck className="success-icon" />
+                <h2>¡Evaluación Completada!</h2>
+                <p>Has completado exitosamente tu evaluación post-incendio.</p>
+                <div className="success-details">
+                    <p>Tu evaluación ha sido registrada y será revisada por el equipo correspondiente.</p>
+                    <p>No es necesario realizar otra evaluación para este incidente.</p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const FormularioVoluntarioView = () => {
-
     const { reporteId, evaluacionFisicaId, evaluacionEmocionalId } = useParams();
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const preguntasExcluidas =  ['9', '10', '11', '12', '13', '14'];
+    useEffect(() => {
+        // Verificar si ya se completó la evaluación para este reporte
+        const submissionKey = `formulario_submitted_${reporteId}`;
+        const hasSubmitted = localStorage.getItem(submissionKey);
+        if (hasSubmitted) {
+            setIsSubmitted(true);
+        }
+    }, [reporteId]);
+
+    const preguntasExcluidas = ['9', '10', '11', '12', '13', '14'];
 
     const [pagina, setPagina] = useState('fisico');
     const [respuestas, setRespuestas] = useState({
@@ -25,14 +50,12 @@ const FormularioVoluntarioView = () => {
     const [partesSeleccionadas, setPartesSeleccionadas] = useState({});
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errores, setErrores] = useState({});
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
-    const [errorTexto, setErrorTexto] = useState("");
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [hideInfoIcon, setHideInfoIcon] = useState(false);
-    const topRef = useRef(null);
-
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [isReady, setIsReady] = useState(null); // Sí o No (true / false)
+    const [isReady, setIsReady] = useState(null);
+    const [errorTexto, setErrorTexto] = useState("");
+    const topRef = useRef(null);
 
     const { loading: loadingFisico, error: errorFisico, data: dataFisico } = useQuery(PREGUNTAS_POR_TEST, {
         variables: { testId: 3 },
@@ -42,13 +65,11 @@ const FormularioVoluntarioView = () => {
         variables: { testId: 4 },
     });
 
-
     const [enviarRespuestasMutation] = useMutation(ENVIAR_RESPUESTAS);
 
     const preguntasFiltradasFisico = dataFisico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
-
     const preguntasFiltradasPsicologico = dataPsicologico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
-    const preguntasCuerpo = dataFisico?.preguntasPorTest.filter(p => preguntasExcluidas.includes(p.id)) || []
+    const preguntasCuerpo = dataFisico?.preguntasPorTest.filter(p => preguntasExcluidas.includes(p.id)) || [];
 
     const mapeoCuerpo = {
         "Brazo Izquierdo": preguntasCuerpo.find(p => p.id === '9'),
@@ -99,19 +120,16 @@ const FormularioVoluntarioView = () => {
     const validarFormulario = () => {
         const erroresTemp = {};
 
-        // Validar preguntas físicas
         if (respuestas.fisico.includes("")) {
             erroresTemp.fisico = true;
         }
 
-        // Validar preguntas psicológicas
         if (respuestas.psicologico.includes("")) {
             erroresTemp.psicologico = true;
         }
 
         const totalPartes = ["Cabeza", "Torso", "Brazo Izquierdo", "Brazo Derecho", "Pierna Izquierda", "Pierna Derecha"];
         const partesCompletas = totalPartes.every(p => partesSeleccionadas[p]);
-        console.log(partesCompletas);
         if (!partesCompletas) {
             erroresTemp.cuerpo = true;
         }
@@ -139,7 +157,7 @@ const FormularioVoluntarioView = () => {
             return;
         }
         setShowConfirmModal(true);
-    }
+    };
 
     const confirmarEnvio = async () => {
         const respuestasFisico = respuestas.fisico.map((texto, idx) => ({
@@ -154,7 +172,6 @@ const FormularioVoluntarioView = () => {
             respuestaTexto: (valorOpciones[texto] || 0).toString(),
         }));
 
-
         const respuestasCuerpo = Object.entries(partesSeleccionadas).reduce((acc, [parte, estado]) => {
             const pregunta = mapeoCuerpo[parte];
             const valor = valorEstadoCuerpo[estado] || 0;
@@ -168,7 +185,7 @@ const FormularioVoluntarioView = () => {
             }
             return acc;
         }, []);
-        console.log(respuestasCuerpo);
+
         const input = {
             reporteId: parseInt(reporteId),
             estado: isReady ? "Disponible" : "No disponible",
@@ -183,18 +200,21 @@ const FormularioVoluntarioView = () => {
                 }
             ]
         };
-        //console.log("🔍 ENVIANDO INPUT:", JSON.stringify(input, null, 2));
-        try {
 
+        try {
             await enviarRespuestasMutation({ variables: { input } });
             setShowConfirmModal(false);
-            setShowSuccessModal(true);
+            // Guardar el estado de envío en localStorage
+            localStorage.setItem(`formulario_submitted_${reporteId}`, 'true');
+            setIsSubmitted(true);
+            scrollToTop();
         } catch (err) {
             console.error("❌ Error al enviar respuestas:", err);
             setErrorTexto("Hubo un error al enviar las respuestas.");
             setShowErrorModal(true);
         }
     };
+
     const renderPreguntas = (seccion, preguntas) => {
         const isInvalid = errores[seccion];
 
@@ -218,6 +238,7 @@ const FormularioVoluntarioView = () => {
                                                 value={opcion}
                                                 checked={respuesta === opcion}
                                                 onChange={() => handleChange(seccion, idx, opcion)}
+                                                disabled={isSubmitted}
                                             />
                                             {opcion}
                                         </label>
@@ -231,7 +252,9 @@ const FormularioVoluntarioView = () => {
         );
     };
 
-
+    if (isSubmitted) {
+        return <SuccessView />;
+    }
 
     return (
         <div className="formulariovol-container">
@@ -244,12 +267,10 @@ const FormularioVoluntarioView = () => {
                         <div className="info-text">Ver antes de iniciar</div>
                     )}
                 </div>
+
                 <div className="formulario-header text-center">
                     <h1 className="titulo-formulario">Evaluación Post-Incendio</h1>
                 </div>
-
-
-
 
                 <form>
                     {pagina === 'fisico' && (
@@ -260,6 +281,7 @@ const FormularioVoluntarioView = () => {
                                 <HumanBody
                                     onSeleccionCambio={setPartesSeleccionadas}
                                     partesSeleccionadas={partesSeleccionadas}
+                                    disabled={isSubmitted}
                                 />
                             </div>
                         </>
@@ -267,13 +289,15 @@ const FormularioVoluntarioView = () => {
 
                     {pagina === 'psicologico' && renderPreguntas('psicologico', preguntasFiltradasPsicologico)}
 
-                    {pagina === 'fisico' ? (
-                        <button type="button" className="btn-formulario-nav" onClick={() => setPagina('psicologico')}>Siguiente</button>
-                    ) : (
-                        <div className="botones-navegacion">
-                            <button type="button" className="btn-formulario-nav" onClick={() => setPagina('fisico')}>Anterior</button>
-                            <button type="button" className="btn-enviar" onClick={handleSubmit}>Enviar</button>
-                        </div>
+                    {!isSubmitted && (
+                        pagina === 'fisico' ? (
+                            <button type="button" className="btn-formulario-nav" onClick={() => setPagina('psicologico')}>Siguiente</button>
+                        ) : (
+                            <div className="botones-navegacion">
+                                <button type="button" className="btn-formulario-nav" onClick={() => setPagina('fisico')}>Anterior</button>
+                                <button type="button" className="btn-enviar" onClick={handleSubmit}>Enviar</button>
+                            </div>
+                        )
                     )}
                 </form>
             </div>
@@ -285,19 +309,6 @@ const FormularioVoluntarioView = () => {
                 <Modal.Body>{errorTexto}</Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => setShowErrorModal(false)}>Aceptar</Button>
-                </Modal.Footer>
-            </Modal>
-
-            <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>¡Enviado con éxito!</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <FaCheck className="icono-enviado"/>
-                    <p>Su respuesta ha sido enviada exitosamente.</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={() => setShowSuccessModal(false)}>Cerrar</Button>
                 </Modal.Footer>
             </Modal>
 
@@ -314,6 +325,7 @@ const FormularioVoluntarioView = () => {
                         <li>Las respuestas se usarán para asignarte necesidades o capacitaciones específicas.</li>
                         <li>No hay respuestas correctas o incorrectas.</li>
                         <li>La información será tratada de forma confidencial.</li>
+                        <li>Solo podrás completar esta evaluación una vez.</li>
                     </ul>
                 </Modal.Body>
                 <Modal.Footer>
@@ -323,7 +335,6 @@ const FormularioVoluntarioView = () => {
                     }}>
                         Entendido
                     </Button>
-
                 </Modal.Footer>
             </Modal>
 
@@ -355,9 +366,6 @@ const FormularioVoluntarioView = () => {
                     </div>
                 </Modal.Body>
             </Modal>
-
-
-
         </div>
     );
 };

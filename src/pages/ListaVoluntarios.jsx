@@ -5,10 +5,20 @@ import { FaTimes } from 'react-icons/fa';
 import '../styles/listaVoluntarios.css';
 
 import { obtenerVoluntarios } from '../api/rest/voluntarioService';
+import {useNavigate} from "react-router-dom";
 
 const ListaVoluntarios = () => {
     const [voluntarios, setVoluntarios] = useState([]);
 
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const [nombre, setNombre] = useState('');
     const [ciFiltro, setCiFiltro] = useState('');
     const [tipoSangreFiltro, setTipoSangreFiltro] = useState('');

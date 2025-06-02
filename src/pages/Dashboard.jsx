@@ -26,13 +26,11 @@ const Dashboard = () => {
 
     const { state } = useLocation();
     const userId = state?.userId;
-    console.log(userId);
     const [showModal, setShowModal] = useState(false);
 
     const [voluntarios, setVoluntarios] = useState([]);
     const [reportesRecientes, setReportesRecientes] = useState([]);
 
-    // Ejecutar la consulta GraphQL con useQuery
     const { loading, error, data } = useQuery(OBTENER_DASHBOARD);
     const navigate = useNavigate();
 
@@ -49,6 +47,7 @@ const Dashboard = () => {
             navigate('/'); // Redirigir al login
         }
     }, [userId]);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token || token.trim() === '') {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Sidebar from '../components/Sidebar';
 import '../styles/capacitaciones.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,8 +15,10 @@ import {
 } from '../api/graphql/SQL/querys/capacitaciones';
 import {PiFireSimpleFill} from "react-icons/pi";
 import LoadingCircle from "../components/LoadingCircle";
+import { useNavigate } from 'react-router-dom';
 
 const CrudCapacitaciones = () => {
+    const navigate = useNavigate();
     const {data, loading, error, refetch} = useQuery(OBTENER_CAPACITACIONES);
     const [crearCapacitacion] = useMutation(CREAR_CAPACITACION);
     const [editarCapacitacion] = useMutation(EDITAR_CAPACITACION);
@@ -33,7 +35,14 @@ const CrudCapacitaciones = () => {
     const [detalleCapacitacion, setDetalleCapacitacion] = useState(null);
     const [errorNombre, setErrorNombre] = useState(false);
     const [errorDescripcion, setErrorDescripcion] = useState(false);
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
 
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const abrirAgregar = () => {
         setModalMode('agregar');
         setNombreActual('');

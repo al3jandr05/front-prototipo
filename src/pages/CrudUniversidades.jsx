@@ -13,8 +13,19 @@ import {
 import LoadingCircle from '../components/LoadingCircle';
 
 import '../styles/universidades.css';
+import {useNavigate} from "react-router-dom";
 
 const CrudUniversidades = () => {
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const { loading, error, data, refetch } = useQuery(OBTENER_UNIVERSIDADES);
     const [eliminarUniversidad] = useMutation(ELIMINAR_UNIVERSIDAD);
     const [agregarUniversidad] = useMutation(AGREGAR_UNIVERSIDAD);

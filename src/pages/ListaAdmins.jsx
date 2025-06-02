@@ -9,7 +9,16 @@ import { useQuery } from '@apollo/client';
 import { OBTENER_USUARIOS } from '../api/graphql/SQL/querys/usuarios';
 
 const ListaAdmins = () => {
+
     const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const [admins, setAdmins] = useState([]);
 
     const [nombre, setNombre] = useState('');

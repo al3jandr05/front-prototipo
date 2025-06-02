@@ -17,7 +17,16 @@ import {
 
 const ResultadoEncuesta = () => {
     const { id } = useParams();
+
     const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const encuestaId = parseInt(id);
     const [showModalUniversidad, setShowModalUniversidad] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);

@@ -8,8 +8,18 @@ import {
     FaTint, FaCalendarAlt, FaVenusMars
 } from 'react-icons/fa';
 import voluntariosBase from '../data/voluntarios';
+import {useNavigate} from "react-router-dom";
 
 const CrudVoluntarios = () => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const [voluntarios, setVoluntarios] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [showDetalleModal, setShowDetalleModal] = useState(false);

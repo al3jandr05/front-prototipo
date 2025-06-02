@@ -14,6 +14,7 @@ import { PREGUNTAS_POR_TEST} from '../api/graphql/SQL/querys/preguntas';
 
 
 const Formulario = () => {
+
     const [pagina, setPagina] = useState('fisico');
     const [preguntas, setPreguntas] = useState({ fisico: [], psicologico: [] });
     const [respuestas, setRespuestas] = useState({ fisico: [], psicologico: [] });
@@ -31,6 +32,14 @@ const Formulario = () => {
 
     const topRef = useRef(null);
     const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const { data: dataFisico } = useQuery(PREGUNTAS_POR_TEST, { variables: { testId: 3 } });
     const { data: dataPsico } = useQuery(PREGUNTAS_POR_TEST, { variables: { testId: 4 } });
 

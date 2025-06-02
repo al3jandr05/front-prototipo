@@ -11,7 +11,7 @@ export const OBTENER_TODAS_SOLICITUDES = gql`
             longitud
             nivelEmergencia
             tipo
-            voluntarioId
+            voluntarioId    
             estado
             ciVoluntariosAcudir
             fechaRespondida

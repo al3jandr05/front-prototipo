@@ -46,7 +46,16 @@ const InfoVoluntarios = () => {
     const historialIdString = id.toString();
 
     const [voluntario, setVoluntario] = useState(null);
+
     const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
 
     const [showModalCap, setShowModalCap] = useState(false);
     const [ShowModalNecesidad, setShowModalNecesidad] = useState(false);

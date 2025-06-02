@@ -96,7 +96,10 @@ const Sidebar = () => {
                         <span className="sidebar-icon"><FaInfoCircle /></span>
                         <span className="sidebar-label">Información</span>
                     </div>*/}
-                    <div className="sidebar-item" onClick={() => navigate('/')}>
+                    <div className="sidebar-item" onClick={() => {
+                        localStorage.removeItem('token'); // Limpiar token
+                        navigate('/'); // Navegar a la ruta de inicio
+                    }}>
                         <span className="sidebar-icon"><FaSignOutAlt /></span>
                         <span className="sidebar-label">Cerrar sesión</span>
                     </div>

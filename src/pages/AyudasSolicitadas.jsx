@@ -10,8 +10,11 @@ import apolloClientNOSQL from '../api/apolloClientNOSQL';
 import { OBTENER_TODAS_SOLICITUDES } from '../api/graphql/NoSQL/querys/solicitudesAyuda';
 import { obtenerVoluntario } from '../api/rest/voluntarioService';
 import LoadingCircle from "../components/LoadingCircle";
+import { useNavigate } from 'react-router-dom';
 
 const AyudasSolicitadas = () => {
+
+    const navigate = useNavigate();
     const [nombreFiltro, setNombreFiltro] = useState('');
     const [prioridadFiltro, setPrioridadFiltro] = useState('');
     const [estadoFiltro, setEstadoFiltro] = useState('');
@@ -27,7 +30,14 @@ const AyudasSolicitadas = () => {
         onCompleted: () => setIsLoading(false),
         onError: () => setIsLoading(false)
     });
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
 
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const [solicitudes, setSolicitudes] = useState([]);
     const [filtradas, setFiltradas] = useState([]);
 

@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:9090/graphql',
+    uri: 'http://34.9.138.238:9090/graphql',
     credentials: 'include' // Esto es crucial para CORS con credenciales
 });
 

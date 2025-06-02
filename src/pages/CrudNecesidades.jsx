@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Sidebar from '../components/Sidebar';
 import '../styles/necesidades.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,10 +15,20 @@ import {
 } from '../api/graphql/SQL/mutations/mutNec';
 import {PiFireSimpleFill} from "react-icons/pi";
 import LoadingCircle from "../components/LoadingCircle";
+import {useNavigate} from "react-router-dom";
 
 
 
 const CrudNecesidades = () => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
+
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const { loading, error, data, refetch } = useQuery(OBTENER_NECESIDADES);
     const [crearNecesidad] = useMutation(CREAR_NECESIDAD);
     const [editarNecesidad] = useMutation(EDITAR_NECESIDAD);

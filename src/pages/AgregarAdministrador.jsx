@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import Sidebar from '../components/Sidebar';
@@ -27,7 +27,14 @@ const AgregarAdministrador = () => {
     });
     const [registrarUsuario] = useMutation(REGISTRO_USUARIO);
     const [errores, setErrores] = useState({});
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const isTokenInvalid = !token ;
 
+        if (isTokenInvalid) {
+            navigate('/'); // Redirigir al login
+        }
+    }, );
     const handleInputChange = (e) => {
         const { name, value } = e.target;
 

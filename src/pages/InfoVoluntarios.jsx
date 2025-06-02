@@ -146,12 +146,12 @@ const InfoVoluntarios = () => {
     };
 
     const evaluaciones = datosReportes
-        .flatMap(reporte => reporte.evaluaciones || [])
-        .map(evaluacion => ({
+        .flatMap(reporte => (reporte.evaluaciones || []).map(evaluacion => ({
             id: evaluacion.id,
-            fecha: forma(evaluacion.fecha), // Aquí formateamos la fecha
+            fecha: forma(evaluacion.fecha),
             nombreTest: evaluacion.test.nombre,
-        }));
+            reporteId: reporte.id // Adding the report ID
+        })));
 
 
     const tieneAnalisis = datosReportes && datosReportes?.length > 0;
@@ -557,6 +557,9 @@ const InfoVoluntarios = () => {
                                         <div className="info-resultado">
                                             <h4>{evaluacion.nombreTest}</h4>
                                             <p>Fecha realizada: {evaluacion.fecha}</p>
+                                        </div>
+                                        <div className="reporte-numero">
+                                            <span>Reporte #{evaluacion.reporteId}</span>
                                         </div>
                                     </div>
                                 ))}

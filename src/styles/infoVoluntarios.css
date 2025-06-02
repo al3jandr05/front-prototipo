@@ -497,7 +497,7 @@
 
 .encuestas-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
     gap: 20px;
     margin-top: 16px;
 }
@@ -715,4 +715,86 @@
     background-color: var(--color-verde-hover);
     color: white;
     text-decoration: none;
+}
+
+.vista-card.card-voluntario {
+    background: white;
+    border: 1px solid rgba(45, 106, 79, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(45, 106, 79, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.vista-card.card-voluntario:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(45, 106, 79, 0.12);
+    border-color: rgba(45, 106, 79, 0.2);
+}
+
+.vista-card.card-voluntario::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #2D6A4F;
+    opacity: 0.8;
+}
+
+.vista-card .info-resultado {
+    padding-right: 100px; /* Espacio para el número de reporte */
+}
+
+.vista-card .info-resultado h4 {
+    color: #2D6A4F;
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.vista-card .info-resultado p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.reporte-numero {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color: rgba(45, 106, 79, 0.1);
+    color: #2D6A4F;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.reporte-numero::before {
+    content: '#';
+    opacity: 0.7;
+}
+
+.vista-card.card-voluntario:hover .reporte-numero {
+    background-color: #2D6A4F;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .encuestas-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .vista-card .info-resultado {
+        padding-right: 80px;
+    }
 }

@@ -17,6 +17,7 @@ import AgregarAdministrador from "./pages/AgregarAdministrador";
 import CrudUniversidades from "./pages/CrudUniversidades";
 import Layout from './components/Layout';
 import PageTitle from './components/PageTitle';
+import FormularioPruebas from "./pages/FormularioPruebas";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/Voluntario/:id" element={<Layout><InfoVoluntarios /></Layout>} />
                 <Route path="/Formulario" element={<Layout><Formulario /></Layout>} />
                 <Route path="/FormularioVoluntario/:reporteId/:evaluacionFisicaId/:evaluacionEmocionalId" element={<FormularioVoluntarioView />} />
+                <Route path="/FormularioPrueba" element={<FormularioPruebas />} />
                 <Route path="/Capacitaciones" element={<Layout><CrudCapacitaciones /></Layout>} />
                 <Route path="/AgregarAdministrador" element={<Layout><AgregarAdministrador /></Layout>} />
                 <Route path="/Necesidades" element={<Layout><CrudNecesidades /></Layout>} />

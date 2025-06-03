@@ -14,6 +14,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { useSidebar } from './Layout';
 import { BiSolidNotepad } from "react-icons/bi";
 import { HiAcademicCap } from "react-icons/hi2";
+import { FaFileWaveform } from "react-icons/fa6";
 
 
 const Sidebar = () => {
@@ -26,13 +27,13 @@ const Sidebar = () => {
         { icon: <MdSpaceDashboard />, label: 'Estadísticas', path: '/Dashboard' },
         { icon: <IoList />, label: 'Voluntarios', path: '/ListaVoluntarios' },
         { icon: <BiSolidNotepad  />, label: 'Evaluación', path: '/Formulario' },
+        { icon: <FaFileWaveform  />, label: 'Evaluación Voluntario', path: '/FormularioPruebas' },
         { icon: <MdReport />, label: 'Capacitaciones', path: '/Capacitaciones' },
         { icon: <FaHandHoldingMedical />, label: 'Necesidades', path: '/Necesidades' },
         { icon: <MdContactSupport  />, label: 'Ayudas Solicitadas', path: '/AyudasSolicitadas' },
         { icon: <IoMdPersonAdd  />, label: 'Administradores', path: '/ListaAdmins' },
         { icon: <HiAcademicCap   />, label: 'Universidades', path: '/Universidades' },
 
-        // { icon: <MdPersonAddAlt1 />, label: 'Voluntarios', path: '/Voluntarios' },
 
 
     ];

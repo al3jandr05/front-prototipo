@@ -212,7 +212,7 @@ const Dashboard = () => {
                     </section>
 
                     <section className="charts-container">
-                        <div className="chart-card" style={{ height: 'auto' }}>
+                        <div className="chart-card" style={{ height: '600px' }}>
                             <h4 className="chart-title">Universidades</h4>
                             {datosUniversidad && (
                                 <Pie
@@ -234,7 +234,7 @@ const Dashboard = () => {
                             )}
                         </div>
 
-                        <div className="chart-card" style={{ height: 'auto' }}>
+                        <div className="chart-card" style={{ height: '600px' }}>
                             <h4 className="chart-title">Necesidades</h4>
                             {datosNecesidades && (
                                 <Pie
@@ -256,7 +256,7 @@ const Dashboard = () => {
                             )}
                         </div>
 
-                        <div className="chart-card" style={{ height: '100%' }}>
+                        <div className="chart-card" style={{ height: '600px' }}>
                             <h4 className="chart-title">Capacitaciones</h4>
                             {datosCapacitaciones && (
                                 <Pie

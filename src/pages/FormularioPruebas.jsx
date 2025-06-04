@@ -8,12 +8,12 @@ import { GrCircleInformation } from "react-icons/gr";
 import { FaCheck, FaClipboardCheck } from "react-icons/fa";
 import { useQuery, useMutation } from '@apollo/client';
 import { PREGUNTAS_POR_TEST } from '../api/graphql/SQL/querys/preguntas'
-import { ENVIAR_RESPUESTAS } from '../api/graphql/SQL/mutations/respuestas'
+import { ENVIAR_RESPUESTAS_PRUEBA } from '../api/graphql/SQL/mutations/respuestaPrueba'
 import Sidebar from "../components/Sidebar";
 import LoadingCircle from "../components/LoadingCircle";
 import {opciones} from "../data/data_formulario";
 
-const SuccessView = () => {
+const SuccessView = ({ respuestaFisica, respuestaEmocional }) => {
     return (
         <div className="formulario-success-view">
             <div className="success-content">
@@ -21,8 +21,11 @@ const SuccessView = () => {
                 <h2>¡Evaluación Completada!</h2>
                 <p>Has completado exitosamente tu evaluación post-incendio.</p>
                 <div className="success-details">
-                    <p>Tu evaluación ha sido registrada y será revisada por el equipo correspondiente.</p>
-                    <p>No es necesario realizar otra evaluación para este incidente.</p>
+                    <h4>Resumen Evaluación Física:</h4>
+                    <p>{respuestaFisica || "No hay información física disponible."}</p>
+
+                    <h4>Resumen Evaluación Emocional:</h4>
+                    <p>{respuestaEmocional || "No hay información emocional disponible."}</p>
                 </div>
             </div>
         </div>
@@ -32,6 +35,8 @@ const SuccessView = () => {
 const FormularioPruebas = () => {
 
 
+    const [resultadoEnvio, setResultadoEnvio] = useState(null); // <-- Nuevo estado para guardar respuesta del servidor
+
     const preguntasExcluidas = ['9', '10', '11', '12', '13', '14'];
 
     const [pagina, setPagina] = useState('fisico');
@@ -39,13 +44,12 @@ const FormularioPruebas = () => {
         fisico: [],
         psicologico: [],
     });
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [partesSeleccionadas, setPartesSeleccionadas] = useState({});
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errores, setErrores] = useState({});
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [hideInfoIcon, setHideInfoIcon] = useState(false);
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [isReady, setIsReady] = useState(null);
     const [errorTexto, setErrorTexto] = useState("");
     const topRef = useRef(null);
 
@@ -57,7 +61,8 @@ const FormularioPruebas = () => {
         variables: { testId: 4 },
     });
 
-    const [enviarRespuestasMutation] = useMutation(ENVIAR_RESPUESTAS);
+    const [enviarRespuestasMutation, { loading, error }] = useMutation(ENVIAR_RESPUESTAS_PRUEBA);
+
 
     const preguntasFiltradasFisico = dataFisico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
     const preguntasFiltradasPsicologico = dataPsicologico?.preguntasPorTest.filter(p => !preguntasExcluidas.includes(p.id)) || [];
@@ -148,7 +153,6 @@ const FormularioPruebas = () => {
             setShowErrorModal(true);
             return;
         }
-        setShowConfirmModal(true);
     };
 
     const confirmarEnvio = async () => {
@@ -178,33 +182,51 @@ const FormularioPruebas = () => {
             return acc;
         }, []);
 
-        /*const input = {
-            reporteId: parseInt(reporteId),
-            estado: isReady ? "Disponible" : "No disponible",
+        const input = {
             evaluaciones: [
                 {
-                    evaluacionId: parseInt(evaluacionFisicaId),
+                    testId: 3,
                     respuestas: [...respuestasFisico, ...respuestasCuerpo]
                 },
                 {
-                    evaluacionId: parseInt(evaluacionEmocionalId),
+                    testId:4,
                     respuestas: respuestasPsicologico
                 }
             ]
         };
 
         try {
-            setShowConfirmModal(false);
             setIsSubmitted(true);
-            await enviarRespuestasMutation({ variables: { input } });
+            const respuesta = await enviarRespuestasMutation({ variables: { input } });
+            setResultadoEnvio(respuesta.data.enviarRespuestasPrueba);
 
             scrollToTop();
         } catch (err) {
             console.error("❌ Error al enviar respuestas:", err);
             setErrorTexto("Hubo un error al enviar las respuestas.");
             setShowErrorModal(true);
-        }*/
+        }
     };
+
+    if (loading) return(
+        <div className="formulariovol-container">
+            <Sidebar />
+
+                <LoadingCircle/>
+
+
+        </div>
+
+    );
+    if (isSubmitted && resultadoEnvio) {
+        return (
+            <SuccessView
+                respuestaFisica={resultadoEnvio.respuestaFisico}
+                respuestaEmocional={resultadoEnvio.respuestaEmocional}
+            />
+        );
+    }
+
 
     const renderPreguntas = (seccion, preguntas) => {
         const isInvalid = errores[seccion];
@@ -285,7 +307,12 @@ const FormularioPruebas = () => {
                         ) : (
                             <div className="botones-navegacion">
                                 <button type="button" className="btn-formulario-nav" onClick={() => setPagina('fisico')}>Anterior</button>
-                                <button type="button" className="btn-enviar" onClick={handleSubmit}>Enviar</button>
+                                <button type="button" className="btn-enviar"
+                                        onClick={() => {
+                                            confirmarEnvio();
+                                            handleSubmit();
+                                        }}>
+                                    Enviar</button>
                             </div>
                         )
                     )}
@@ -328,34 +355,6 @@ const FormularioPruebas = () => {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>¿Te encuentras apto para otro incendio?</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <p>Tu evaluación será registrada, pero antes responde:</p>
-                    <div className="d-flex justify-content-center gap-4 mt-4">
-                        <Button
-                            variant="success"
-                            onClick={() => {
-                                setIsReady(true);
-                                confirmarEnvio();
-                            }}
-                        >
-                            Sí
-                        </Button>
-                        <Button
-                            variant="danger"
-                            onClick={() => {
-                                setIsReady(false);
-                                confirmarEnvio();
-                            }}
-                        >
-                            No
-                        </Button>
-                    </div>
-                </Modal.Body>
-            </Modal>
         </div>
     );
 };

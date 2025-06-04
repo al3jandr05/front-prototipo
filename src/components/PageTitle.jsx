@@ -11,7 +11,7 @@ const PageTitle = () => {
             '/ListaVoluntarios': 'Lista de Voluntarios',
             '/Voluntario': 'Información de Voluntario',
             '/Formulario': 'Formulario',
-            '/FormularioVoluntario': 'Formulario Voluntario',
+            '/FormularioVoluntario': 'Formulario Pruebas',
             '/Capacitaciones': 'Capacitaciones',
             '/AgregarAdministrador': 'Agregar Administrador',
             '/Necesidades': 'Necesidades',

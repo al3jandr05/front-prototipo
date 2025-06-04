@@ -19,7 +19,8 @@ const PageTitle = () => {
             '/ListaAdmins': 'Lista de Administradores',
             '/ResultadoEncuesta': 'Resultado de Encuesta',
             '/AyudasSolicitadas': 'Ayudas Solicitadas',
-            '/Universidades': 'Universidades'
+            '/Universidades': 'Universidades',
+            '/FormularioPruebas': 'Formulario Pruebas',
         };
 
         const basePath = '/' + pathname.split('/')[1];

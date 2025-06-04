@@ -14,7 +14,8 @@
   --color-texto-principal: #212121;
   --color-borde-suave: #C8E6C9;
   --sombra-suave: 0 2px 6px rgba(0, 0, 0, 0.1);
-
+  --color-texto-secundario: #666;
+  --color-borde: #e0e0e0;
 }
 
 

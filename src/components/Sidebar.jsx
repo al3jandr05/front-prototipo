@@ -34,8 +34,6 @@ const Sidebar = () => {
         { icon: <IoMdPersonAdd  />, label: 'Administradores', path: '/ListaAdmins' },
         { icon: <HiAcademicCap   />, label: 'Universidades', path: '/Universidades' },
 
-
-
     ];
 
     const handleNavigate = (path) => {
@@ -73,8 +71,7 @@ const Sidebar = () => {
 
                 <div className="sidebar-menu">
                     {menuItems.map((item, index) => {
-                        const isActive = location.pathname.startsWith(item.path);
-
+                        const isActive = location.pathname === item.path;
                         return (
                             <div key={index} className="sidebar-item-wrapper">
                                 <div

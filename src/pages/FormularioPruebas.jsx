@@ -1,36 +1,93 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/formularioView.css';
+import '../styles/succesView.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 import HumanBody from '../components/HumanBody';
 import { GrCircleInformation } from "react-icons/gr";
-import { FaCheck, FaClipboardCheck } from "react-icons/fa";
 import { useQuery, useMutation } from '@apollo/client';
 import { PREGUNTAS_POR_TEST } from '../api/graphql/SQL/querys/preguntas'
 import { ENVIAR_RESPUESTAS_PRUEBA } from '../api/graphql/SQL/mutations/respuestaPrueba'
-import Sidebar from "../components/Sidebar";
 import LoadingCircle from "../components/LoadingCircle";
-import {opciones} from "../data/data_formulario";
+import {opciones} from "../data/data_formulario";import {FaRegSmileBeam } from 'react-icons/fa';
+import { FaClipboardCheck, FaHeartbeat, FaBrain, FaRegCheckCircle } from 'react-icons/fa';
+import { GiLungs } from 'react-icons/gi';
+import { MdOutlineEmojiPeople, MdOutlinePsychology } from 'react-icons/md';
+
 
 const SuccessView = ({ respuestaFisica, respuestaEmocional }) => {
-    return (
-        <div className="formulario-success-view">
-            <div className="success-content">
-                <FaClipboardCheck className="success-icon" />
-                <h2>¡Evaluación Completada!</h2>
-                <p>Has completado exitosamente tu evaluación post-incendio.</p>
-                <div className="success-details">
-                    <h4>Resumen Evaluación Física:</h4>
-                    <p>{respuestaFisica || "No hay información física disponible."}</p>
+    // Función para formatear el texto con saltos de línea
+    const formatText = (text) => {
+        if (!text) return "No se registraron observaciones en esta evaluación.";
+        return text.split('\n').map((paragraph, i) => (
+            <p key={i} className="evaluation-detail">{paragraph || <>&nbsp;</>}</p>
+        ));
+    };
 
-                    <h4>Resumen Evaluación Emocional:</h4>
-                    <p>{respuestaEmocional || "No hay información emocional disponible."}</p>
+    return (
+        <div className="evaluation-success-container">
+            <div className="evaluation-success-card">
+                <div className="evaluation-success-header">
+                    <FaClipboardCheck className="success-main-icon" />
+                    <h2 className="evaluation-success-title">Evaluación Registrada Exitosamente</h2>
+                    <p className="evaluation-success-subtitle">Los resultados han sido guardados en nuestro sistema</p>
+                </div>
+
+                <div className="evaluation-results-container">
+                    <div className="evaluation-result physical-evaluation">
+                        <div className="result-header">
+                            <div className="result-icon-container" style={{ backgroundColor: 'var(--color-verde-suave)' }}>
+                                <FaHeartbeat className="result-icon" />
+                            </div>
+                            <h3 className="result-title">Evaluación Física</h3>
+                        </div>
+                        <div className="result-content">
+                            <div className="result-detail">
+                                <div className="detail-icon-text">
+                                    <GiLungs className="detail-icon" />
+                                    <span className="detail-label">Estado físico general:</span>
+                                </div>
+                                <div className="detail-content">
+                                    {formatText(respuestaFisica)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="evaluation-result emotional-evaluation">
+                        <div className="result-header">
+                            <div className="result-icon-container" style={{ backgroundColor: 'rgba(234, 67, 53, 0.1)' }}>
+                                <MdOutlinePsychology className="result-icon" style={{ color: 'var(--color-rojo)' }} />
+                            </div>
+                            <h3 className="result-title">Evaluación Emocional</h3>
+                        </div>
+                        <div className="result-content">
+                            <div className="result-detail">
+                                <div className="detail-icon-text">
+                                    <MdOutlineEmojiPeople className="detail-icon" />
+                                    <span className="detail-label">Estado emocional:</span>
+                                </div>
+                                <div className="detail-content">
+                                    {formatText(respuestaEmocional)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="evaluation-success-footer">
+                    <div className="success-message">
+                        <FaRegCheckCircle className="success-icon" />
+                        <p>La evaluación ha sido completada en su totalidad</p>
+                    </div>
+                    <p className="contact-message">Si necesitas apoyo adicional, contacta a nuestro equipo de soporte.</p>
                 </div>
             </div>
         </div>
     );
 };
+
 
 const FormularioPruebas = () => {
 
@@ -210,11 +267,7 @@ const FormularioPruebas = () => {
 
     if (loading) return(
         <div className="formulariovol-container">
-            <Sidebar />
-
                 <LoadingCircle/>
-
-
         </div>
 
     );
@@ -271,15 +324,6 @@ const FormularioPruebas = () => {
     return (
         <div className="formulariovol-container">
             <div className="formulariovol-content" ref={topRef}>
-                <div className="informacion-container">
-                    <div className={`info-circle ${hideInfoIcon ? 'hide' : ''}`} onClick={() => setShowInfoModal(true)}>
-                        <GrCircleInformation />
-                    </div>
-                    {!showInfoModal && !hideInfoIcon && (
-                        <div className="info-text">Ver antes de iniciar</div>
-                    )}
-                </div>
-
                 <div className="formulario-header text-center">
                     <h1 className="titulo-formulario">Evaluación Post-Incendio</h1>
                 </div>
@@ -329,31 +373,6 @@ const FormularioPruebas = () => {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showInfoModal} onHide={() => setShowInfoModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Recomendaciones</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>
-                        Este formulario tiene como objetivo evaluar tu estado físico y emocional tras participar en un incendio.
-                        Por favor, responde con sinceridad cada pregunta.
-                    </p>
-                    <ul>
-                        <li>Las respuestas se usarán para asignarte necesidades o capacitaciones específicas.</li>
-                        <li>No hay respuestas correctas o incorrectas.</li>
-                        <li>La información será tratada de forma confidencial.</li>
-                        <li>Solo podrás completar esta evaluación una vez.</li>
-                    </ul>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={() => {
-                        setShowInfoModal(false);
-                        setHideInfoIcon(true);
-                    }}>
-                        Entendido
-                    </Button>
-                </Modal.Footer>
-            </Modal>
 
         </div>
     );

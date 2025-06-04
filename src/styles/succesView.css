@@ -1,0 +1,178 @@
+
+.evaluation-success-container {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh;
+    background-color: var(--color-fondo);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.evaluation-success-card {
+    width: 100%;
+    max-width: 900px;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    padding: 30px;
+}
+
+.evaluation-success-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.success-main-icon {
+    font-size: 3.5rem;
+    color: var(--color-verde-oscuro);
+    margin-bottom: 15px;
+}
+
+.evaluation-success-title {
+    color: var(--color-verde-oscuro);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.evaluation-success-subtitle {
+    color: var(--color-texto-secundario);
+    font-size: 1.1rem;
+}
+
+.evaluation-results-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.evaluation-result {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid var(--color-borde);
+}
+
+.physical-evaluation {
+    border-top: 4px solid var(--color-verde-oscuro);
+}
+
+.emotional-evaluation {
+    border-top: 4px solid red;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.result-icon-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-icon {
+    font-size: 1.5rem;
+    color: var(--color-verde-oscuro);
+}
+
+.result-title {
+    color: var(--color-texto-principal);
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.result-content {
+    padding: 0 10px;
+}
+
+.result-detail {
+    margin-bottom: 15px;
+}
+
+.detail-icon-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.detail-icon {
+    font-size: 1.2rem;
+    color: var(--color-texto-secundario);
+}
+
+.detail-label {
+    font-weight: 500;
+    color: var(--color-texto-principal);
+}
+
+.detail-content {
+    padding-left: 30px;
+}
+
+.evaluation-detail {
+    color: var(--color-texto-secundario);
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.evaluation-success-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-borde);
+    text-align: center;
+}
+
+.success-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--color-verde-oscuro);
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.success-icon {
+    font-size: 1.2rem;
+}
+
+.contact-message {
+    color: var(--color-texto-secundario);
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .evaluation-results-container {
+        grid-template-columns: 1fr;
+    }
+
+    .evaluation-success-title {
+        font-size: 1.5rem;
+    }
+
+    .evaluation-success-subtitle {
+        font-size: 1rem;
+    }
+
+    .result-title {
+        font-size: 1.1rem;
+    }
+
+    .evaluation-success-card {
+        padding: 20px;
+    }
+}

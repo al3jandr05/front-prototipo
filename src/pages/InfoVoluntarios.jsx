@@ -99,7 +99,6 @@ const InfoVoluntarios = () => {
             setTipoMensaje('');
         }, 5000);
     };
-
     useEffect(() => {
         const fetchVoluntario = async () => {
             try {
@@ -111,25 +110,18 @@ const InfoVoluntarios = () => {
         };
         fetchVoluntario();
     }, [id]);
-
     const { loading, error, data } = useQuery(OBTENER_REPORTES_VOLUNTARIOS, {
         variables: { historialId },
     });
     // const loading = false;
     // const error = null;
     // const data = { reportesVoluntarios: [] };
-
     const nombreEmail = voluntario?.email || ' ';
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
-
-
     const formatFecha = (fecha) => {
         const date = new Date(fecha);
         return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
     };
-
-
-
     const datosReportes = data?.reportesVoluntarios
         ? data.reportesVoluntarios
             .filter(reporte => reporte.observaciones && reporte.observaciones.trim() !== '') // Filtra los reportes que tienen observaciones
@@ -138,28 +130,21 @@ const InfoVoluntarios = () => {
                 fechaGenerado: formatFecha(reporte.fechaGenerado), // Cambia la fecha al formato deseado
             }))
         : [];
-
     const cantidadReportes = datosReportes?.length > 0 ;
     const vacio = []
-
     const tieneCapacitaciones = datosReportes && datosReportes?.length > 0;
-
     const reporteMasReciente = datosReportes.length > 0
         ? [...datosReportes].sort((a, b) => new Date(b.fechaGenerado) - new Date(a.fechaGenerado))[0]
         : null;
-
     const tieneHistorial = datosReportes && (
         (datosReportes?.length > 0)
     );
-
     const tieneEncuestas = datosReportes && datosReportes?.length > 0;
-
     const forma = (fecha) => {
         const date = new Date(fecha);
         if (isNaN(date)) return fecha;  // Si la fecha es inválida, se devuelve tal cual
         return date.toLocaleDateString('es-ES'); // Formato dd/mm/yyyy
     };
-
     const evaluaciones = datosReportes
         .flatMap(reporte => (reporte.evaluaciones || []).map(evaluacion => ({
             id: evaluacion.id,
@@ -167,12 +152,8 @@ const InfoVoluntarios = () => {
             nombreTest: evaluacion.test.nombre,
             reporteId: reporte.id // Adding the report ID
         })));
-
-
     const tieneAnalisis = datosReportes && datosReportes?.length > 0;
-
     const tieneReportes = datosReportes && datosReportes?.length > 0;
-
     const datosPersonales = [
         { icono: <FaCalendarAlt />, texto: voluntario?.fecha_nacimiento || 'N/D' },
         { icono: <FaVenusMars />, texto: voluntario?.genero || 'N/D' },
@@ -181,30 +162,23 @@ const InfoVoluntarios = () => {
         { icono: <FaMapMarkerAlt />, texto: voluntario?.ubicacion || 'N/D' },
         { icono: <FaIdCard />, texto: voluntario?.ci || 'N/D' }
     ];
-
     const parseFecha = (fechaStr) => {
         if (!fechaStr) return null;
-
         const partes = fechaStr.split('/');
         if (partes.length !== 3) return null;
-
         const [dia, mes, anio] = partes;
         const date = new Date(anio, mes - 1, dia); // mes en JavaScript es 0-based
-
         return isNaN(date) ? null : date;
     };
-
     const evaluacionesfisic = reporteMasReciente ? (() => {
         const fechaBase = parseFecha(reporteMasReciente.fechaGenerado);
         const fechaProxima = fechaBase ? new Date(fechaBase.getTime() + 7 * 24 * 60 * 60 * 1000) : null;
-
         return [
             { icono: <FaFileAlt />, texto: 'Última evaluación: ' + reporteMasReciente.fechaGenerado },
             { icono: <MdReport />, texto: 'Reporte #' + reporteMasReciente.id },
             { texto: 'Resultado: ' + (reporteMasReciente.resumenFisico || 'Sin datos') },
         ];
     })() : [];
-
     const evaluacionesPsico = reporteMasReciente ? (() => {
         const fechaBase = parseFecha(reporteMasReciente.fechaGenerado);
         const fechaProxima = fechaBase ? new Date(fechaBase.getTime() + 7 * 24 * 60 * 60 * 1000) : null;
@@ -215,7 +189,6 @@ const InfoVoluntarios = () => {
             { texto: 'Resultado: ' + (reporteMasReciente.resumenEmocional || 'Sin datos') },
         ];
     })() : [];
-
     useEffect(() => {
         if (vistaActual === 'historial' && !tieneHistorial) {
             setVistaActual(null);
@@ -233,10 +206,7 @@ const InfoVoluntarios = () => {
         </div>
 
     );
-
     return (
-
-
         <div className="infovoluntarios-container">
             {showModalCap && (
                 <ModalCapacitaciones
@@ -245,7 +215,6 @@ const InfoVoluntarios = () => {
                     onClose={() => setShowModalCap(false)}
                 />
             )}
-
             {ShowModalNecesidad && (
                 <ModalNecesidades
                     reporteId={reporteMasReciente?.id}
@@ -253,11 +222,8 @@ const InfoVoluntarios = () => {
                     onClose={() => setShowModalNecesidad(false)}
                 />
             )}
-
-
-
             <main className="infovoluntarios-content">
-           
+
                 <header className="infovoluntarios-header">
                     <div className="info-avatar"><span>{inicial}</span></div>
                     <div>
@@ -290,14 +256,9 @@ const InfoVoluntarios = () => {
                                     </span>
                                 )}
                             </div>
-
                         </div>
-
                     </div>
-
                 </header>
-
-
                 <section className="infovoluntarios-paneles">
                     <div className="panel-hover panel-personal">
                         <h4>
@@ -308,7 +269,6 @@ const InfoVoluntarios = () => {
                             <p key={i}>{d.icono} {d.texto}</p>
                         ))}
                     </div>
-
                     <div className="panel-hover panel-fisico">
                         <h4>
                             <FaHeartbeat />
@@ -330,7 +290,6 @@ const InfoVoluntarios = () => {
                             </div>
                         )}
                     </div>
-
                     <div className="panel-hover panel-psicologico">
                         <h4>
                             <FaBrain />
@@ -353,8 +312,6 @@ const InfoVoluntarios = () => {
                         )}
                     </div>
                 </section>
-
-
                 <section className="alternar-vista">
                     <div className="opciones-boton">
                         <button className="btn-opcion" onClick={() => {
@@ -368,7 +325,6 @@ const InfoVoluntarios = () => {
                         >
                             <FaHistory /> Historial
                         </button>
-
                         <button
                             className="btn-opcion"
                             onClick={() => {
@@ -382,7 +338,6 @@ const InfoVoluntarios = () => {
                         >
                             <MdReport /> Reportes
                         </button>
-
                         <button
                             className="btn-opcion"
                             onClick={() => {
@@ -396,7 +351,6 @@ const InfoVoluntarios = () => {
                         >
                             <PiCertificate /> Capacitaciones y Certificaciones
                         </button>
-
                         <button
                             className="btn-opcion"
                             onClick={() => {
@@ -410,7 +364,6 @@ const InfoVoluntarios = () => {
                         >
                             <FaFileWaveform /> Encuestas Realizadas
                         </button>
-
                         <button
                             className="btn-opcion"
                             onClick={() => {
@@ -422,11 +375,9 @@ const InfoVoluntarios = () => {
                                 }
                             }}
                         >
-                            <MdPsychology /> Análisis
+                            <MdPsychology /> Análisis de Necesidades
                         </button>
-
                     </div>
-
                 </section>
                 <ModalNulo
                     show={showModalNuloCap}
@@ -440,8 +391,6 @@ const InfoVoluntarios = () => {
                         reporte={reporteSeleccionado}
                     />
                 )}
-
-
                 <section className="vistas">
                     <h2 className="titulo-seccion">
                         {vistaActual === 'analisis' && 'Análisis de Necesidades'}
@@ -450,8 +399,6 @@ const InfoVoluntarios = () => {
                         {vistaActual === 'capacitaciones' && 'Capacitaciones y Certificaciones'}
                         {vistaActual === 'encuestas' && 'Encuestas Realizadas'}
                     </h2>
-
-                    {/* Vista: Análisis */}
                     {vistaActual === 'capacitaciones' && tieneCapacitaciones && (
                         <div className="panel-capacitaciones">
                             <button
@@ -475,10 +422,6 @@ const InfoVoluntarios = () => {
                             </div>
                         </div>
                     )}
-
-
-
-                    {/* Vista: Historial */}
                     {vistaActual === 'historial' && (
                         <div className="panel-historial">
                             {/* CLÍNICO */}
@@ -534,12 +477,6 @@ const InfoVoluntarios = () => {
                             </div>
                         </div>
                     )}
-
-
-
-
-
-                    {/* Vista: Reportes */}
                     {vistaActual === 'reportes' && tieneReportes && (
                         <div className="panel-reporte">
                             <div className="reportes-grid">
@@ -556,10 +493,6 @@ const InfoVoluntarios = () => {
                             </div>
                         </div>
                     )}
-
-
-
-                    {/* Vista: Encuestas */}
                     {vistaActual === 'encuestas' && tieneEncuestas && (
                         <div className="panel-encuestas">
                             <div className="encuestas-grid">
@@ -581,8 +514,6 @@ const InfoVoluntarios = () => {
                             </div>
                         </div>
                     )}
-
-
                     {/* Vista: Certificaciones */}
                     {vistaActual === 'analisis' && tieneAnalisis && (
                         <div className="panel-analisis">
@@ -592,7 +523,6 @@ const InfoVoluntarios = () => {
                             >
                                 Agregar
                             </button>
-
                             <div className="analisis-grid">
                                 {reporteMasReciente.necesidades.map((item, index) => (
                                     <div key={index} className="vista-card">
@@ -606,15 +536,8 @@ const InfoVoluntarios = () => {
                         </div>
                     )}
                 </section>
-
             </main>
-
-
         </div>
-
-
     );
-
 };
-
 export default InfoVoluntarios;

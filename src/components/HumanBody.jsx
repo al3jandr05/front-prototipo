@@ -67,7 +67,7 @@ const HumanBody = ({ onSeleccionCambio, partesSeleccionadas = {} }) => {
             const area = bodyGroups[key];
             const svg = document.getElementById(key);
             const estado = selecciones[area];
-            const color = estado ? estadoColores[estado] : '#388E3C';
+            const color = estado ? estadoColores[estado] : '#424242';
 
             if (svg) {
                 const path = svg.querySelector('path');

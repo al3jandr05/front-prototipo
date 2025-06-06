@@ -18,7 +18,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 20px;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo);
     color: white;
     border: none;
     border-radius: 8px;
@@ -30,18 +30,18 @@
 }
 
 .btn-volver:hover {
-    background-color: var(--color-verde-hover);
+    background-color: var(--color-amarillo-hover);
 }
 
 .titulo-resultado {
     font-size: 2.5rem;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     margin-bottom: 10px;
 }
 
 .subtitulo {
     font-size: 1.1rem;
-    color: #444;
+    color: var(--color-blanco);
     margin-bottom: 5px;
 }
 
@@ -61,7 +61,7 @@
 
 .categoria-titulo {
     font-size: 1.5rem;
-    color: var(--color-verde-principal);
+    color: var(--color-naranja-suave);
     margin-bottom: 20px;
     padding-bottom: 5px;
 }
@@ -77,12 +77,12 @@
     padding: 15px 20px;
     border-radius: 10px;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
-    border-left: 6px solid var(--color-verde-principal);
+    border-left: 6px solid var(--color-naranja-suave);
     position: relative;
 }
 
 .resultado-card h4 {
-    color: var(--color-verde-oscuro);
+    color: var(--color-naranja-suave);
     margin-bottom: 8px;
     font-size: 1.1rem;
 }
@@ -98,7 +98,7 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo);
     color: white;
     border: none;
     border-radius: 8px;
@@ -108,7 +108,7 @@
 }
 
 .btn-asignar-universidad:hover {
-    background-color: var(--color-verde-hover);
+    background-color: var(--color-amarillo-hover);
 }
 
 .universidad-asignada {

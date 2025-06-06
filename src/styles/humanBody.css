@@ -179,7 +179,7 @@
     top: -50px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--color-verde-oscuro);
+    background-color: var(--color-gris);
     color: white;
     padding: 5px 12px;
     border-radius: 6px;

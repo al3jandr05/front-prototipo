@@ -78,7 +78,6 @@ const SuccessView = ({ respuestaFisica, respuestaEmocional }) => {
 
                 <div className="evaluation-success-footer">
                     <div className="success-message">
-                        <FaRegCheckCircle className="success-icon" />
                         <p>La evaluación ha sido completada en su totalidad</p>
                     </div>
                     <p className="contact-message">Si necesitas apoyo adicional, contacta a nuestro equipo de soporte.</p>

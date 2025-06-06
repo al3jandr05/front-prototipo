@@ -25,18 +25,18 @@
 }
 
 .btn-primary{
-    background-color: var(--color-verde-oscuro) !important;
-    border-color: var(--color-verde-oscuro) !important;
+    background-color: var(--color-amarillo) !important;
+    border-color: var(--color-amarillo) !important;
 }
 
 .btn-primary:hover{
-    background-color: var(--color-verde-hover) !important;
+    background-color: var(--color-amarillo-hover) !important;
 }
 
 
 /* Estilos generales del modal */
 .modal-header {
-    background-color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo);
     color: white;
 }
 
@@ -119,17 +119,17 @@
 }
 
 .btn-primary {
-    background-color: var(--color-verde-oscuro);
-    border-color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo);
+    border-color: var(--color-amarillo);
 }
 
 .btn-primary:hover {
-    background-color: var(--color-verde-hover);
-    border-color: var(--color-verde-hover);
+    background-color: var(--color-amarillo-hover);
+    border-color: var(--color-amarillo);
 }
 
 .toggle-password-text {
-    color: var(--color-verde-oscuro) !important;
+    color: var(--color-naranja-fuerte) !important;
     font-size: 0.875rem;
     margin-top: 0.5rem;
     cursor: pointer;
@@ -138,7 +138,7 @@
 }
 
 .toggle-password-text:hover {
-    color: var(--color-verde-hover);
+    color: var(--color-naranja-suave);
     text-decoration: none;
 }
 

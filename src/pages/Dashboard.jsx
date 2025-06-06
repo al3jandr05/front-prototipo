@@ -97,8 +97,7 @@ const Dashboard = () => {
                 datasets: [
                     {
                         data: universidades.map(u => u.cantidad),
-                        backgroundColor: ['#A5D6A7', '#388E3C', '#2e6a2f', '#4CAF50', '#81C784'],
-                        borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+                        backgroundColor: ['#f8520b', '#f38859', '#611800', '#a64920', '#f8520b'],
                         borderWidth: 2,
                     }
                 ]
@@ -110,8 +109,7 @@ const Dashboard = () => {
                 datasets: [
                     {
                         data: necesidades.map(n => n.cantidad),
-                        backgroundColor: ['#C8E6C9', '#2e6a2f', '#2D6A4F', '#1B4332'],
-                        borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+                        backgroundColor: ['#f8520b', '#f38859', '#611800', '#a64920', '#f8520b'],
                         borderWidth: 2,
                     }
                 ]
@@ -123,8 +121,7 @@ const Dashboard = () => {
                 datasets: [
                     {
                         data: capacitaciones.map(c => c.cantidad),
-                        backgroundColor: ['#C8E6C9', '#388E3C', '#2D6A4F', '#1B4332'],
-                        borderColor: ['#caf0f8', '#caf0f8', '#caf0f8', '#caf0f8'],
+                        backgroundColor: ['#f8520b', '#f38859', '#611800', '#a64920', '#f8520b'],
                         borderWidth: 2,
                     }
                 ]

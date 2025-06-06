@@ -36,8 +36,8 @@
     max-width: 420px;
     padding: 40px 30px;
     border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    background: rgba(255, 255, 255, 0.50);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    background: rgba(30, 29, 29, 0.7);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -45,19 +45,21 @@
 }
 
 .login-card h1 {
-    color: var(--color-verde-oscuro);
+    color: var(--color-borde);
 }
 
 .input-box input,
 .password-wrapper input {
     background-color: rgba(255, 255, 255, 0.1);
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .input-box input::placeholder,
 .password-wrapper input::placeholder {
     color: rgba(0, 0, 0, 0.6);
+    font-style: italic;
+    font-weight: bold;
 }
 
 
@@ -69,7 +71,7 @@
     gap: 10px;
     font-size: 22px;
     font-weight: bold;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     margin-bottom: 20px;
 }
 
@@ -90,7 +92,8 @@
 
 .input-box p {
     margin-bottom: 6px;
-    font-weight: 500;
+    font-weight: bold;
+    color: var(--color-amarillo);
 }
 
 .input-box input {
@@ -99,7 +102,7 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     background-color: var(--color-card);
-    color: var(--color-verde-oscuro);
+    color: var(--color-gris);
 }
 
 .password-wrapper {
@@ -115,7 +118,7 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     background-color: var(--color-card);
-    color: var(--color-verde-oscuro);
+    color: var(--color-gris);
 }
 
 .eye-icon {
@@ -125,11 +128,11 @@
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 18px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 
 button[type="submit"] {
-    background-color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo);
     color: white;
     border: none;
     padding: 10px;
@@ -142,7 +145,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo-hover);
 }
 
 @media (max-width: 700px) {

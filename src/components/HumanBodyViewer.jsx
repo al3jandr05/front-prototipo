@@ -41,7 +41,7 @@ const HumanBodyViewer = ({ partes = [] }) => {
         for (let key in bodyGroups) {
             const svg = document.getElementById(key);
             if (svg?.querySelector('path')) {
-                svg.querySelector('path').style.fill = '#3b8c1b';
+                svg.querySelector('path').style.fill = '#424242';
             }
         }
 

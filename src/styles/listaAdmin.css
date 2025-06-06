@@ -16,23 +16,13 @@
 }
 
 .titulo-admin {
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     font-size: 2.5rem;
     margin-bottom: 20px;
 }
 
-.btn-agregar-admin {
-    background-color: var(--color-verde-oscuro);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
 .btn-agregar-admin:hover {
-    background-color: var(--color-verde-hover);
+    background-color: var(--color-amarillo-hover);
 }
 
 .admin-paneles {
@@ -50,7 +40,7 @@
     padding: 12px 18px;
     font-size: 16px;
     border-radius: 25px;
-    border: 1px solid var(--color-verde-principal);
+    border: 1px solid var(--color-amarillo);
     width: 100%;
     max-width: 85%;
     transition: border-color 0.3s ease;
@@ -58,7 +48,7 @@
 
 .input-busqueda-admin:focus {
     outline: none;
-    border-color: var(--color-verde-hover);
+    border-color: var(--color-amarillo);
 }
 
 /* Filtros */
@@ -70,7 +60,7 @@
 
 .filtros-grid-admin label {
     font-weight: 600;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
     display: block;
     margin-bottom: 5px;
 }
@@ -120,7 +110,7 @@
 }
 
 .mensaje-vacio-admin {
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
     font-style: italic;
     padding-top: 10px;
     text-align: center;
@@ -136,7 +126,7 @@
     background-color: var(--color-card);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-left: 6px solid var(--color-verde-principal);
+    border-left: 6px solid var(--color-amarillo);
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -144,13 +134,13 @@
 .card-admin:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
-    background-color: var(--color-verde-hover-card);
+    background-color: var(--color-blanco);
 }
 
 .avatar-admin {
     width: 48px;
     height: 48px;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo);
     color: white;
     font-weight: bold;
     font-size: 20px;
@@ -178,7 +168,7 @@
 .nombre-rol-admin h4 {
     margin: 0;
     font-size: 18px;
-    color: var(--color-verde-principal);
+    color: var(--color-texto-principal);
 }
 
 .rol-admin {

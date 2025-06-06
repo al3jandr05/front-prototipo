@@ -13,7 +13,7 @@
 }
 
 .titulo-ayudas {
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
@@ -32,9 +32,7 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: 8px;
-    border: 1px solid var(--color-verde-suave);
     font-size: 16px;
-    color: var(--color-verde-oscuro);
     background-color: white;
 }
 
@@ -53,16 +51,15 @@
 
 .filtros-grid label {
     font-weight: 500;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     font-size: 14px;
 }
 
 .filtros-grid select {
     padding: 10px 16px;
     border-radius: 8px;
-    border: 1px solid var(--color-verde-suave);
     font-size: 16px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-gris);
     background-color: white;
     min-width: 150px;
 }
@@ -72,7 +69,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo);
     color: white;
     border: none;
     border-radius: 8px;
@@ -82,7 +79,7 @@
 }
 
 .filtro-limpiar button:hover {
-    background-color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo-hover);
 }
 
 /* Contenido principal en dos columnas */
@@ -139,7 +136,7 @@
     margin: 0 0 6px 0;
     font-size: 12px;
     font-weight: 600;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 
 .leyenda-flotante .leyenda-items {
@@ -153,7 +150,7 @@
     align-items: center;
     gap: 6px;
     font-size: 11px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-texto-principal);
 }
 
 .leyenda-flotante .leyenda-item .badge-prioridad {
@@ -186,19 +183,17 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
-    border-left: 4px solid var(--color-verde-principal);
 }
 
 .card-ayuda:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    background-color: var(--color-verde-hover-card, #f8fffe);
+    background-color: var(--bs-white, #f8fffe);
 }
 
 .avatar-ayuda {
     min-width: 44px;
     height: 44px;
-    background-color: var(--color-verde-oscuro);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -226,7 +221,7 @@
 .nombre-prioridad h4 {
     margin: 0;
     font-size: 16px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-texto-principal);
     font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -271,7 +266,6 @@
     font-size: 12px;
     font-weight: 500;
     margin-bottom: 2px;
-    color: var(--color-verde-oscuro);
 }
 
 .fecha-ayuda {
@@ -282,7 +276,7 @@
 
 .mensaje-vacio {
     text-align: center;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
     font-style: italic;
     padding: 40px 20px;
     font-size: 16px;
@@ -306,9 +300,7 @@
 .filtros-ayudas select {
     padding: 10px 16px;
     border-radius: 8px;
-    border: 1px solid var(--color-verde-suave);
     font-size: 16px;
-    color: var(--color-verde-oscuro);
     background-color: white;
 }
 
@@ -326,7 +318,6 @@
     box-shadow: 0 3px 8px rgba(0,0,0,0.05);
     transition: transform 0.2s;
     cursor: pointer;
-    border-left: 6px solid var(--color-verde-principal);
 }
 
 .ayuda-card:hover {
@@ -341,7 +332,6 @@
 
 .estado {
     font-weight: bold;
-    margin-top: 10px;
 }
 
 .fecha {

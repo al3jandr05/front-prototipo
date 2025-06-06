@@ -11,20 +11,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 20,
         borderBottomWidth: 2,
-        borderBottomColor: '#1B4332',
+        borderBottomColor: '#ffa100',
         paddingBottom: 15,
     },
     headerLeft: { flex: 1 },
     headerRight: { flex: 1, alignItems: 'flex-end' },
     title: {
         fontSize: 24,
-        color: '#1B4332',
+        color: '#ffa100',
         marginBottom: 10,
         fontWeight: 'bold',
     },
     subtitle: {
         fontSize: 16,
-        color: '#2D6A4F',
+        color: '#ffc867',
         marginBottom: 5,
     },
     section: {
@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         fontSize: 18,
-        color: '#1B4332',
+        color: '#ffa100',
         marginBottom: 10,
         borderBottomWidth: 2,
-        borderBottomColor: '#2D6A4F',
+        borderBottomColor: '#ffc867',
         paddingBottom: 5,
         fontWeight: 'bold',
     },
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         marginTop: 3,
         paddingLeft: 8,
         borderLeftWidth: 2,
-        borderLeftColor: '#2D6A4F',
+        borderLeftColor: '#ffc867',
     },
     evaluacionContent: {
         fontSize: 12,
@@ -70,11 +70,11 @@ const styles = StyleSheet.create({
     },
     fecha: {
         fontSize: 11,
-        color: '#2D6A4F',
+        color: '#ffc867',
     },
     reporteNumero: {
         fontSize: 11,
-        color: '#2D6A4F',
+        color: '#ffc867',
         fontWeight: 'bold',
     },
     infoRow: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     label: {
         width: '30%',
         fontSize: 12,
-        color: '#2D6A4F',
+        color: '#ffc867',
         fontWeight: 'bold',
     },
     value: {

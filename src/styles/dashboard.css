@@ -11,7 +11,7 @@
 }
 
 .titulo-dashboard {
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     font-size: 2.5rem;
     margin-bottom: 20px;
 }
@@ -38,20 +38,20 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    border-bottom: 4px solid var(--color-verde-principal);
+    border-bottom: 4px solid var(--color-amarillo);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .voluntario-tarjeta,
 .reporte-tarjeta {
-    background: var(--color-card);
+    background: var(--color-blanco);
     padding: 20px;
     border-radius: 12px;
     box-shadow: var(--sombra-suave);
     display: flex;
     align-items: center;
     gap: 16px;
-    border-left: 6px solid var(--color-verde-principal);
+    border-left: 6px solid var(--color-naranja-fuerte);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
@@ -72,7 +72,7 @@
 .chart-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    background-color: var(--color-verde-hover-card);
+    background-color: var(--color-blanco);
 }
 
 
@@ -80,7 +80,7 @@
 .tarjeta h3 {
     margin: 0;
     font-size: 18px;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
 }
 
 .tarjeta p {
@@ -91,7 +91,7 @@
 
 .tarjeta svg {
     font-size: 30px;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
 }
 
 /* Paneles */
@@ -103,7 +103,7 @@
 
 .panel {
     flex: 1;
-    background: var(--color-verde-suave);
+    background: var(--color-card);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
@@ -111,7 +111,7 @@
 }
 
 .panel h3 {
-    color: var(--color-verde-oscuro);
+    color: var(--color-naranja-fuerte);
     margin-bottom: 15px;
 }
 
@@ -137,12 +137,12 @@
 .reporte-tipo {
     margin: 4px 0 0;
     font-size: 14px;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
     font-style: italic;
 }
 
 .avatar-voluntario {
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-naranja-fuerte);
     color: white;
     font-weight: bold;
     width: 42px;
@@ -177,7 +177,7 @@
 }
 
 .chart-card {
-    background: white;
+    background: var(--color-card);
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -243,10 +243,10 @@
 .voluntario-card:hover,
 .reporte-card:hover {
     transform: translateY(-4px);
-}
+}z
 
 .avatar-voluntario {
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-naranja-fuerte);
     color: white;
     font-weight: bold;
     min-width: 42px;

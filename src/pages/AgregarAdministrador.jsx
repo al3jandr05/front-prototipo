@@ -334,7 +334,7 @@ const AgregarAdministrador = () => {
                                 <button type="button" className="btn-cancelar" onClick={handleVolver}>
                                     Cancelar
                                 </button>
-                                <button type="submit" className="btn-agregar">
+                                <button type="submit" className="btn-agregar-admin">
                                     Agregar Administrador
                                 </button>
                                 {mensaje && (

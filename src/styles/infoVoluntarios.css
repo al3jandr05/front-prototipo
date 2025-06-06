@@ -20,7 +20,7 @@
 .info-avatar {
     width: 80px;
     height: 80px;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo);
     border-radius: 50%;
     color: white;
     font-size: 28px;
@@ -34,13 +34,13 @@
 .nombre-voluntario {
     margin: 0;
     font-size: 24px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 
 .email-voluntario {
     margin: 0;
     font-size: 15px;
-    color: #555;
+    color: var(--color-naranja-fuerte);
 }
 
 .estado-info {
@@ -66,7 +66,7 @@
 }
 
 .estado-info.activo {
-    background-color: #e0f7e9;
+    background-color: var(--color-blanco);
     color: #2e7d32;
 }
 
@@ -75,7 +75,7 @@
 }
 
 .estado-info.inactivo {
-    background-color: #fdecea;
+    background-color: var(--color-blanco);
     color: #c62828;
 }
 
@@ -84,7 +84,7 @@
 }
 
 .titulo-seccion {
-    color: var(--color-verde-oscuro);
+    color: var(--color-naranja-fuerte);
     font-size: 2rem;
 }
 
@@ -101,17 +101,17 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    border-left: 6px solid var(--color-verde-principal);
+    border-left: 6px solid;
 }
 
 .panel-hover:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
-    background-color: var(--color-verde-hover-card);
+    background-color: var(--bs-white);
 }
 
 .panel-hover h4 {
-    color: var(--color-verde-oscuro);
+    color: var(--color-naranja-fuerte);
     font-size: 1.3rem;
     margin-bottom: 20px;
     display: flex;
@@ -121,7 +121,7 @@
 
 .panel-hover h4 svg {
     font-size: 1.4rem;
-    color: var(--color-verde-principal);
+    color: var(--color-naranja-suave);
 }
 
 .panel-hover p {
@@ -136,7 +136,7 @@
 
 .panel-hover p svg {
     font-size: 1.1rem;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo-hover);
     min-width: 20px;
 }
 
@@ -157,7 +157,7 @@
 
 .panel-hover .item-evaluacion svg {
     font-size: 1.1rem;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo-hover);
     min-width: 20px;
 }
 
@@ -175,7 +175,7 @@
 
 .no-evaluacion .icono-vacio {
     font-size: 2rem;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
     opacity: 0.7;
 }
 
@@ -186,9 +186,8 @@
     font-style: italic;
 }
 
-/* Estilos específicos para cada panel */
 .panel-personal {
-    border-left-color: var(--color-verde-principal);
+    border-left-color: #1F22FFFF;
 }
 
 .panel-fisico {
@@ -224,7 +223,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo);
     border: none;
     padding: 10px 25px;
     border-radius: 12px;
@@ -235,7 +234,7 @@
 }
 
 .btn-opcion:hover {
-    background-color: var(--color-verde-suave);
+    background-color: var(--color-amarillo-hover);
 }
 
 .mensaje-vacio {
@@ -260,7 +259,7 @@
 }
 
 .reporte-icono {
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
     margin-top: 4px;
     flex-shrink: 0;
 }
@@ -269,7 +268,7 @@
     display: block;
     font-size: 16px;
     margin-bottom: 6px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 
 .vista-card p {
@@ -288,11 +287,11 @@
 .panel-header h4 {
     margin: 0;
     font-size: 18px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 .panel-icon {
     font-size: 22px;
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
 }
 .panel-item {
     display: flex;
@@ -302,7 +301,7 @@
 }
 
 .panel-item-icon {
-    color: var(--color-verde-principal);
+    color: var(--color-amarillo);
     font-size: 16px;
     min-width: 24px;
     display: flex;
@@ -376,7 +375,7 @@
 
 .diseño-vacio .icono-vacio {
     font-size: 28px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-texto-principal);
     margin-bottom: 10px;
 }
 
@@ -390,19 +389,19 @@
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    background-color: var(--color-verde-suave);
-    color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo);
+    color: var(--color-amarillo);
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .tab-button:hover {
-    background-color: var(--color-verde-suave);
+    background-color: var(--color-amarillo-hover);
 }
 
 .tab-button.active {
-    background-color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo);
     color: white;
 }
 
@@ -414,7 +413,7 @@
 }
 
 .vista-card {
-    background-color: white;
+    background-color: var(--color-card);
     padding: 16px;
     border-radius: 10px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
@@ -424,11 +423,13 @@
 .vista-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-blanco);
+
 }
 
 .vista-card strong {
     margin-bottom: 6px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 
 .vista-card p {
@@ -450,8 +451,8 @@
     padding: 12px 0;
     font-weight: bold;
     font-size: 17px;
-    color: var(--color-verde-principal);
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    color: var(--color-amarillo);
+    border-bottom: 1px solid rgba(81, 81, 81, 0.4);
 }
 
 .panel-historial{
@@ -460,7 +461,6 @@
 
 .historial-toggle span {
     font-size: 18px;
-    color: #555;
     margin-left: 10px;
 }
 
@@ -540,13 +540,13 @@
 }
 
 .card-reporte:hover {
-    background-color: var(--color-verde-hover-card);
+    background-color: var(--color-blanco);
 }
 
 .card-reporte .info-voluntario h4 {
     margin: 0;
     font-size: 18px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 
 .card-reporte .info-voluntario p {
@@ -566,13 +566,13 @@
 }
 
 .card-encuesta:hover {
-    background-color: var(--color-verde-hover-card);
+    background-color: var(--color-amarillo-hover);
 }
 
 .card-encuesta .info-resultado h4 {
     margin: 0;
     font-size: 18px;
-    color: var(--color-verde-oscuro);
+    color: var(--color-amarillo);
 }
 
 .card-encuesta .info-resultado p {
@@ -614,7 +614,7 @@
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo);
     color: white;
     border: none;
     cursor: pointer;
@@ -623,7 +623,7 @@
 }
 
 .btn-formulario-enviar:hover {
-    background-color: var(--color-verde-hover);
+    background-color: var(--color-amarillo-hover);
 }
 
 /* Estilos para el mensaje del formulario */
@@ -676,7 +676,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 20px;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-naranja-fuerte);
     color: white;
     border: none;
     border-radius: 8px;
@@ -687,7 +687,7 @@
 }
 
 .btn-volver:hover {
-    background-color: var(--color-verde-hover);
+    background-color: var(--color-amarillo-hover);
 }
 
 .btn-volver svg {
@@ -699,7 +699,7 @@
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
-    background-color: var(--color-verde-principal);
+    background-color: var(--color-amarillo);
     color: white;
     border: none;
     cursor: pointer;
@@ -712,17 +712,15 @@
 }
 
 .btn-descargar-pdf:hover {
-    background-color: var(--color-verde-hover);
+    background-color: var(--color-amarillo-hover);
     color: white;
     text-decoration: none;
 }
 
 .vista-card.card-voluntario {
     background: white;
-    border: 1px solid rgba(45, 106, 79, 0.1);
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(45, 106, 79, 0.08);
     transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
@@ -731,8 +729,6 @@
 
 .vista-card.card-voluntario:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(45, 106, 79, 0.12);
-    border-color: rgba(45, 106, 79, 0.2);
 }
 
 .vista-card.card-voluntario::before {
@@ -742,7 +738,6 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background-color: #2D6A4F;
     opacity: 0.8;
 }
 
@@ -751,7 +746,7 @@
 }
 
 .vista-card .info-resultado h4 {
-    color: #2D6A4F;
+    color: var(--color-amarillo);
     font-size: 1.1rem;
     margin: 0 0 8px 0;
     font-weight: 600;
@@ -761,6 +756,7 @@
     color: #666;
     font-size: 0.9rem;
     margin: 0;
+    font-weight: bold;
 }
 
 .reporte-numero {
@@ -768,8 +764,8 @@
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
-    background-color: rgba(45, 106, 79, 0.1);
-    color: #2D6A4F;
+    background-color:var(--color-amarillo-hover);
+    color: var(--color-texto-principal);
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 0.85em;
@@ -785,8 +781,8 @@
 }
 
 .vista-card.card-voluntario:hover .reporte-numero {
-    background-color: #2D6A4F;
-    color: white;
+    background-color: var(--color-amarillo);
+    color: var(--color-texto-principal);
 }
 
 @media (max-width: 768px) {

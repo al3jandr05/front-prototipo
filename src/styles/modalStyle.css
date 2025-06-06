@@ -5,7 +5,7 @@
 }
 
 .modal-header {
-    background-color: var(--color-verde-oscuro);
+    background-color: var(--color-amarillo) !important;
     color: white;
     padding: 16px 24px;
 }
@@ -24,11 +24,12 @@
     background-color: #f1f1f1;
 }
 
+
 .btn-primary{
-    background-color: var(--color-verde-oscuro) !important;
-    border-color: var(--color-verde-oscuro) !important;
+    background-color: var(--color-amarillo) !important;
+    border-color: var(--color-amarillo) !important;
 }
 
 .btn-primary:hover{
-    background-color: var(--color-verde-hover) !important;
+    background-color: var(--color-amarillo) !important;
 }

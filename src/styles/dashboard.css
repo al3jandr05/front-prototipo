@@ -192,9 +192,13 @@
 }
 
 .chart-title {
-    margin: 0 0 15px 0;
-    font-size: 16px;
+    font-size: 20px;
     color: #333;
+    font-weight: bold;
+    color: var(--color-naranja-fuerte);
+    line-height: 1.2;
+    border-bottom: 2px solid var(--color-naranja-fuerte);
+
 }
 
 .chart-wrapper {

@@ -569,6 +569,42 @@
     margin-bottom: 30px;
 }
 
+.badge {
+    padding: 0.3rem 0.7rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-no-empezado {
+    background-color: #dc3545; /* rojo fuerte */
+    color: white;
+}
+
+.badge-en-progreso {
+    background-color: #ffc107; /* amarillo oscuro */
+    color: black;
+}
+
+.badge-completado {
+    background-color: #28a745; /* verde oscuro */
+    color: white;
+}
+
+.estado-no-empezado .step-number {
+    background-color: #dc3545;
+}
+
+.estado-en-progreso .step-number {
+    background-color: #ffc107;
+}
+
+.estado-completado .step-number {
+    background-color: #28a745;
+}
+
 .panel-hover {
     background-color: var(--color-card);
     padding: 25px;

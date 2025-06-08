@@ -701,24 +701,27 @@ const InfoVoluntarios = () => {
                         <p className="text-center text-gray-600 italic">No hay etapas definidas para este curso.</p>
                     ) : (
                         <div className="progress-steps">
-                            {stages.map((stage, index) => (
-                                <div
-                                    key={stage.id}
-                                    className="progress-step has-line"
-                                >
-                                    <div className="step-number-wrapper">
-                                        <div className="step-number">{index + 1}</div>
-                                    </div>
-                                    <div className="step-content">
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h6 className="step-title">{stage.nombre}</h6>
-                                                <p className="step-description">{stage.descripcion}</p>
+                            {stages.map((stage, index) => {
+                                const estado = stage.estado || 'No Empezado'; // fallback por seguridad
+                                const estadoClass = estado.toLowerCase().replace(/\s/g, '-'); // Ej: "En Progreso" → "en-progreso"
+
+                                return (
+                                    <div key={stage.id} className={`progress-step has-line estado-${estadoClass}`}>
+                                        <div className="step-number-wrapper">
+                                            <div className="step-number">{index + 1}</div>
+                                        </div>
+                                        <div className="step-content">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h6 className="step-title">{stage.nombre}</h6>
+                                                    <p className="step-description">{stage.descripcion}</p>
+                                                </div>
+                                                <span className={`badge badge-${estadoClass}`}>{estado}</span>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                 </Modal.Body>

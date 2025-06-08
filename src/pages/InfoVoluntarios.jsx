@@ -17,8 +17,8 @@ import { obtenerVoluntario } from '../api/rest/voluntarioService';
 import { OBTENER_REPORTES_VOLUNTARIOS } from '../api/graphql/SQL/querys/reportes';
 import { OBTENER_CURSOS_VOLUNTARIO } from '../api/graphql/SQL/querys/cursosVoluntario';
 import { CREAR_EVALUACION } from '../api/graphql/SQL/mutations/crearEvaluacion';
-import ModalCapacitaciones from '../components/franco/ModalCapacitaciones'; // Assuming this component exists
-import ModalNecesidades from '../components/franco/ModalNecesidades'; // Assuming this component exists
+import ModalCapacitaciones from '../components/franco/ModalCapacitaciones';
+import ModalNecesidades from '../components/franco/ModalNecesidades';
 import ModalNulo from '../components/ModalNulo';
 import ModalReporte from "../components/ModalReporte";
 import CardReporte from "../components/CardReporte";
@@ -88,7 +88,6 @@ const mockCapacitaciones = [
     },
 ];
 
-
 const InfoVoluntarios = () => {
     const { id } = useParams();
     const historialId = parseInt(id);
@@ -99,6 +98,7 @@ const InfoVoluntarios = () => {
 
     const [showModalCap, setShowModalCap] = useState(false);
     const [showModalNecesidad, setShowModalNecesidad] = useState(false);
+
     const [vistaActual, setVistaActual] = useState(null);
     const [mostrarClinico, setMostrarClinico] = useState(true);
     const [mostrarPsicologico, setMostrarPsicologico] = useState(true);
@@ -113,7 +113,13 @@ const InfoVoluntarios = () => {
 
     const [crearEvaluacion] = useMutation(CREAR_EVALUACION);
 
-    // New states for Capacitaciones and Cursos
+    // Estados para Capacitaciones (CRUD)
+    const [capacitaciones, setCapacitaciones] = useState([...mockCapacitaciones]);
+    const [showAddCapModal, setShowAddCapModal] = useState(false);
+    const [newCapName, setNewCapName] = useState('');
+    const [newCapDescription, setNewCapDescription] = useState('');
+
+    // Cursos y Etapas
     const [showCoursesModal, setShowCoursesModal] = useState(false);
     const [selectedCapacitacion, setSelectedCapacitacion] = useState(null);
     const [courses, setCourses] = useState([]);
@@ -212,7 +218,7 @@ const InfoVoluntarios = () => {
         : [];
 
     const cantidadReportes = datosReportes?.length > 0;
-    const tieneCapacitaciones = mockCapacitaciones.length > 0; // Use mock data
+    const tieneCapacitaciones = capacitaciones.length > 0; // Use mock data
     const reporteMasReciente = datosReportes.length > 0
         ? [...datosReportes].sort((a, b) => new Date(b.fechaGenerado) - new Date(a.fechaGenerado))[0]
         : null;
@@ -283,14 +289,14 @@ const InfoVoluntarios = () => {
         }
     }, [vistaActual, tieneHistorial]);
 
-    // Handler to open the courses modal
+    // Handler para abrir cursos de una capacitación (ya no se usa en la vista de capacitaciones)
     const handleCardClick = (capacitacion) => {
         setSelectedCapacitacion(capacitacion);
-        setCourses([...capacitacion.cursos]); // Make a copy to allow reordering
+        setCourses([...capacitacion.cursos]);
         setShowCoursesModal(true);
     };
 
-    // Handler for drag and drop reordering of courses
+    // Handler para drag and drop de cursos
     const dragItem = useRef(0);
     const dragOverItem = useRef(0);
 
@@ -301,22 +307,19 @@ const InfoVoluntarios = () => {
         dragItem.current = null;
         dragOverItem.current = null;
         setCourses(_courses);
-
-        // Update the mockCapacitaciones data with the new order
-        const updatedMockCapacitaciones = mockCapacitaciones.map(cap =>
-            cap.id === selectedCapacitacion.id ? { ...cap, cursos: _courses } : cap
+        setSelectedCapacitacion(prev => ({ ...prev, cursos: _courses }));
+        setCapacitaciones(prev =>
+            prev.map(cap =>
+                cap.id === selectedCapacitacion.id ? { ...cap, cursos: _courses } : cap
+            )
         );
-        // In a real application, you would dispatch an action or make an API call to save this new order.
-        // For this example, we'll just update the local mock data directly (not ideal for large apps, but works for mock).
-        // For now, we'll skip updating mockCapacitaciones as it's a constant. In a real app, mockCapacitaciones would be a state.
-        // If mockCapacitaciones were state: setMockCapacitaciones(updatedMockCapacitaciones);
     };
 
-    // CRUD functions for Courses
+    // CRUD para cursos
     const handleAddCourse = () => {
         if (newCourseName.trim() === '') return;
         const newCourse = {
-            id: `cur${Date.now()}`, // Unique ID
+            id: `cur${Date.now()}`,
             nombre: newCourseName,
             descripcion: newCourseDescription,
             estado: 'no iniciada',
@@ -324,8 +327,12 @@ const InfoVoluntarios = () => {
         };
         const updatedCourses = [...courses, newCourse];
         setCourses(updatedCourses);
-        // Update selectedCapacitacion's courses
         setSelectedCapacitacion(prev => ({ ...prev, cursos: updatedCourses }));
+        setCapacitaciones(prev =>
+            prev.map(cap =>
+                cap.id === selectedCapacitacion.id ? { ...cap, cursos: updatedCourses } : cap
+            )
+        );
         setNewCourseName('');
         setNewCourseDescription('');
         setShowAddCourseModal(false);
@@ -333,13 +340,16 @@ const InfoVoluntarios = () => {
 
     const handleEditCourse = () => {
         if (!editingCourse || editingCourse.nombre.trim() === '') return;
-
         const updatedCourses = courses.map(c =>
             c.id === editingCourse.id ? { ...c, nombre: editingCourse.nombre, descripcion: editingCourse.descripcion } : c
         );
         setCourses(updatedCourses);
-        // Update selectedCapacitacion's courses
         setSelectedCapacitacion(prev => ({ ...prev, cursos: updatedCourses }));
+        setCapacitaciones(prev =>
+            prev.map(cap =>
+                cap.id === selectedCapacitacion.id ? { ...cap, cursos: updatedCourses } : cap
+            )
+        );
         setShowEditCourseModal(false);
         setEditingCourse(null);
     };
@@ -347,18 +357,22 @@ const InfoVoluntarios = () => {
     const handleDeleteCourse = (courseId) => {
         const updatedCourses = courses.filter(c => c.id !== courseId);
         setCourses(updatedCourses);
-        // Update selectedCapacitacion's courses
         setSelectedCapacitacion(prev => ({ ...prev, cursos: updatedCourses }));
+        setCapacitaciones(prev =>
+            prev.map(cap =>
+                cap.id === selectedCapacitacion.id ? { ...cap, cursos: updatedCourses } : cap
+            )
+        );
     };
 
-    // Handler to open the course detail modal
+    // Handler para abrir detalle de curso
     const handleCourseCardClick = (course) => {
         setSelectedCourse(course);
-        setStages([...course.etapas]); // Copy for local state management
+        setStages([...course.etapas]);
         setShowCourseDetailModal(true);
     };
 
-    // Helper to calculate course status
+    // Estado de curso
     const getCourseStatus = (courseStages) => {
         const completedStages = courseStages.filter(stage => stage.completada).length;
         if (completedStages === 0) {
@@ -370,7 +384,7 @@ const InfoVoluntarios = () => {
         }
     };
 
-    // CRUD functions for Stages
+    // CRUD para etapas
     const handleAddStage = () => {
         if (newStageName.trim() === '') return;
         const newStage = {
@@ -389,7 +403,6 @@ const InfoVoluntarios = () => {
 
     const handleEditStage = () => {
         if (!editingStage || editStageName.trim() === '') return;
-
         const updatedStages = stages.map(s =>
             s.id === editingStage.id ? { ...s, nombre: editStageName, descripcion: editStageDescription } : s
         );
@@ -407,57 +420,68 @@ const InfoVoluntarios = () => {
         updateCourseStages(selectedCourse.id, updatedStages);
     };
 
-    const handleToggleStageCompletion = (stageToToggle) => {
-        const currentStageIndex = stages.findIndex(s => s.id === stageToToggle.id);
-        if (currentStageIndex === -1) return;
-
-        const updatedStages = stages.map((s, idx) => {
-            if (s.id === stageToToggle.id) {
-                // Check if it's the next uncompleted stage
-                const isNextUncompleted = stages.slice(0, idx).every(prev => prev.completada) &&
-                    stages.slice(idx + 1).every(next => !next.completada);
-                if (isNextUncompleted || s.completada) { // Allow unchecking completed stages
-                    return { ...s, completada: !s.completada };
-                }
-                return s; // Prevent completing out of order
-            }
-            return s;
-        });
-
-        // Check if the current stage was not the last completed, and the next one is now available
-        if (!stageToToggle.completada && stages[currentStageIndex + 1]) {
-            // No need to explicitly mark next stage as available, the logic handles it
-        }
-
-        setStages(updatedStages);
-        updateCourseStages(selectedCourse.id, updatedStages);
-    };
-
+    // Solo para la vista de cursos (no permitir completar etapas)
+    const handleToggleStageCompletion = () => { };
 
     const updateCourseStages = (courseId, newStages) => {
-        const updatedCourses = courses.map(course => {
-            if (course.id === courseId) {
-                return { ...course, etapas: newStages, estado: getCourseStatus(newStages) };
-            }
-            return course;
-        });
-        setCourses(updatedCourses);
-
-        // Also update the selectedCapacitacion's courses
+        // Actualiza en el modal de cursos
+        setCourses(prev =>
+            prev.map(course =>
+                course.id === courseId
+                    ? { ...course, etapas: newStages, estado: getCourseStatus(newStages) }
+                    : course
+            )
+        );
+        // Actualiza en la capacitación seleccionada
         setSelectedCapacitacion(prevCap => {
             if (!prevCap) return null;
-            const updatedCapCourses = prevCap.cursos.map(course => {
-                if (course.id === courseId) {
-                    return { ...course, etapas: newStages, estado: getCourseStatus(newStages) };
-                }
-                return course;
-            });
+            const updatedCapCourses = prevCap.cursos.map(course =>
+                course.id === courseId
+                    ? { ...course, etapas: newStages, estado: getCourseStatus(newStages) }
+                    : course
+            );
             return { ...prevCap, cursos: updatedCapCourses };
         });
+        // Actualiza en el array principal de capacitaciones
+        setCapacitaciones(prev =>
+            prev.map(cap =>
+                cap.id === selectedCapacitacion.id
+                    ? {
+                        ...cap,
+                        cursos: cap.cursos.map(course =>
+                            course.id === courseId
+                                ? { ...course, etapas: newStages, estado: getCourseStatus(newStages) }
+                                : course
+                        )
+                    }
+                    : cap
+            )
+        );
     };
 
+    // CRUD para capacitaciones
+    const handleAddCapacitacion = () => {
+        if (newCapName.trim() === '') return;
+        const newCap = {
+            id: `cap${Date.now()}`,
+            nombre: newCapName,
+            descripcion: newCapDescription,
+            cursos: [],
+        };
+        setCapacitaciones([...capacitaciones, newCap]);
+        setShowAddCapModal(false);
+        setNewCapName('');
+        setNewCapDescription('');
+    };
 
-    if (loading || loadingCursos ) return (
+    // Vista de cursos: muestra todos los cursos de todas las capacitaciones
+    const allCourses = capacitaciones.flatMap(cap => cap.cursos.map(course => ({
+        ...course,
+        capId: cap.id,
+        capNombre: cap.nombre
+    })));
+
+    if (loading || loadingCursos) return (
         <div className="infovoluntarios-container">
             <Sidebar />
             <main className="infovoluntarios-content">
@@ -636,6 +660,12 @@ const InfoVoluntarios = () => {
                         >
                             <MdPsychology /> Análisis de Necesidades
                         </button>
+                        <button
+                            className="btn-opcion"
+                            onClick={() => setVistaActual('cursos')}
+                        >
+                            <LuNotebookPen /> Cursos
+                        </button>
                     </div>
                 </section>
                 <ModalNulo
@@ -657,22 +687,52 @@ const InfoVoluntarios = () => {
                         {vistaActual === 'reportes' && 'Reportes'}
                         {vistaActual === 'capacitaciones' && 'Capacitaciones y Certificaciones'}
                         {vistaActual === 'encuestas' && 'Encuestas Realizadas'}
+                        {vistaActual === 'cursos' && 'Cursos'}
                     </h2>
+                    {/* CAPACITACIONES: solo cards y botón agregar */}
                     {vistaActual === 'capacitaciones' && tieneCapacitaciones && (
                         <div className="panel-capacitaciones">
+                            <button
+                                className="btn-opcion"
+                                onClick={() => setShowModalCap(true)}
+                            >
+                                Agregar
+                            </button>
                             <div className="capacitaciones-grid">
-                                {mockCapacitaciones.map((item, index) => (
-                                    <div
-                                        key={item.id}
-                                        className="vista-card cursor-pointer"
-                                        onClick={() => handleCardClick(item)}
-                                    >
+                                {reporteMasReciente.capacitaciones.map((item, index) => (
+                                    <div key={index} className="vista-card">
                                         <div>
-                                            <strong>{item.nombre}</strong>
+                                            <strong>{item.tipo}</strong>
                                             <p>{item.descripcion}</p>
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                    )}
+                    {/* VISTA DE CURSOS */}
+                    {vistaActual === 'cursos' && (
+                        <div className="panel-cursos">
+                            <div className="cursos-grid">
+                                {allCourses.length === 0 ? (
+                                    <p className="text-center text-gray-600 italic">No hay cursos disponibles.</p>
+                                ) : (
+                                    allCourses.map((course) => (
+                                        <div
+                                            key={course.id}
+                                            className="vista-card cursor-pointer"
+                                            onClick={() => {
+                                                setSelectedCourse(course);
+                                                setStages([...course.etapas]);
+                                                setShowCourseDetailModal(true);
+                                            }}
+                                        >
+                                            <strong>{course.nombre}</strong>
+                                            <p>{course.descripcion}</p>
+                                            <small className="text-muted">Capacitación: {course.capNombre}</small>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </div>
                     )}
@@ -768,7 +828,7 @@ const InfoVoluntarios = () => {
                             </div>
                         </div>
                     )}
-                    {/* Vista: Certificaciones */}
+                    {/* Vista: Análisis de Necesidades */}
                     {vistaActual === 'analisis' && tieneAnalisis && (
                         <div className="panel-analisis">
                             <button
@@ -823,7 +883,7 @@ const InfoVoluntarios = () => {
                                     onDragEnter={(e) => (dragOverItem.current = index)}
                                     onDragEnd={handleSortCourses}
                                     onDragOver={(e) => e.preventDefault()}
-                                    className="course-card cursor-grab" // Using a specific class for styling
+                                    className="course-card cursor-grab"
                                 >
                                     <div className="course-card-content" onClick={() => handleCourseCardClick(course)}>
                                         <h5 className="course-title">{course.nombre}</h5>
@@ -936,7 +996,7 @@ const InfoVoluntarios = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Modal para Detalles del Curso y Etapas */}
+            {/* Modal para Detalles del Curso y Etapas (solo CRUD, sin completar) */}
             <Modal show={showCourseDetailModal} onHide={() => setShowCourseDetailModal(false)} size="lg" centered>
                 <Modal.Header closeButton >
                     <Modal.Title className="text-xl font-bold flex items-center gap-2">
@@ -950,29 +1010,11 @@ const InfoVoluntarios = () => {
                             <LuClipboardList />
                             {selectedCourse?.nombre}</h5>
                         <p className="course-description">{selectedCourse?.descripcion}</p>
-                        <div className="course-status-line">
-                            <span className="label">Estado del Curso:</span>
-                            <span className={`course-status ${selectedCourse?.estado.replace(' ', '-').toLowerCase()}`}>
-                                {selectedCourse?.estado.charAt(0).toUpperCase() + selectedCourse?.estado.slice(1)}
-                            </span>
-                        </div>
                     </div>
-
                     <h5 className="course-stages-heading">
                         <TbListDetails />
                         Etapas del Curso
                     </h5>
-
-                    <div className="flex justify-between items-center mb-6">
-                        <div className="w-full h-2 bg-gray-300 rounded-full relative">
-                            <div
-                                className="h-2 bg-yellow-400 rounded-full transition-all duration-500"
-                                style={{ width: `${(stages.filter(s => s.completada).length / stages.length) * 100}%` }}
-                            ></div>
-                        </div>
-                        <span className="ml-4 text-sm text-gray-600">{stages.filter(s => s.completada).length} / {stages.length} completadas</span>
-                    </div>
-
                     <div className="flex justify-end mb-4">
                         <Button
                             variant="success"
@@ -983,66 +1025,51 @@ const InfoVoluntarios = () => {
                             Agregar Etapa
                         </Button>
                     </div>
-
                     {stages.length === 0 ? (
                         <p className="text-center text-gray-600 italic">No hay etapas definidas para este curso.</p>
                     ) : (
                         <div className="progress-steps">
-                            {stages.map((stage, index) => {
-                                const isCompleted = stage.completada;
-                                const isNextAvailable = stages.slice(0, index).every(s => s.completada) && !isCompleted;
-                                const canComplete = isNextAvailable || isCompleted;
-
-                                return (
-                                    <div
-                                        key={stage.id}
-                                        className={`progress-step ${isCompleted ? 'completed' : ''} ${canComplete ? 'clickable' : 'disabled'} has-line`}
-                                        onClick={() => canComplete && handleToggleStageCompletion(stage)}
-                                    >
-                                        <div className="step-number-wrapper">
-                                            <div className="step-number">{index + 1}</div>
-                                        </div>
-                                        <div className="step-content">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h6 className="step-title">{stage.nombre}</h6>
-                                                    <p className="step-description">{stage.descripcion}</p>
-                                                    {!isCompleted && canComplete && (
-                                                        <span className="stage-completion-hint text-sm text-yellow-600">Haga click para completar etapa</span>
-                                                    )}
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <Button
-                                                        variant="outline-primary"
-                                                        size="sm"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setEditingStage({ ...stage });
-                                                            setEditStageName(stage.nombre);
-                                                            setEditStageDescription(stage.descripcion);
-                                                            setShowEditStageModal(true);
-                                                        }}
-                                                        className="action-button"
-                                                    >
-                                                        <FaEdit />
-                                                    </Button>
-                                                    <Button
-                                                        variant="outline-danger"
-                                                        size="sm"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleDeleteStage(stage.id);
-                                                        }}
-                                                        className="action-button"
-                                                    >
-                                                        <FaTrash />
-                                                    </Button>
-                                                </div>
+                            {stages.map((stage, index) => (
+                                <div
+                                    key={stage.id}
+                                    className="progress-step has-line"
+                                >
+                                    <div className="step-number-wrapper">
+                                        <div className="step-number">{index + 1}</div>
+                                    </div>
+                                    <div className="step-content">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h6 className="step-title">{stage.nombre}</h6>
+                                                <p className="step-description">{stage.descripcion}</p>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    variant="outline-primary"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        setEditingStage({ ...stage });
+                                                        setEditStageName(stage.nombre);
+                                                        setEditStageDescription(stage.descripcion);
+                                                        setShowEditStageModal(true);
+                                                    }}
+                                                    className="action-button"
+                                                >
+                                                    <FaEdit />
+                                                </Button>
+                                                <Button
+                                                    variant="outline-danger"
+                                                    size="sm"
+                                                    onClick={() => handleDeleteStage(stage.id)}
+                                                    className="action-button"
+                                                >
+                                                    <FaTrash />
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
-                                );
-                            })}
+                                </div>
+                            ))}
                         </div>
                     )}
                 </Modal.Body>

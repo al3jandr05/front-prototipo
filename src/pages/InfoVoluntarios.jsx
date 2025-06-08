@@ -12,7 +12,7 @@ import { MdReport } from "react-icons/md";
 import { PiCertificate } from "react-icons/pi";
 import { MdPsychology } from 'react-icons/md';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation,useLazyQuery  } from '@apollo/client';
 import { obtenerVoluntario } from '../api/rest/voluntarioService';
 import { OBTENER_REPORTES_VOLUNTARIOS } from '../api/graphql/SQL/querys/reportes';
 import { OBTENER_CURSOS_VOLUNTARIO } from '../api/graphql/SQL/querys/cursosVoluntario';
@@ -63,6 +63,7 @@ const InfoVoluntarios = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [stages, setStages] = useState([]);
 
+    const [cursos, setCursos] = useState([]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -108,20 +109,29 @@ const InfoVoluntarios = () => {
         fetchVoluntario();
     }, [id]);
 
+
     const { loading, error, data } = useQuery(OBTENER_REPORTES_VOLUNTARIOS, {
         variables: { historialId },
     });
-    const { loadingCursos, errorCursos, dataCursos } = useQuery(OBTENER_CURSOS_VOLUNTARIO, {
-        variables: { id: id?.toString() },
+
+
+    const {
+        data: cursosData,
+        loading: loadingCursos,
+        error: errorCursos,
+    } = useQuery(OBTENER_CURSOS_VOLUNTARIO, {
+        variables: { id: historialId },
     });
 
+    console.log('🔹 Cursos raw response:', { loadingCursos, errorCursos, cursosData });
+
+    // Usamos efecto para capturar cambios en cursosData
     useEffect(() => {
-        console.log({
-            loadingCursos,
-            errorCursos,
-            dataCursos,
-        });
-    }, [loadingCursos, errorCursos, dataCursos]);
+        if (cursosData?.obtenerCursosVoluntario) {
+            setCursos(cursosData.obtenerCursosVoluntario);
+        }
+    }, [cursosData]);
+    console.log(cursosData);
     const nombreEmail = voluntario?.email || ' ';
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
 
@@ -139,7 +149,7 @@ const InfoVoluntarios = () => {
             }))
         : [];
 
-    const cursosVoluntario = dataCursos?.obtenerCursosVoluntario || [];
+    const cursosVoluntario = cursos;
     const tieneCapacitaciones = cursosVoluntario.length > 0;
     const cantidadReportes = datosReportes?.length > 0;
     const reporteMasReciente = datosReportes.length > 0
@@ -212,12 +222,7 @@ const InfoVoluntarios = () => {
         }
     }, [vistaActual, tieneHistorial]);
 
-    // Handler para abrir cursos de una capacitación (ya no se usa en la vista de capacitaciones)
-    const handleCardClick = (capacitacion) => {
-        setSelectedCapacitacion(capacitacion);
-        setCourses([...capacitacion.cursos]);
-        setShowCoursesModal(true);
-    };
+
 
     // Handler para drag and drop de cursos
     const dragItem = useRef(0);
@@ -238,7 +243,6 @@ const InfoVoluntarios = () => {
 
 
 
-    // Handler para abrir detalle de curso
     const handleCourseCardClick = (course) => {
         setSelectedCourse(course);
         setStages([...course.etapas]);
@@ -262,7 +266,7 @@ const InfoVoluntarios = () => {
     // Vista de cursos: muestra todos los cursos de todas las capacitaciones
 
 
-    if (loading || loadingCursos) return (
+    if (loading ) return (
         <div className="infovoluntarios-container">
             <Sidebar />
             <main className="infovoluntarios-content">

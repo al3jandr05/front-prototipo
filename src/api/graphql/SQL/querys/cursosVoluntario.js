@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const OBTENER_CURSOS_VOLUNTARIO = gql`
-    query ObtenerCursosVoluntario($id: String!) {
+    query ObtenerCursosVoluntario($id: Int!) {
         obtenerCursosVoluntario(id: $id) {
             id
             nombre

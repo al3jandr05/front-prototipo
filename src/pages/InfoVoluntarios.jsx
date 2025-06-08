@@ -29,65 +29,6 @@ import HistorialClinicoPDF from '../components/HistorialClinicoPDF';
 import '../styles/infoVoluntarios.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const mockCapacitaciones = [
-    {
-        id: 'cap1',
-        nombre: 'Primeros Auxilios Básicos',
-        descripcion: 'Curso fundamental para aprender a responder en situaciones de emergencia.',
-        cursos: [
-            {
-                id: 'cur1',
-                nombre: 'Evaluación de la Escena',
-                descripcion: 'Aprende a asegurar el área y evaluar la situación.',
-                estado: 'no iniciada',
-                etapas: [
-                    { id: 'eta1', nombre: 'Seguridad Personal', descripcion: 'Identificar riesgos para el rescatista.', completada: false },
-                    { id: 'eta2', nombre: 'Evaluación Inicial de Víctima', descripcion: 'Determinar nivel de conciencia y respiración.', completada: false },
-                    { id: 'eta3', nombre: 'Llamada de Emergencia', descripcion: 'Comunicar información clave a servicios de emergencia.', completada: false },
-                ],
-            },
-            {
-                id: 'cur2',
-                nombre: 'Reanimación Cardiopulmonar (RCP)',
-                descripcion: 'Técnicas de RCP para adultos, niños y bebés.',
-                estado: 'no iniciada',
-                etapas: [
-                    { id: 'eta4', nombre: 'Compresiones Torácicas', descripcion: 'Técnica y ritmo correctos.', completada: false },
-                    { id: 'eta5', nombre: 'Ventilaciones de Rescate', descripcion: 'Manejo de vía aérea y respiraciones.', completada: false },
-                    { id: 'eta6', nombre: 'Uso de DEA', descripcion: 'Funcionamiento y aplicación de desfibrilador.', completada: false },
-                ],
-            },
-            {
-                id: 'cur3',
-                nombre: 'Manejo de Hemorragias',
-                descripcion: 'Control de sangrados externos.',
-                estado: 'no iniciada',
-                etapas: [
-                    { id: 'eta7', nombre: 'Presión Directa', descripcion: 'Aplicación de presión sobre la herida.', completada: false },
-                    { id: 'eta8', nombre: 'Vendaje Compresivo', descripcion: 'Uso de vendajes para controlar el sangrado.', completada: false },
-                ],
-            },
-        ],
-    },
-    {
-        id: 'cap2',
-        nombre: 'Gestión de Desastres',
-        descripcion: 'Preparación y respuesta ante desastres naturales.',
-        cursos: [
-            {
-                id: 'cur4',
-                nombre: 'Planificación de Emergencias',
-                descripcion: 'Desarrollo de planes de contingencia.',
-                estado: 'no iniciada',
-                etapas: [
-                    { id: 'eta9', nombre: 'Análisis de Riesgos', descripcion: 'Identificar posibles desastres.', completada: false },
-                    { id: 'eta10', nombre: 'Rutas de Evacuación', descripcion: 'Diseñar y señalizar rutas seguras.', completada: false },
-                ],
-            },
-        ],
-    },
-];
-
 const InfoVoluntarios = () => {
     const { id } = useParams();
     const historialId = parseInt(id);
@@ -113,12 +54,6 @@ const InfoVoluntarios = () => {
 
     const [crearEvaluacion] = useMutation(CREAR_EVALUACION);
 
-    // Estados para Capacitaciones (CRUD)
-    const [capacitaciones, setCapacitaciones] = useState([...mockCapacitaciones]);
-    const [showAddCapModal, setShowAddCapModal] = useState(false);
-    const [newCapName, setNewCapName] = useState('');
-    const [newCapDescription, setNewCapDescription] = useState('');
-
     // Cursos y Etapas
     const [showCoursesModal, setShowCoursesModal] = useState(false);
     const [selectedCapacitacion, setSelectedCapacitacion] = useState(null);
@@ -127,26 +62,6 @@ const InfoVoluntarios = () => {
     const [showCourseDetailModal, setShowCourseDetailModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [stages, setStages] = useState([]);
-
-    // For editing courses
-    const [showEditCourseModal, setShowEditCourseModal] = useState(false);
-    const [editingCourse, setEditingCourse] = useState(null);
-
-    // For adding courses
-    const [showAddCourseModal, setShowAddCourseModal] = useState(false);
-    const [newCourseName, setNewCourseName] = useState('');
-    const [newCourseDescription, setNewCourseDescription] = useState('');
-
-    // For editing stages
-    const [showEditStageModal, setShowEditStageModal] = useState(false);
-    const [editingStage, setEditingStage] = useState(null);
-    const [editStageName, setEditStageName] = useState('');
-    const [editStageDescription, setEditStageDescription] = useState('');
-
-    // For adding stages
-    const [showAddStageModal, setShowAddStageModal] = useState(false);
-    const [newStageName, setNewStageName] = useState('');
-    const [newStageDescription, setNewStageDescription] = useState('');
 
 
     useEffect(() => {
@@ -197,9 +112,16 @@ const InfoVoluntarios = () => {
         variables: { historialId },
     });
     const { loadingCursos, errorCursos, dataCursos } = useQuery(OBTENER_CURSOS_VOLUNTARIO, {
-        variables: { id: id.toString() },
+        variables: { id: id?.toString() },
     });
 
+    useEffect(() => {
+        console.log({
+            loadingCursos,
+            errorCursos,
+            dataCursos,
+        });
+    }, [loadingCursos, errorCursos, dataCursos]);
     const nombreEmail = voluntario?.email || ' ';
     const inicial = voluntario?.nombre?.charAt(0).toUpperCase() || 'U';
 
@@ -217,8 +139,9 @@ const InfoVoluntarios = () => {
             }))
         : [];
 
+    const cursosVoluntario = dataCursos?.obtenerCursosVoluntario || [];
+    const tieneCapacitaciones = cursosVoluntario.length > 0;
     const cantidadReportes = datosReportes?.length > 0;
-    const tieneCapacitaciones = capacitaciones.length > 0; // Use mock data
     const reporteMasReciente = datosReportes.length > 0
         ? [...datosReportes].sort((a, b) => new Date(b.fechaGenerado) - new Date(a.fechaGenerado))[0]
         : null;
@@ -308,62 +231,12 @@ const InfoVoluntarios = () => {
         dragOverItem.current = null;
         setCourses(_courses);
         setSelectedCapacitacion(prev => ({ ...prev, cursos: _courses }));
-        setCapacitaciones(prev =>
-            prev.map(cap =>
-                cap.id === selectedCapacitacion.id ? { ...cap, cursos: _courses } : cap
-            )
-        );
     };
 
-    // CRUD para cursos
-    const handleAddCourse = () => {
-        if (newCourseName.trim() === '') return;
-        const newCourse = {
-            id: `cur${Date.now()}`,
-            nombre: newCourseName,
-            descripcion: newCourseDescription,
-            estado: 'no iniciada',
-            etapas: [],
-        };
-        const updatedCourses = [...courses, newCourse];
-        setCourses(updatedCourses);
-        setSelectedCapacitacion(prev => ({ ...prev, cursos: updatedCourses }));
-        setCapacitaciones(prev =>
-            prev.map(cap =>
-                cap.id === selectedCapacitacion.id ? { ...cap, cursos: updatedCourses } : cap
-            )
-        );
-        setNewCourseName('');
-        setNewCourseDescription('');
-        setShowAddCourseModal(false);
-    };
 
-    const handleEditCourse = () => {
-        if (!editingCourse || editingCourse.nombre.trim() === '') return;
-        const updatedCourses = courses.map(c =>
-            c.id === editingCourse.id ? { ...c, nombre: editingCourse.nombre, descripcion: editingCourse.descripcion } : c
-        );
-        setCourses(updatedCourses);
-        setSelectedCapacitacion(prev => ({ ...prev, cursos: updatedCourses }));
-        setCapacitaciones(prev =>
-            prev.map(cap =>
-                cap.id === selectedCapacitacion.id ? { ...cap, cursos: updatedCourses } : cap
-            )
-        );
-        setShowEditCourseModal(false);
-        setEditingCourse(null);
-    };
 
-    const handleDeleteCourse = (courseId) => {
-        const updatedCourses = courses.filter(c => c.id !== courseId);
-        setCourses(updatedCourses);
-        setSelectedCapacitacion(prev => ({ ...prev, cursos: updatedCourses }));
-        setCapacitaciones(prev =>
-            prev.map(cap =>
-                cap.id === selectedCapacitacion.id ? { ...cap, cursos: updatedCourses } : cap
-            )
-        );
-    };
+
+
 
     // Handler para abrir detalle de curso
     const handleCourseCardClick = (course) => {
@@ -384,102 +257,10 @@ const InfoVoluntarios = () => {
         }
     };
 
-    // CRUD para etapas
-    const handleAddStage = () => {
-        if (newStageName.trim() === '') return;
-        const newStage = {
-            id: `eta${Date.now()}`,
-            nombre: newStageName,
-            descripcion: newStageDescription,
-            completada: false
-        };
-        const updatedStages = [...stages, newStage];
-        setStages(updatedStages);
-        updateCourseStages(selectedCourse.id, updatedStages);
-        setNewStageName('');
-        setNewStageDescription('');
-        setShowAddStageModal(false);
-    };
 
-    const handleEditStage = () => {
-        if (!editingStage || editStageName.trim() === '') return;
-        const updatedStages = stages.map(s =>
-            s.id === editingStage.id ? { ...s, nombre: editStageName, descripcion: editStageDescription } : s
-        );
-        setStages(updatedStages);
-        updateCourseStages(selectedCourse.id, updatedStages);
-        setShowEditStageModal(false);
-        setEditingStage(null);
-        setEditStageName('');
-        setEditStageDescription('');
-    };
-
-    const handleDeleteStage = (stageId) => {
-        const updatedStages = stages.filter(s => s.id !== stageId);
-        setStages(updatedStages);
-        updateCourseStages(selectedCourse.id, updatedStages);
-    };
-
-    // Solo para la vista de cursos (no permitir completar etapas)
-    const handleToggleStageCompletion = () => { };
-
-    const updateCourseStages = (courseId, newStages) => {
-        // Actualiza en el modal de cursos
-        setCourses(prev =>
-            prev.map(course =>
-                course.id === courseId
-                    ? { ...course, etapas: newStages, estado: getCourseStatus(newStages) }
-                    : course
-            )
-        );
-        // Actualiza en la capacitación seleccionada
-        setSelectedCapacitacion(prevCap => {
-            if (!prevCap) return null;
-            const updatedCapCourses = prevCap.cursos.map(course =>
-                course.id === courseId
-                    ? { ...course, etapas: newStages, estado: getCourseStatus(newStages) }
-                    : course
-            );
-            return { ...prevCap, cursos: updatedCapCourses };
-        });
-        // Actualiza en el array principal de capacitaciones
-        setCapacitaciones(prev =>
-            prev.map(cap =>
-                cap.id === selectedCapacitacion.id
-                    ? {
-                        ...cap,
-                        cursos: cap.cursos.map(course =>
-                            course.id === courseId
-                                ? { ...course, etapas: newStages, estado: getCourseStatus(newStages) }
-                                : course
-                        )
-                    }
-                    : cap
-            )
-        );
-    };
-
-    // CRUD para capacitaciones
-    const handleAddCapacitacion = () => {
-        if (newCapName.trim() === '') return;
-        const newCap = {
-            id: `cap${Date.now()}`,
-            nombre: newCapName,
-            descripcion: newCapDescription,
-            cursos: [],
-        };
-        setCapacitaciones([...capacitaciones, newCap]);
-        setShowAddCapModal(false);
-        setNewCapName('');
-        setNewCapDescription('');
-    };
 
     // Vista de cursos: muestra todos los cursos de todas las capacitaciones
-    const allCourses = capacitaciones.flatMap(cap => cap.cursos.map(course => ({
-        ...course,
-        capId: cap.id,
-        capNombre: cap.nombre
-    })));
+
 
     if (loading || loadingCursos) return (
         <div className="infovoluntarios-container">
@@ -689,7 +470,6 @@ const InfoVoluntarios = () => {
                         {vistaActual === 'encuestas' && 'Encuestas Realizadas'}
                         {vistaActual === 'cursos' && 'Cursos'}
                     </h2>
-                    {/* CAPACITACIONES: solo cards y botón agregar */}
                     {vistaActual === 'capacitaciones' && tieneCapacitaciones && (
                         <div className="panel-capacitaciones">
                             <button
@@ -702,7 +482,7 @@ const InfoVoluntarios = () => {
                                 {reporteMasReciente.capacitaciones.map((item, index) => (
                                     <div key={index} className="vista-card">
                                         <div>
-                                            <strong>{item.tipo}</strong>
+                                            <strong>{item.nombre}</strong>
                                             <p>{item.descripcion}</p>
                                         </div>
                                     </div>
@@ -714,10 +494,10 @@ const InfoVoluntarios = () => {
                     {vistaActual === 'cursos' && (
                         <div className="panel-cursos">
                             <div className="cursos-grid">
-                                {allCourses.length === 0 ? (
+                                {cursosVoluntario.length === 0 ? (
                                     <p className="text-center text-gray-600 italic">No hay cursos disponibles.</p>
                                 ) : (
-                                    allCourses.map((course) => (
+                                    cursosVoluntario.map((course) => (
                                         <div
                                             key={course.id}
                                             className="vista-card cursor-pointer"
@@ -729,7 +509,6 @@ const InfoVoluntarios = () => {
                                         >
                                             <strong>{course.nombre}</strong>
                                             <p>{course.descripcion}</p>
-                                            <small className="text-muted">Capacitación: {course.capNombre}</small>
                                         </div>
                                     ))
                                 )}
@@ -861,16 +640,6 @@ const InfoVoluntarios = () => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="p-6 bg-gray-50">
-                    <div className="flex justify-end mb-4">
-                        <Button
-                            variant="success"
-                            onClick={() => setShowAddCourseModal(true)}
-                            className="btn-agregar-curso"
-                        >
-                            <FaPlus />
-                            Agregar Curso
-                        </Button>
-                    </div>
                     {courses.length === 0 ? (
                         <p className="text-center text-gray-600 italic">No hay cursos asignados a esta capacitación.</p>
                     ) : (
@@ -892,24 +661,6 @@ const InfoVoluntarios = () => {
                                             {course.estado.charAt(0).toUpperCase() + course.estado.slice(1)}
                                         </span>
                                     </div>
-                                    <div className="course-actions">
-                                        <Button
-                                            variant="outline-primary"
-                                            size="sm"
-                                            onClick={() => { setEditingCourse({ ...course }); setShowEditCourseModal(true); }}
-                                            className="action-button"
-                                        >
-                                            <FaEdit />
-                                        </Button>
-                                        <Button
-                                            variant="outline-danger"
-                                            size="sm"
-                                            onClick={() => handleDeleteCourse(course.id)}
-                                            className="action-button"
-                                        >
-                                            <FaTrash />
-                                        </Button>
-                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -922,81 +673,8 @@ const InfoVoluntarios = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Modal para Agregar Curso */}
-            <Modal show={showAddCourseModal} onHide={() => setShowAddCourseModal(false)} centered>
-                <Modal.Header closeButton className="bg-gradient-to-r from-orange-400 to-yellow-400 text-white">
-                    <Modal.Title>Agregar Nuevo Curso</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nombre del Curso</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={newCourseName}
-                                onChange={(e) => setNewCourseName(e.target.value)}
-                                placeholder="Escribe el nombre del curso"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Descripción</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                value={newCourseDescription}
-                                onChange={(e) => setNewCourseDescription(e.target.value)}
-                                placeholder="Añade una descripción del curso"
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowAddCourseModal(false)}>
-                        Cancelar
-                    </Button>
-                    <Button variant="primary" onClick={handleAddCourse} className="bg-blue-500 hover:bg-blue-600">
-                        Guardar Curso
-                    </Button>
-                </Modal.Footer>
-            </Modal>
 
-            {/* Modal para Editar Curso */}
-            <Modal show={showEditCourseModal} onHide={() => setShowEditCourseModal(false)} centered>
-                <Modal.Header closeButton className="bg-gradient-to-r from-orange-400 to-yellow-400 text-white">
-                    <Modal.Title>Editar Curso</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nombre del Curso</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editingCourse?.nombre || ''}
-                                onChange={(e) => setEditingCourse({ ...editingCourse, nombre: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Descripción</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                value={editingCourse?.descripcion || ''}
-                                onChange={(e) => setEditingCourse({ ...editingCourse, descripcion: e.target.value })}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditCourseModal(false)}>
-                        Cancelar
-                    </Button>
-                    <Button variant="primary" onClick={handleEditCourse} className="bg-blue-500 hover:bg-blue-600">
-                        Guardar Cambios
-                    </Button>
-                </Modal.Footer>
-            </Modal>
 
-            {/* Modal para Detalles del Curso y Etapas (solo CRUD, sin completar) */}
             <Modal show={showCourseDetailModal} onHide={() => setShowCourseDetailModal(false)} size="lg" centered>
                 <Modal.Header closeButton >
                     <Modal.Title className="text-xl font-bold flex items-center gap-2">
@@ -1015,16 +693,6 @@ const InfoVoluntarios = () => {
                         <TbListDetails />
                         Etapas del Curso
                     </h5>
-                    <div className="flex justify-end mb-4">
-                        <Button
-                            variant="success"
-                            onClick={() => setShowAddStageModal(true)}
-                            className="btn-agregar-curso"
-                        >
-                            <FaPlus />
-                            Agregar Etapa
-                        </Button>
-                    </div>
                     {stages.length === 0 ? (
                         <p className="text-center text-gray-600 italic">No hay etapas definidas para este curso.</p>
                     ) : (
@@ -1042,29 +710,6 @@ const InfoVoluntarios = () => {
                                             <div>
                                                 <h6 className="step-title">{stage.nombre}</h6>
                                                 <p className="step-description">{stage.descripcion}</p>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Button
-                                                    variant="outline-primary"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        setEditingStage({ ...stage });
-                                                        setEditStageName(stage.nombre);
-                                                        setEditStageDescription(stage.descripcion);
-                                                        setShowEditStageModal(true);
-                                                    }}
-                                                    className="action-button"
-                                                >
-                                                    <FaEdit />
-                                                </Button>
-                                                <Button
-                                                    variant="outline-danger"
-                                                    size="sm"
-                                                    onClick={() => handleDeleteStage(stage.id)}
-                                                    className="action-button"
-                                                >
-                                                    <FaTrash />
-                                                </Button>
                                             </div>
                                         </div>
                                     </div>
@@ -1084,79 +729,6 @@ const InfoVoluntarios = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Modal para Agregar Etapa */}
-            <Modal show={showAddStageModal} onHide={() => setShowAddStageModal(false)} centered>
-                <Modal.Header closeButton className="bg-gradient-to-r from-orange-400 to-yellow-400 text-white">
-                    <Modal.Title>Agregar Nueva Etapa</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nombre de la Etapa</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={newStageName}
-                                onChange={(e) => setNewStageName(e.target.value)}
-                                placeholder="Escribe el nombre de la etapa"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Descripción</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                value={newStageDescription}
-                                onChange={(e) => setNewStageDescription(e.target.value)}
-                                placeholder="Añade una descripción de la etapa"
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowAddStageModal(false)}>
-                        Cancelar
-                    </Button>
-                    <Button variant="primary" onClick={handleAddStage} className="bg-blue-500 hover:bg-blue-600">
-                        Guardar Etapa
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            {/* Modal para Editar Etapa */}
-            <Modal show={showEditStageModal} onHide={() => setShowEditStageModal(false)} centered>
-                <Modal.Header closeButton className="bg-gradient-to-r from-orange-400 to-yellow-400 text-white">
-                    <Modal.Title>Editar Etapa</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nombre de la Etapa</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editStageName}
-                                onChange={(e) => setEditStageName(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Descripción</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                value={editStageDescription}
-                                onChange={(e) => setEditStageDescription(e.target.value)}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditStageModal(false)}>
-                        Cancelar
-                    </Button>
-                    <Button variant="primary" onClick={handleEditStage} className="bg-blue-500 hover:bg-blue-600">
-                        Guardar Cambios
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </div>
     );
 };

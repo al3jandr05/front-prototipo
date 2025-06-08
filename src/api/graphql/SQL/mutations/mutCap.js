@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CREAR_CAPACITACION = gql`
-    mutation CrearCapacitacion($nombre: String!, $descripcion: String!) {
-        crearCapacitacion(nombre: $nombre, descripcion: $descripcion) {
+    mutation CrearCapacitacion($input: inputAgregarCapacitacion!) {
+        crearCapacitacion(input: $input) {
             id
             nombre
             descripcion
@@ -11,8 +11,8 @@ export const CREAR_CAPACITACION = gql`
 `;
 
 export const EDITAR_CAPACITACION = gql`
-    mutation EditarCapacitacion($id: ID!, $nombre: String!, $descripcion: String!) {
-        editarCapacitacion(id: $id, nombre: $nombre, descripcion: $descripcion) {
+    mutation EditarCapacitacion($input: inputAgregarCapacitacion!) {
+        editarCapacitacion(input: $input) {
             id
             nombre
             descripcion

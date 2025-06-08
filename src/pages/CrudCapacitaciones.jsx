@@ -20,6 +20,8 @@ import {useNavigate} from 'react-router-dom';
 const CrudCapacitaciones = () => {
     const navigate = useNavigate();
     const {data, loading, error, refetch} = useQuery(OBTENER_CAPACITACIONES);
+
+    console.log(data)
     const [crearCapacitacion] = useMutation(CREAR_CAPACITACION);
     const [editarCapacitacion] = useMutation(EDITAR_CAPACITACION);
     const [eliminarCapacitacion] = useMutation(ELIMINAR_CAPACITACION);
@@ -80,34 +82,58 @@ const CrudCapacitaciones = () => {
     const abrirCursosModal = (capacitacion) => {
         setCurrentCapacitacion(capacitacion);
         setCursos(capacitacion.cursos || []);
+        setNuevoCurso({ nombre: '', etapas: [], descripcion: '' });
+        setNuevaEtapa({ nombre: '', orden: null, id: null });
+        setEditCursoIndex(null);
+        setEditEtapaIndex(null);
         setActiveTab('lista');
         setShowCursosModal(true);
     };
 
     const agregarEtapa = () => {
-        if (!nuevaEtapa.trim()) return;
+        if (!nuevaEtapa.nombre?.trim()) return;
 
         const updatedEtapas = [...nuevoCurso.etapas];
+
+        const etapaObj = {
+            ...nuevaEtapa,
+            nombre: nuevaEtapa.nombre.trim(),
+            orden: editEtapaIndex !== null
+                ? updatedEtapas[editEtapaIndex].orden
+                : updatedEtapas.length + 1,
+            ...(nuevaEtapa.id ? { id: nuevaEtapa.id } : {})
+        };
+
         if (editEtapaIndex !== null) {
-            updatedEtapas[editEtapaIndex] = nuevaEtapa;
+            updatedEtapas[editEtapaIndex] = etapaObj;
         } else {
-            updatedEtapas.push(nuevaEtapa);
+            updatedEtapas.push(etapaObj);
         }
 
-        setNuevoCurso({...nuevoCurso, etapas: updatedEtapas});
-        setNuevaEtapa('');
+        setNuevoCurso({ ...nuevoCurso, etapas: updatedEtapas });
+        setNuevaEtapa({ nombre: '', orden: null, id: null });
         setEditEtapaIndex(null);
     };
 
-    const editarEtapa = (index) => {
-        setNuevaEtapa(nuevoCurso.etapas[index]);
-        setEditEtapaIndex(index);
+    const editarEtapa = (id) => {
+        const idx = nuevoCurso.etapas.findIndex((e) => e.id === id);
+        if (idx === -1) return;
+
+        setNuevaEtapa(nuevoCurso.etapas[idx]);
+        setEditEtapaIndex(idx);
     };
 
     const eliminarEtapa = (index) => {
-        const updatedEtapas = nuevoCurso.etapas.filter((_, i) => i !== index);
-        setNuevoCurso({...nuevoCurso, etapas: updatedEtapas});
+        const updatedEtapas = nuevoCurso.etapas
+            .filter((_, i) => i !== index)
+            .map((etapa, idx) => ({
+                ...etapa,
+                orden: idx + 1
+            }));
+
+        setNuevoCurso({ ...nuevoCurso, etapas: updatedEtapas });
     };
+
 
     const agregarCurso = () => {
         if (!nuevoCurso.nombre.trim() || nuevoCurso.etapas.length < 3) return;
@@ -120,7 +146,7 @@ const CrudCapacitaciones = () => {
         }
 
         setCursos(updatedCursos);
-        setNuevoCurso({ nombre: '', etapas: [] });
+        setNuevoCurso({ nombre: '', etapas: [], descripcion: '' });
         setEditCursoIndex(null);
         setActiveTab('lista');
     };
@@ -138,23 +164,47 @@ const CrudCapacitaciones = () => {
 
     const guardarCapacitacion = async () => {
         if (!nombreActual.trim()) return;
-
+        console.log(cursos);
+        const cursosFormateados = cursos.map((curso) => ({
+            ...(curso.id ? { id: curso.id } : {}),
+            nombre: curso.nombre,
+            etapas: Array.isArray(curso.etapas)
+                ? curso.etapas.map((etapa, idx) => {
+                    if (typeof etapa === 'string') {
+                        return {
+                            id: 0,
+                            nombre: etapa,
+                            orden: idx + 1
+                        };
+                    }
+                    return {
+                        id: etapa.id ?? 0,
+                        nombre: etapa.nombre,
+                        orden: etapa.orden ?? idx + 1
+                    };
+                })
+                : []
+        }));
         try {
             if (modalMode === 'agregar') {
                 await crearCapacitacion({
                     variables: {
-                        nombre: nombreActual,
-                        descripcion: descripcionActual,
-                        cursos: cursos
+                        input: {
+                            nombre: nombreActual,
+                            descripcion: descripcionActual,
+                            cursos: cursosFormateados
+                        }
                     }
                 });
             } else {
                 await editarCapacitacion({
                     variables: {
-                        id: editId,
-                        nombre: nombreActual,
-                        descripcion: descripcionActual,
-                        cursos: cursos
+                        input: {
+                            id: editId,
+                            nombre: nombreActual,
+                            descripcion: descripcionActual,
+                            cursos: cursosFormateados
+                        }
                     }
                 });
             }
@@ -172,7 +222,7 @@ const CrudCapacitaciones = () => {
         setDescripcionActual('');
         setEditId(null);
         setCursos([]);
-        setNuevoCurso({ nombre: '', etapas: [] });
+        setNuevoCurso({ nombre: '', etapas: [], descripcion: '' });
     };
 
     const confirmarEliminarCapacitacion = async () => {
@@ -200,7 +250,7 @@ const CrudCapacitaciones = () => {
                 </div>
                 <div className="step-content">
                     <div className="step-title">Etapa {index + 1}</div>
-                    <div className="step-description">{etapa}</div>
+                    <div className="step-description">{etapa.nombre}</div>
                 </div>
                 <div className="step-actions">
                     <Button variant="outline-warning" size="sm" onClick={() => onEdit(index)}>
@@ -332,7 +382,7 @@ const CrudCapacitaciones = () => {
                                     <h6>Cursos agregados:</h6>
                                     <ul className="cursos-lista-preview">
                                         {cursos.map((curso, index) => (
-                                            <li key={index}>
+                                            <li key={curso.id}>
                                                 <span className="curso-nombre">{curso.nombre}</span>
                                                 <span className="curso-etapas">{curso.etapas.length} etapas</span>
                                             </li>
@@ -355,7 +405,18 @@ const CrudCapacitaciones = () => {
                 </Modal>
 
                 {/* Modal Cursos */}
-                <Modal show={showCursosModal} onHide={() => setShowCursosModal(false)} size="xl" className="modal-cursos">
+                <Modal
+                    show={showCursosModal}
+                    onHide={() => {
+                        setShowCursosModal(false);
+                        setNuevoCurso({ nombre: '', etapas: [], descripcion: '' });
+                        setNuevaEtapa({ nombre: '', orden: null, id: null });
+                        setEditCursoIndex(null);
+                        setEditEtapaIndex(null);
+                    }}
+                    size="xl"
+                    className="modal-cursos"
+                >
                     <Modal.Header closeButton className="modal-header-custom">
                         <Modal.Title>
                             <PiFireSimpleFill className="modal-title-icon" />
@@ -386,7 +447,7 @@ const CrudCapacitaciones = () => {
                                             <h5 className="lista-cursos-titulo">Cursos</h5>
                                             <div className="cursos-grid">
                                                 {cursos.map((curso, index) => (
-                                                    <div key={index} className="curso-card">
+                                                    <div key={curso.id} className="curso-card">
                                                         <div className="curso-header">
                                                             <h6 className="curso-nombre">{curso.nombre}</h6>
                                                         </div>
@@ -431,7 +492,7 @@ const CrudCapacitaciones = () => {
                                                 <Button
                                                     variant="primary"
                                                     onClick={() => {
-                                                        setNuevoCurso({ nombre: '', etapas: [] });
+                                                        setNuevoCurso({ nombre: '', etapas: [], descripcion: '' });
                                                         setActiveTab('formulario');
                                                     }}
                                                     className="btn-agregar-curso"
@@ -458,14 +519,29 @@ const CrudCapacitaciones = () => {
                                     </Form.Group>
 
                                     <Form.Group className="mb-4">
+                                        <Form.Label>Descripcion del Curso</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Descripcion"
+                                            value={nuevoCurso.descripcion}
+                                            onChange={(e) => setNuevoCurso({...nuevoCurso, descripcion: e.target.value})}
+                                            className="curso-nombre-input"
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group className="mb-4">
                                         <Form.Label>Etapas del Curso (mínimo 3)</Form.Label>
                                         <div className="d-flex mb-3">
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Nombre de la etapa"
-                                                value={nuevaEtapa}
-                                                onChange={(e) => setNuevaEtapa(e.target.value)}
-                                                className="etapa-input"
+                                                value={nuevaEtapa.nombre}
+                                                onChange={(e) =>
+                                                    setNuevaEtapa({
+                                                        ...nuevaEtapa,
+                                                        nombre: e.target.value,
+                                                    })
+                                                }
                                             />
                                             <Button
                                                 variant={editEtapaIndex !== null ? "warning" : "primary"}
@@ -482,12 +558,14 @@ const CrudCapacitaciones = () => {
                                                 <p className="no-etapas-message">No hay etapas agregadas</p>
                                             ) : (
                                                 <div className="etapas-list-container">
-                                                    {nuevoCurso.etapas.map((etapa, index) => (
+                                                    {[...nuevoCurso.etapas]
+                                                        .sort((a, b) => a.orden - b.orden)
+                                                        .map((etapa, index) => (
                                                         <StepItem
-                                                            key={index}
+                                                            key={etapa.id}
                                                             index={index}
                                                             etapa={etapa}
-                                                            onEdit={editarEtapa}
+                                                            onEdit={() => editarEtapa(etapa.id)}
                                                             onDelete={eliminarEtapa}
                                                         />
                                                     ))}
@@ -523,7 +601,9 @@ const CrudCapacitaciones = () => {
                                             <p className="no-etapas-message">No hay etapas agregadas</p>
                                         ) : (
                                             <div className="steps-container">
-                                                {nuevoCurso.etapas.map((etapa, index) => (
+                                                {[...nuevoCurso.etapas]
+                                                    .sort((a, b) => a.orden - b.orden)
+                                                    .map((etapa, index) => (
                                                     <StepItem
                                                         key={index}
                                                         index={index}
@@ -602,14 +682,14 @@ const CrudCapacitaciones = () => {
                                         <h6 className="detalle-cursos-title">Cursos:</h6>
                                         <div className="detalle-cursos-container">
                                             {detalleCapacitacion.cursos.map((curso, index) => (
-                                                <div key={index} className="detalle-curso-item">
+                                                <div key={curso.id} className="detalle-curso-item">
                                                     <h6 className="detalle-curso-nombre">
                                                         {curso.nombre} <span className="etapas-count">({curso.etapas.length} etapas)</span>
                                                     </h6>
                                                     <div className="detalle-etapas-container">
                                                         {curso.etapas.map((etapa, idx) => (
                                                             <StepItem
-                                                                key={idx}
+                                                                key={etapa.id}
                                                                 index={idx}
                                                                 etapa={etapa}
                                                             />

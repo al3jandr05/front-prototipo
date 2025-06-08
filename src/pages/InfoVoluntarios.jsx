@@ -15,6 +15,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { obtenerVoluntario } from '../api/rest/voluntarioService';
 import { OBTENER_REPORTES_VOLUNTARIOS } from '../api/graphql/SQL/querys/reportes';
+import { OBTENER_CURSOS_VOLUNTARIO } from '../api/graphql/SQL/querys/cursosVoluntario';
 import { CREAR_EVALUACION } from '../api/graphql/SQL/mutations/crearEvaluacion';
 import ModalCapacitaciones from '../components/franco/ModalCapacitaciones'; // Assuming this component exists
 import ModalNecesidades from '../components/franco/ModalNecesidades'; // Assuming this component exists
@@ -28,7 +29,6 @@ import HistorialClinicoPDF from '../components/HistorialClinicoPDF';
 import '../styles/infoVoluntarios.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Mock Data for Capacitaciones and Cursos
 const mockCapacitaciones = [
     {
         id: 'cap1',
@@ -189,6 +189,9 @@ const InfoVoluntarios = () => {
 
     const { loading, error, data } = useQuery(OBTENER_REPORTES_VOLUNTARIOS, {
         variables: { historialId },
+    });
+    const { loadingCursos, errorCursos, dataCursos } = useQuery(OBTENER_CURSOS_VOLUNTARIO, {
+        variables: { id: id.toString() },
     });
 
     const nombreEmail = voluntario?.email || ' ';
@@ -451,14 +454,10 @@ const InfoVoluntarios = () => {
             });
             return { ...prevCap, cursos: updatedCapCourses };
         });
-
-        // Optionally, update the mockCapacitaciones structure if it's mutable.
-        // For this example, we assume mockCapacitaciones is a constant for simplicity,
-        // and only local state `courses` and `selectedCapacitacion` are updated.
     };
 
 
-    if (loading) return (
+    if (loading || loadingCursos ) return (
         <div className="infovoluntarios-container">
             <Sidebar />
             <main className="infovoluntarios-content">

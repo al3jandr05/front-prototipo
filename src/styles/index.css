@@ -2,12 +2,12 @@
 
 
 :root {
-  --color-fondo: rgb(66, 66, 66);
+  --color-fondo: #ffffff;
   --color-card: rgba(255, 255, 255, 0.7);
   --color-blur: blur(8px);
   --color-negro: #d80020;
-  --color-naranja-fuerte: #f8520b;
-  --color-naranja-suave: #fb8755;
+  --color-naranja-fuerte: #de2e03;
+  --color-naranja-suave: #ff7c39;
   --color-amarillo: #ffa100;
   --color-amarillo-hover: #ffc867;
   --color-gris: #272525;

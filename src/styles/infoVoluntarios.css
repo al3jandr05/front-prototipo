@@ -743,7 +743,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: var(--color-naranja-fuerte);
+    background-color: var(--color-naranja-suave);
     border: none;
     padding: 12px 28px;
     border-radius: 25px;

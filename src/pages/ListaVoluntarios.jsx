@@ -4,7 +4,7 @@ import CardVoluntario from '../components/CardVoluntario';
 import { FaTimes } from 'react-icons/fa';
 import '../styles/listaVoluntarios.css';
 
-import { obtenerVoluntarios } from '../api/rest/voluntarioService';
+import { obtenerVoluntarios, obtenerUsuariosConRoles} from '../api/rest/voluntarioService';
 import {useNavigate} from "react-router-dom";
 
 const ListaVoluntarios = () => {
@@ -24,17 +24,46 @@ const ListaVoluntarios = () => {
     const [tipoSangreFiltro, setTipoSangreFiltro] = useState('');
     const [estadoFiltro, setEstadoFiltro] = useState('');
 
+    // useEffect(() => {
+    //     const fetchVoluntarios = async () => {
+    //         try {
+    //             const data = await obtenerVoluntarios();
+    //             setVoluntarios(data);  // Almacena los voluntarios en el estado
+    //         } catch (error) {
+    //             console.error("Error al obtener los voluntarios:", error);
+    //         }
+    //     };
+    //
+    //     fetchVoluntarios();  // Llamar la función al montar el componente
+    // }, []);
+
     useEffect(() => {
         const fetchVoluntarios = async () => {
             try {
                 const data = await obtenerVoluntarios();
-                setVoluntarios(data);  // Almacena los voluntarios en el estado
+
+                console.log("Valores de rol_id encontrados:", data.map(v => v.rol_id));
+
+                const roles = {
+                    1: 'Voluntario',
+                    2: 'Voluntario',
+                    3: 'Comunario'
+                };
+
+                const voluntariosConRol = data.map(v => ({
+                    ...v,
+                    rol: roles[v.rol_id] || 'Desconocido'
+                }));
+
+                //console.log(voluntariosConRol);
+                console.log(data);
+
+                setVoluntarios(voluntariosConRol);
             } catch (error) {
                 console.error("Error al obtener los voluntarios:", error);
             }
         };
-
-        fetchVoluntarios();  // Llamar la función al montar el componente
+        fetchVoluntarios();
     }, []);
 
     const resetFiltros = () => {
@@ -46,6 +75,7 @@ const ListaVoluntarios = () => {
 
     const filtrados = voluntarios.filter((v) =>
         v.nombre.toLowerCase().includes(nombre.toLowerCase()) &&
+        // (v.rol ? v.rol.toLowerCase().includes('') : true) &&
         v.ci.includes(ciFiltro) &&
         (tipoSangreFiltro === '' || v.tipo_sangre.toLowerCase() === tipoSangreFiltro.toLowerCase()) &&
         (estadoFiltro === '' || v.estado.toLowerCase() === estadoFiltro.toLowerCase())

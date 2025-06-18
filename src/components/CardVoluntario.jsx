@@ -22,6 +22,7 @@ const CardVoluntario = ({ voluntario }) => {
                     </span>
                 </div>
                 <p>CI: {voluntario.ci} &nbsp; | &nbsp; Tipo de Sangre: {voluntario.tipo_sangre}</p>
+                <p>{voluntario.rol === "Comunario" ? "Comunario" : "Voluntario"}</p>
             </div>
         </div>
     );

@@ -9,9 +9,22 @@ const CardVoluntario = ({ voluntario }) => {
         navigate(`/Voluntario/${voluntario.id}`);
     };
 
+    const getRolColor = (rol) => {
+        return rol === 'Voluntario' ? '#56aacc' : '#72c472';
+    };
+
+    const rolColor = getRolColor(voluntario.rol);
+
     return (
-        <div className="card-voluntario" onClick={handleClick}>
-            <div className="avatar">
+        <div 
+            className="card-voluntario" 
+            onClick={handleClick}
+            style={{ borderLeft: `6px solid ${rolColor}` }}
+        >
+            <div 
+                className="avatar"
+                style={{ backgroundColor: rolColor }}
+            >
                 <span>{voluntario.nombre[0]}</span>
             </div>
             <div className="info-voluntario">
@@ -22,7 +35,6 @@ const CardVoluntario = ({ voluntario }) => {
                     </span>
                 </div>
                 <p>CI: {voluntario.ci} &nbsp; | &nbsp; Tipo de Sangre: {voluntario.tipo_sangre}</p>
-                <p>{voluntario.rol === "Comunario" ? "Comunario" : "Voluntario"}</p>
             </div>
         </div>
     );

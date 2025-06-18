@@ -23,6 +23,7 @@ const ListaVoluntarios = () => {
     const [ciFiltro, setCiFiltro] = useState('');
     const [tipoSangreFiltro, setTipoSangreFiltro] = useState('');
     const [estadoFiltro, setEstadoFiltro] = useState('');
+    const [rolFiltro, setRolFiltro] = useState('');
 
     // useEffect(() => {
     //     const fetchVoluntarios = async () => {
@@ -71,14 +72,15 @@ const ListaVoluntarios = () => {
         setCiFiltro('');
         setTipoSangreFiltro('');
         setEstadoFiltro('');
+        setRolFiltro('');
     };
 
     const filtrados = voluntarios.filter((v) =>
         v.nombre.toLowerCase().includes(nombre.toLowerCase()) &&
-        // (v.rol ? v.rol.toLowerCase().includes('') : true) &&
         v.ci.includes(ciFiltro) &&
         (tipoSangreFiltro === '' || v.tipo_sangre.toLowerCase() === tipoSangreFiltro.toLowerCase()) &&
-        (estadoFiltro === '' || v.estado.toLowerCase() === estadoFiltro.toLowerCase())
+        (estadoFiltro === '' || v.estado.toLowerCase() === estadoFiltro.toLowerCase()) &&
+        (rolFiltro === '' || v.rol === rolFiltro)
     );
 
     return (
@@ -106,31 +108,48 @@ const ListaVoluntarios = () => {
                                 <label>CI</label>
                                 <input
                                     type="text"
-                                    placeholder="Buscar por CI"
+                                    placeholder="Filtrar por CI"
                                     value={ciFiltro}
                                     onChange={(e) => setCiFiltro(e.target.value)}
                                 />
                             </div>
                             <div>
                                 <label>Tipo de Sangre</label>
-                                <select value={tipoSangreFiltro} onChange={(e) => setTipoSangreFiltro(e.target.value)}>
+                                <select
+                                    value={tipoSangreFiltro}
+                                    onChange={(e) => setTipoSangreFiltro(e.target.value)}
+                                >
                                     <option value="">Todos</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
                                     <option value="A+">A+</option>
                                     <option value="A-">A-</option>
                                     <option value="B+">B+</option>
                                     <option value="B-">B-</option>
                                     <option value="AB+">AB+</option>
                                     <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
                                 </select>
                             </div>
                             <div>
-                                <label>Disponibilidad</label>
-                                <select value={estadoFiltro} onChange={(e) => setEstadoFiltro(e.target.value)}>
+                                <label>Estado</label>
+                                <select
+                                    value={estadoFiltro}
+                                    onChange={(e) => setEstadoFiltro(e.target.value)}
+                                >
                                     <option value="">Todos</option>
                                     <option value="Activo">Activo</option>
                                     <option value="Inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Rol</label>
+                                <select
+                                    value={rolFiltro}
+                                    onChange={(e) => setRolFiltro(e.target.value)}
+                                >
+                                    <option value="">Todos</option>
+                                    <option value="Voluntario">Voluntario</option>
+                                    <option value="Comunario">Comunario</option>
                                 </select>
                             </div>
                             <div className="filtro-limpiar">

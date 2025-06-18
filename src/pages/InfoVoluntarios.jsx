@@ -101,7 +101,18 @@ const InfoVoluntarios = () => {
         const fetchVoluntario = async () => {
             try {
                 const data = await obtenerVoluntario(id);
-                setVoluntario(data);
+                const roles = {
+                    1: 'Voluntario',
+                    2: 'Voluntario',
+                    3: 'Comunario'
+                };
+                
+                const voluntarioConRol = {
+                    ...data,
+                    rol: roles[data.rol_id] || 'Desconocido'
+                };
+                
+                setVoluntario(voluntarioConRol);
             } catch (error) {
                 console.error("Error al obtener el voluntario:", error);
             }
@@ -302,6 +313,13 @@ const InfoVoluntarios = () => {
                             <div className={`estado-info ${voluntario?.estado?.toLowerCase()}`}>
                                 <span className="dot"></span>
                                 {voluntario?.estado}
+                            </div>
+                            <div className={`estado-info ${voluntario?.rol?.toLowerCase()}`} style={{ 
+                                backgroundColor: voluntario?.rol === 'Voluntario' ? '#56aacc' : '#72c472',
+                                color: 'white'
+                            }}>
+                                <span className="dot"></span>
+                                {voluntario?.rol}
                             </div>
                             <div className="formulario-section">
                                 <button className="btn-formulario-enviar" onClick={handleEnviarFormulario}>

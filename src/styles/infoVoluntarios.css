@@ -447,44 +447,40 @@
 }
 
 .estado-info {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 6px 14px;
+    padding: 6px 12px;
     border-radius: 20px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.estado-info .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .estado-info.activo {
-    background-color: #e8f5e9;
-    /* Light green */
+    background-color: rgba(46, 125, 50, 0.1);
     color: #2e7d32;
-    /* Dark green */
-}
-
-.estado-info.activo .dot {
-    background-color: #2e7d32;
 }
 
 .estado-info.inactivo {
-    background-color: #ffebee;
-    /* Light red */
+    background-color: rgba(198, 40, 40, 0.1);
     color: #c62828;
-    /* Dark red */
 }
 
-.estado-info.inactivo .dot {
-    background-color: #c62828;
+.estado-info .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.estado-info.voluntario,
+.estado-info.comunario {
+    color: white;
+}
+
+.estado-info.voluntario .dot,
+.estado-info.comunario .dot {
+    background-color: white;
 }
 
 .formulario-section {
